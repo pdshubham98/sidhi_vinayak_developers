@@ -1,0 +1,99 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getProperties, typeLabels, statusLabels } from '../../lib/properties';
+import PropertyCard from '../../components/PropertyCard.astro';
+
+const properties = await getProperties();
+---
+
+<Base
+  title="Properties in Bhopal"
+  description="Browse residential plots and farm house plots available around Bhopal, Madhya Pradesh. Vatika Green near Bilkisganj. Filter by type or availability."
+  breadcrumbs={[{ name: 'Properties', url: '/properties' }]}
+>
+  <section class="page-hero">
+    <div class="container">
+      <h1>Properties</h1>
+      <p>Plots and farm house plots around Bhopal. Call or share your requirement for current prices and a site visit.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <!-- Filters -->
+      <div style="margin-bottom:1.75rem;">
+        <p style="font-size:0.85rem;font-weight:600;color:#4a6054;margin-bottom:0.6rem;text-transform:uppercase;letter-spacing:0.06em;">Filter by type</p>
+        <div class="filter-bar" id="type-filters" role="group" aria-label="Filter by property type">
+          <button class="filter-btn" data-filter="all" aria-pressed="true">All</button>
+          {Object.entries(typeLabels).map(([value, label]) => (
+            <button class="filter-btn" data-filter={value} aria-pressed="false">{label}</button>
+          ))}
+        </div>
+      </div>
+
+      <div style="margin-bottom:2rem;">
+        <p style="font-size:0.85rem;font-weight:600;color:#4a6054;margin-bottom:0.6rem;text-transform:uppercase;letter-spacing:0.06em;">Filter by status</p>
+        <div class="filter-bar" id="status-filters" role="group" aria-label="Filter by availability">
+          <button class="filter-btn" data-filter-status="all" aria-pressed="true">All</button>
+          {Object.entries(statusLabels).map(([value, label]) => (
+            <button class="filter-btn" data-filter-status={value} aria-pressed="false">{label}</button>
+          ))}
+        </div>
+      </div>
+
+      <!-- Grid -->
+      <div class="property-grid" id="property-grid">
+        {properties.map(p => <PropertyCard property={p} />)}
+        <div class="empty-state" id="empty-state" hidden aria-live="polite">
+          <strong>No properties match those filters.</strong>
+          <p>Try a different combination, or <a href="/requirement">share your requirement</a> and we will find something for you.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  let activeType   = 'all';
+  let activeStatus = 'all';
+
+  function applyFilters() {
+    const cards = Array.from(document.querySelectorAll<HTMLElement>('#property-grid .property-card'));
+    let visible = 0;
+
+    cards.forEach(card => {
+      const type   = card.dataset.type   ?? '';
+      const status = card.dataset.status ?? '';
+      const show =
+        (activeType   === 'all' || activeType   === type) &&
+        (activeStatus === 'all' || activeStatus === status);
+      card.hidden = !show;
+      if (show) visible++;
+    });
+
+    const empty = document.getElementById('empty-state')!;
+    empty.hidden = visible > 0;
+  }
+
+  // Type filters
+  document.getElementById('type-filters')!.addEventListener('click', e => {
+    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.filter-btn');
+    if (!btn) return;
+    activeType = btn.dataset.filter ?? 'all';
+    document.querySelectorAll('#type-filters .filter-btn').forEach(b =>
+      b.setAttribute('aria-pressed', String(b === btn))
+    );
+    applyFilters();
+  });
+
+  // Status filters
+  document.getElementById('status-filters')!.addEventListener('click', e => {
+    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.filter-btn');
+    if (!btn) return;
+    activeStatus = btn.dataset.filterStatus ?? 'all';
+    document.querySelectorAll('#status-filters .filter-btn').forEach(b =>
+      b.setAttribute('aria-pressed', String(b === btn))
+    );
+    applyFilters();
+  });
+</script>

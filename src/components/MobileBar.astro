@@ -1,0 +1,34 @@
+---
+import { site, telHref, whatsappHref } from '../config/site';
+const hasPhone = !!site.contact.phone;
+const hasWhatsapp = !!site.contact.whatsapp;
+---
+
+{(hasPhone || hasWhatsapp) && (
+  <div class="mobile-bar" role="navigation" aria-label="Quick contact">
+    {hasPhone && (
+      <a href={telHref(site.contact.phone)} class="btn btn-outline">
+        📞 Call
+      </a>
+    )}
+    {hasWhatsapp && (
+      <a
+        href={whatsappHref(site.contact.whatsapp, "Hi, I'm interested in a property.")}
+        class="btn btn-primary"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        💬 WhatsApp
+      </a>
+    )}
+    <a href="/requirement" class="btn btn-ghost">
+      Enquire
+    </a>
+  </div>
+)}
+
+{!hasPhone && !hasWhatsapp && (
+  <div class="mobile-bar" role="navigation" aria-label="Quick contact">
+    <a href="/requirement" class="btn btn-primary">Enquire now</a>
+  </div>
+)}

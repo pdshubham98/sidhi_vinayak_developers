@@ -1,0 +1,80 @@
+---
+export const prerender = false;
+
+import { actions, isInputError } from 'astro:actions';
+import Base from '../layouts/Base.astro';
+import Field from '../components/Field.astro';
+import ChoiceGroup from '../components/ChoiceGroup.astro';
+import Consent from '../components/Consent.astro';
+import Honeypot from '../components/Honeypot.astro';
+import { sellTypeOptions } from '../lib/form-options';
+
+const result = Astro.getActionResult(actions.sell);
+if (result?.data?.received) {
+  return Astro.redirect('/thank-you');
+}
+
+const errors = result && isInputError(result.error) ? result.error.fields : {};
+---
+
+<Base
+  title="Sell your property in Bhopal"
+  description="Sell your plot, farm house, house, or commercial property in Bhopal, Madhya Pradesh. Share the details and Siddhivinayak Developers will connect you with genuine buyers."
+  breadcrumbs={[{ name: 'Sell your property', url: '/sell' }]}
+>
+  <section class="page-hero">
+    <div class="container">
+      <h1>Sell your property</h1>
+      <p>Share the details and we will reach out with genuine buyers.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container" style="max-width:680px;">
+      <form
+        method="POST"
+        action={actions.sell}
+        class="form-stack"
+        id="sell-form"
+        novalidate
+      >
+        <Honeypot />
+
+        <div class="form-row">
+          <Field id="name" label="Your name" required error={errors.name?.[0]} autocomplete="name" />
+          <Field id="phone" label="Mobile number" type="tel" required error={errors.phone?.[0]} hint="10-digit Indian mobile number" autocomplete="tel" />
+        </div>
+
+        <Field id="email" label="Email address" type="email" error={errors.email?.[0]} autocomplete="email" />
+
+        <ChoiceGroup
+          id="propertyType"
+          label="Type of property"
+          options={sellTypeOptions}
+          required
+          error={errors.propertyType?.[0]}
+          asSelect
+        />
+
+        <Field id="location" label="Property location" required placeholder="Area, locality or address" error={errors.location?.[0]} />
+
+        <div class="form-row">
+          <Field id="size" label="Size" placeholder="e.g. 1,200 sq ft or 5,000 sq ft" error={errors.size?.[0]} />
+          <Field id="expectedPrice" label="Expected price" placeholder="e.g. ₹30 Lakh" error={errors.expectedPrice?.[0]} />
+        </div>
+
+        <Field id="message" label="Anything else about the property?" type="textarea" error={errors.message?.[0]} />
+
+        <Consent error={errors.consent?.[0]} />
+
+        <div class="form-submit">
+          <button type="submit" class="btn btn-primary">Submit listing enquiry</button>
+        </div>
+      </form>
+    </div>
+  </section>
+</Base>
+
+<script>
+  import '/src/scripts/enhance-form.ts';
+</script>

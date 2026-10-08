@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Green background -->
+  <rect width="32" height="32" rx="6" fill="#24533B"/>
+  <!-- Stylised S letterform using a plot grid motif -->
+  <rect x="9" y="7" width="14" height="5" rx="1.5" fill="#F3F6F1"/>
+  <rect x="9" y="14" width="14" height="4" rx="1.5" fill="#C8862E"/>
+  <rect x="9" y="20" width="14" height="5" rx="1.5" fill="#F3F6F1"/>
+</svg>

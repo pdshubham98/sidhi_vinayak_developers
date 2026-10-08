@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400">
+  <rect width="640" height="400" fill="#D9E5D3"/>
+  <!-- Ground -->
+  <rect x="0" y="320" width="640" height="80" fill="#C9D6C3"/>
+  <!-- House body -->
+  <rect x="160" y="180" width="320" height="160" rx="4" fill="#F3F6F1" stroke="#C9D6C3" stroke-width="2"/>
+  <!-- Roof -->
+  <polygon points="140,185 320,60 500,185" fill="#24533B" opacity="0.85"/>
+  <polygon points="140,185 320,60 500,185" fill="none" stroke="#183B29" stroke-width="2"/>
+  <!-- Door -->
+  <rect x="285" y="265" width="70" height="75" rx="3" fill="#C9D6C3" stroke="#C9D6C3" stroke-width="1"/>
+  <circle cx="348" cy="305" r="4" fill="#24533B"/>
+  <!-- Windows -->
+  <rect x="185" y="215" width="75" height="65" rx="3" fill="#DCE8EE" stroke="#C9D6C3" stroke-width="1.5"/>
+  <line x1="222" y1="215" x2="222" y2="280" stroke="#C9D6C3" stroke-width="1"/>
+  <line x1="185" y1="247" x2="260" y2="247" stroke="#C9D6C3" stroke-width="1"/>
+  <rect x="380" y="215" width="75" height="65" rx="3" fill="#DCE8EE" stroke="#C9D6C3" stroke-width="1.5"/>
+  <line x1="417" y1="215" x2="417" y2="280" stroke="#C9D6C3" stroke-width="1"/>
+  <line x1="380" y1="247" x2="455" y2="247" stroke="#C9D6C3" stroke-width="1"/>
+  <!-- Trees -->
+  <ellipse cx="100" cy="310" rx="28" ry="34" fill="#2d6b4a" opacity="0.7"/>
+  <rect cx="100" y="330" x="97" width="6" height="15" rx="2" fill="#183B29"/>
+  <ellipse cx="540" cy="310" rx="28" ry="34" fill="#2d6b4a" opacity="0.7"/>
+  <rect cx="540" y="330" x="537" width="6" height="15" rx="2" fill="#183B29"/>
+  <!-- Sample label -->
+  <text x="320" y="370" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#4a6054">Sample listing</text>
+</svg>

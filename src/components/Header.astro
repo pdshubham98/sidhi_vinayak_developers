@@ -1,0 +1,69 @@
+---
+import { site } from '../config/site';
+const path = Astro.url.pathname;
+const is = (p: string) => path === p || path === p + '/' ? 'page' : undefined;
+---
+
+<header class="site-header">
+  <div class="container">
+    <div class="site-header__inner">
+      <a href="/" class="site-header__logo" aria-label={site.name + ' – home'}>
+        {site.name}
+        <span>{site.tagline}</span>
+      </a>
+
+      <button
+        class="menu-toggle"
+        id="menu-toggle"
+        aria-expanded="false"
+        aria-controls="site-nav"
+        aria-label="Open navigation menu"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <rect class="bar bar1" x="3" y="6" width="18" height="2" rx="1" fill="currentColor" />
+          <rect class="bar bar2" x="3" y="11" width="18" height="2" rx="1" fill="currentColor" />
+          <rect class="bar bar3" x="3" y="16" width="18" height="2" rx="1" fill="currentColor" />
+        </svg>
+      </button>
+
+      <nav class="site-nav" id="site-nav" aria-label="Main navigation">
+        <a href="/properties" aria-current={is('/properties')}>Properties</a>
+        <a href="/construction" aria-current={is('/construction')}>Construction</a>
+        <a href="/faq" aria-current={is('/faq')}>FAQ</a>
+        <a href="/contact" aria-current={is('/contact')}>Contact</a>
+        <a href="/requirement" class="btn btn-primary">Book a site visit</a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<script>
+  const toggle = document.getElementById('menu-toggle')!;
+  const nav = document.getElementById('site-nav')!;
+
+  toggle.addEventListener('click', () => {
+    const open = toggle.getAttribute('aria-expanded') === 'true';
+    toggle.setAttribute('aria-expanded', String(!open));
+    toggle.setAttribute('aria-label', open ? 'Open navigation menu' : 'Close navigation menu');
+    nav.classList.toggle('is-open', !open);
+  });
+
+  // Close nav when a link is clicked
+  nav.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => {
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-label', 'Open navigation menu');
+      nav.classList.remove('is-open');
+    });
+  });
+
+  // Close nav on Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && nav.classList.contains('is-open')) {
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-label', 'Open navigation menu');
+      nav.classList.remove('is-open');
+      toggle.focus();
+    }
+  });
+</script>

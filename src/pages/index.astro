@@ -1,0 +1,199 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../config/site';
+import { getProperties } from '../lib/properties';
+import PropertyCard from '../components/PropertyCard.astro';
+import PlotGrid from '../components/PlotGrid.astro';
+
+const allProperties = await getProperties();
+const featured = allProperties.find(p => p.data.featured);
+const latest = allProperties.filter(p => !p.data.featured).slice(0, 3);
+---
+
+<Base
+  title={site.name}
+  description="Buy plots and farm house plots near Bhopal, build your home, or sell your property. Vatika Green Farm House near Bilkisganj. Office in Neelbad, Bhopal."
+>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero__inner">
+        <div>
+          <p class="hero__eyebrow">Plots &amp; farm houses · Bhopal, Madhya Pradesh</p>
+          <h1>Plots and farm houses around Bhopal</h1>
+          <p class="hero__sub">
+            Buy a plot or farm house near Bilkisganj, build your home in Bhopal,
+            or sell your property. We work personally with every client.
+          </p>
+
+          <nav class="hero-paths" aria-label="What are you looking for?">
+            <a href="/properties" class="hero-path">
+              <span class="hero-path__icon" aria-hidden="true">🌿</span>
+              <span class="hero-path__label">
+                I want to buy
+                <span class="hero-path__sub">Farm house plots and residential plots</span>
+              </span>
+            </a>
+            <a href="/construction" class="hero-path">
+              <span class="hero-path__icon" aria-hidden="true">🏗️</span>
+              <span class="hero-path__label">
+                I want to build a house
+                <span class="hero-path__sub">Construction on your plot in Bhopal</span>
+              </span>
+            </a>
+            <a href="/sell" class="hero-path">
+              <span class="hero-path__icon" aria-hidden="true">🤝</span>
+              <span class="hero-path__label">
+                I want to sell
+                <span class="hero-path__sub">List your property with us</span>
+              </span>
+            </a>
+          </nav>
+        </div>
+
+        <div>
+          <PlotGrid />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured project -->
+  {featured && (
+    <section class="section featured-section">
+      <div class="container">
+        <div class="section-heading">
+          <h2>Vatika Green Farm House, Khuraniya</h2>
+          <p>Farm house plots at Vatika Green Parisar, Khuraniya, near Bilkisganj, Bhopal — a planned layout with an internal road and trees.</p>
+        </div>
+        <div style="max-width:420px;">
+          <PropertyCard property={featured} />
+        </div>
+        <div style="margin-top:1.5rem;display:flex;flex-wrap:wrap;gap:0.75rem;">
+          <a href="/requirement?need=farm-house" class="btn btn-primary" style="background:var(--ochre);border-color:var(--ochre);color:#17261D;">
+            Book a site visit
+          </a>
+          <a href="/properties/vatika-green-farm-house" class="btn btn-outline" style="color:#fff;border-color:rgba(255,255,255,0.4);">
+            See details
+          </a>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Latest listings -->
+  {latest.length > 0 && (
+    <section class="section">
+      <div class="container">
+        <div class="section-heading">
+          <h2>Latest properties in Bhopal</h2>
+        </div>
+        <div class="property-grid">
+          {latest.map(p => <PropertyCard property={p} />)}
+        </div>
+        <div style="margin-top:1.75rem;">
+          <a href="/properties" class="btn btn-outline">See all properties</a>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- What we do -->
+  <section class="section" style="background:var(--sage);">
+    <div class="container">
+      <div class="section-heading">
+        <h2>What we do</h2>
+        <p>A family business based in Neelbad, Bhopal. We sell plots, handle resale, and build homes — personally, without agents or middlemen.</p>
+      </div>
+      <div class="service-grid">
+        <div class="service-card">
+          <div class="service-card__icon">🌿</div>
+          <h3>Plot and farm house sales</h3>
+          <p>Residential plots and farm house plots around Bhopal, including our Vatika Green project near Bilkisganj.</p>
+          <a href="/properties" style="display:inline-block;margin-top:0.75rem;font-weight:600;color:var(--forest);font-size:0.95rem;">Browse properties</a>
+        </div>
+        <div class="service-card">
+          <div class="service-card__icon">🔄</div>
+          <h3>Resale</h3>
+          <p>Buying and selling residential and commercial properties in Bhopal. We help both sides find the right match.</p>
+          <a href="/sell" style="display:inline-block;margin-top:0.75rem;font-weight:600;color:var(--forest);font-size:0.95rem;">List your property</a>
+        </div>
+        <div class="service-card">
+          <div class="service-card__icon">🏗️</div>
+          <h3>House construction</h3>
+          <p>Build your home on your plot in Bhopal. We guide you from design and approvals through to handover.</p>
+          <a href="/construction" style="display:inline-block;margin-top:0.75rem;font-weight:600;color:var(--forest);font-size:0.95rem;">How it works</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section class="section">
+    <div class="container">
+      <div style="display:grid;gap:2.5rem;grid-template-columns:1fr;max-width:840px;">
+        <div class="section-heading" style="margin-bottom:0;">
+          <h2>About Siddhivinayak Developers</h2>
+          <div style="margin-top:0.75rem;display:flex;flex-direction:column;gap:0.9rem;color:#4a6054;max-width:60ch;">
+            <p>
+              We are a family-run real estate business based in Neelbad, Bhopal, Madhya Pradesh.
+              We focus on residential plots and farm house land around Bhopal — buying, selling, and construction.
+            </p>
+            <p>
+              Our current project is Vatika Green Farm House at Khuraniya, near Bilkisganj.
+              We are personally involved in every transaction, from the first site visit to registration.
+            </p>
+            <p>
+              Our office is at Plot No. 31, AM Point, Near Durga Mandir, Neelbad, Bhopal.
+            </p>
+          </div>
+          <a href="/contact" class="btn btn-outline" style="margin-top:1.25rem;">Get in touch</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How a purchase works -->
+  <section class="section" style="background:var(--sage);">
+    <div class="container">
+      <div class="section-heading">
+        <h2>How a purchase works</h2>
+        <p>Four straightforward steps from your first call to registration in Bhopal.</p>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <h3>Share your requirement</h3>
+          <p>Tell us what you are looking for and your budget. We find the right options for you.</p>
+        </div>
+        <div class="step">
+          <h3>Book a site visit</h3>
+          <p>We take you to see the property in Bhopal or near Bilkisganj. Ask every question — we answer plainly.</p>
+        </div>
+        <div class="step">
+          <h3>Finalise the deal</h3>
+          <p>Agree on the price and terms. We handle the paperwork and verify all documents.</p>
+        </div>
+        <div class="step">
+          <h3>Registration</h3>
+          <p>The property is registered in your name at the Bhopal sub-registrar office. We stay available throughout.</p>
+        </div>
+      </div>
+      <div style="margin-top:2rem;">
+        <a href="/faq" class="btn btn-outline">Read frequently asked questions</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sell banner -->
+  <section class="section">
+    <div class="container">
+      <div class="sell-banner">
+        <div class="sell-banner__text">
+          <h2>Want to sell your property in Bhopal?</h2>
+          <p>Share the details and we will connect you with genuine buyers.</p>
+        </div>
+        <a href="/sell" class="btn btn-primary">List your property</a>
+      </div>
+    </div>
+  </section>
+</Base>

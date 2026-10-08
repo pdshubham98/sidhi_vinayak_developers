@@ -1,0 +1,110 @@
+---
+export const prerender = false;
+
+import { actions, isInputError } from 'astro:actions';
+import Base from '../layouts/Base.astro';
+import Field from '../components/Field.astro';
+import Consent from '../components/Consent.astro';
+import Honeypot from '../components/Honeypot.astro';
+import { site, telHref, whatsappHref } from '../config/site';
+
+const result = Astro.getActionResult(actions.contact);
+if (result?.data?.received) {
+  return Astro.redirect('/thank-you');
+}
+
+const errors = result && isInputError(result.error) ? result.error.fields : {};
+
+// ?property= prefills a hidden field
+const propertyParam = Astro.url.searchParams.get('property') ?? '';
+---
+
+<Base
+  title="Contact us"
+  description="Contact Siddhivinayak Developers in Neelbad, Bhopal. Call, WhatsApp, or send a message about plots, farm house land, or house construction in Madhya Pradesh."
+  breadcrumbs={[{ name: 'Contact', url: '/contact' }]}
+>
+  <section class="page-hero">
+    <div class="container">
+      <h1>Contact us</h1>
+      <p>Call, WhatsApp or send us a message. We will get back to you quickly.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div style="display:grid;gap:3rem;grid-template-columns:1fr;">
+        <div style="display:grid;gap:1.5rem;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));">
+          {site.contact.phone && (
+            <div style="padding:1.25rem;background:#fff;border:1px solid var(--line);border-radius:var(--radius-lg);">
+              <div style="font-size:1.5rem;margin-bottom:0.5rem;">📞</div>
+              <h3 style="margin-bottom:0.25rem;">Call us</h3>
+              <a href={telHref(site.contact.phone)} style="color:var(--forest);font-weight:600;">{site.contact.phone}</a>
+              {site.contact.hours && <p style="font-size:0.875rem;color:#4a6054;margin-top:0.25rem;">{site.contact.hours}</p>}
+            </div>
+          )}
+          {site.contact.whatsapp && (
+            <div style="padding:1.25rem;background:#fff;border:1px solid var(--line);border-radius:var(--radius-lg);">
+              <div style="font-size:1.5rem;margin-bottom:0.5rem;">💬</div>
+              <h3 style="margin-bottom:0.25rem;">WhatsApp</h3>
+              <a href={whatsappHref(site.contact.whatsapp, "Hi, I have a question.")} target="_blank" rel="noopener noreferrer" style="color:var(--forest);font-weight:600;">Send a message</a>
+            </div>
+          )}
+          {site.contact.email && (
+            <div style="padding:1.25rem;background:#fff;border:1px solid var(--line);border-radius:var(--radius-lg);">
+              <div style="font-size:1.5rem;margin-bottom:0.5rem;">✉️</div>
+              <h3 style="margin-bottom:0.25rem;">Email</h3>
+              <a href={`mailto:${site.contact.email}`} style="color:var(--forest);font-weight:600;word-break:break-all;">{site.contact.email}</a>
+            </div>
+          )}
+          <div style="padding:1.25rem;background:#fff;border:1px solid var(--line);border-radius:var(--radius-lg);">
+            <div style="font-size:1.5rem;margin-bottom:0.5rem;">📍</div>
+            <h3 style="margin-bottom:0.25rem;">Office</h3>
+            <address style="font-style:normal;font-size:0.9rem;color:#4a6054;line-height:1.6;">
+              {site.office.lines.map(l => <>{l}<br /></>)}
+            </address>
+            {site.office.mapUrl && (
+              <a href={site.office.mapUrl} target="_blank" rel="noopener noreferrer" style="font-size:0.875rem;color:var(--forest);font-weight:600;display:inline-block;margin-top:0.4rem;">View on map</a>
+            )}
+          </div>
+        </div>
+
+        <!-- Contact form -->
+        <div style="max-width:600px;">
+          <h2 style="margin-bottom:1.5rem;">Send a message</h2>
+          <form
+            method="POST"
+            action={actions.contact}
+            class="form-stack"
+            id="contact-form"
+            novalidate
+          >
+            <Honeypot />
+
+            {propertyParam && (
+              <input type="hidden" name="property" value={propertyParam} />
+            )}
+
+            <div class="form-row">
+              <Field id="name" label="Your name" required error={errors.name?.[0]} autocomplete="name" />
+              <Field id="phone" label="Mobile number" type="tel" required error={errors.phone?.[0]} hint="10-digit Indian mobile number" autocomplete="tel" />
+            </div>
+
+            <Field id="email" label="Email address" type="email" error={errors.email?.[0]} autocomplete="email" />
+            <Field id="message" label="Message" type="textarea" required error={errors.message?.[0]} />
+
+            <Consent error={errors.consent?.[0]} />
+
+            <div class="form-submit">
+              <button type="submit" class="btn btn-primary">Send message</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  import '/src/scripts/enhance-form.ts';
+</script>

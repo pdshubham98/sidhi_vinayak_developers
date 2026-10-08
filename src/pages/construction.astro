@@ -1,0 +1,66 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../config/site';
+---
+
+<Base
+  title="House construction in Bhopal"
+  description="Build your home on your plot in Bhopal, Madhya Pradesh. Siddhivinayak Developers handles design, approvals, construction, and handover. Get a free estimate."
+  breadcrumbs={[{ name: 'Construction', url: '/construction' }]}
+>
+  <section class="page-hero">
+    <div class="container">
+      <h1>House construction</h1>
+      <p>Build your home on your plot. We guide you from design through to handover.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container" style="max-width:800px;">
+      <div class="section-heading">
+        <h2>How it works</h2>
+        <p>A straightforward process from the first meeting to the day you move in.</p>
+      </div>
+
+      <div class="construction-steps">
+        <div class="construction-step">
+          <div class="construction-step__num">1</div>
+          <div>
+            <h3>Tell us about your plot and plans</h3>
+            <p>Share the plot details, your requirements and your budget. We will visit the site and give you an honest estimate.</p>
+          </div>
+        </div>
+        <div class="construction-step">
+          <div class="construction-step__num">2</div>
+          <div>
+            <h3>Design and approval</h3>
+            <p>We prepare the layout plan, get the necessary approvals and finalise the design with you before any work begins.</p>
+          </div>
+        </div>
+        <div class="construction-step">
+          <div class="construction-step__num">3</div>
+          <div>
+            <h3>Construction</h3>
+            <p>Work begins on site. We give you regular updates and you can visit whenever you like. No surprises.</p>
+          </div>
+        </div>
+        <div class="construction-step">
+          <div class="construction-step__num">4</div>
+          <div>
+            <h3>Handover</h3>
+            <p>We walk you through the completed house, handle any finishing touches, and hand over the keys.</p>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:3rem;padding:2rem;background:var(--sage);border-radius:var(--radius-lg);">
+        <h2 style="font-size:1.4rem;margin-bottom:0.5rem;">Get a free estimate</h2>
+        <p style="color:#4a6054;margin-bottom:1.25rem;">Share your plot details and we will visit the site and give you an honest estimate for construction in Bhopal.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:0.75rem;">
+          <a href="/requirement?need=construction" class="btn btn-primary">Book a site visit</a>
+          <a href="/faq" class="btn btn-outline">Read FAQ</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

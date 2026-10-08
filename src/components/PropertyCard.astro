@@ -1,0 +1,55 @@
+---
+import type { Property } from '../lib/properties';
+import { typeLabels, statusLabels, formatPrice } from '../lib/properties';
+
+interface Props {
+  property: Property;
+}
+const { property: p } = Astro.props;
+const id = p.id;
+const { title, type, status, location, price, size, offer, summary, images, sample } = p.data;
+const image = images?.[0];
+const statusClass = {
+  available: 'badge-available',
+  booked: 'badge-booked',
+  sold: 'badge-sold',
+  upcoming: 'badge-upcoming',
+}[status];
+---
+
+<article class="property-card" data-type={type} data-status={status}>
+  <a href={`/properties/${id}`} class="property-card__image" tabindex="-1" aria-hidden="true">
+    {image ? (
+      <img src={image.src} alt={image.alt} loading="lazy" width="640" height="400" />
+    ) : (
+      <div style="width:100%;height:100%;background:var(--sage);" aria-hidden="true"></div>
+    )}
+    {image?.placeholder && (
+      <div class="property-card__photo-tag">
+        <span class="badge badge-sample">Photo coming soon</span>
+      </div>
+    )}
+  </a>
+
+  <div class="property-card__body">
+    <div class="property-card__meta">
+      <span class={`badge ${statusClass}`}>{statusLabels[status]}</span>
+      <span class="badge" style="background:var(--grey-light);color:#4a6054;">{typeLabels[type]}</span>
+      {sample && <span class="badge badge-sample">Sample listing</span>}
+    </div>
+
+    <h3 class="property-card__title">
+      <a href={`/properties/${id}`}>{title}</a>
+    </h3>
+
+    <p class="property-card__location">📍 {location}</p>
+
+    {summary && <p style="font-size:0.9rem;color:#4a6054;">{summary}</p>}
+
+    <div class="property-card__footer">
+      <span class="property-card__price">{formatPrice(price)}</span>
+      {size && <span class="property-card__size">{size}</span>}
+      {offer && <span class="property-card__offer">{offer}</span>}
+    </div>
+  </div>
+</article>

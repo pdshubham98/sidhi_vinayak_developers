@@ -1,0 +1,113 @@
+---
+import { site } from '../config/site';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import MobileBar from '../components/MobileBar.astro';
+import '../styles/global.css';
+
+interface BreadcrumbItem {
+  name: string;
+  url: string;
+}
+
+interface Props {
+  title: string;
+  description?: string;
+  /** Canonical URL for this page (full URL). */
+  canonical?: string;
+  /** Open Graph image URL. */
+  ogImage?: string;
+  /** Breadcrumb trail for BreadcrumbList schema. First item is always Home. */
+  breadcrumbs?: BreadcrumbItem[];
+  /** Extra JSON-LD blocks to inject (e.g. FAQPage, RealEstateListing). */
+  extraSchemas?: object[];
+}
+
+const {
+  title,
+  description = site.description,
+  canonical,
+  ogImage,
+  breadcrumbs,
+  extraSchemas = [],
+} = Astro.props;
+
+const pageTitle = title === site.name ? site.name : `${title} – ${site.name}`;
+
+const businessSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'RealEstateAgent',
+  name: site.name,
+  description: site.description,
+  url: Astro.site ? String(Astro.site) : undefined,
+  ...(site.contact.phone ? { telephone: site.contact.phone } : {}),
+  ...(site.contact.email ? { email: site.contact.email } : {}),
+  ...(site.contact.hours ? { openingHours: site.contact.hours } : {}),
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: site.office.lines[0],
+    addressLocality: 'Bhopal',
+    addressRegion: 'Madhya Pradesh',
+    postalCode: '462044',
+    addressCountry: 'IN',
+  },
+  areaServed: {
+    '@type': 'City',
+    name: 'Bhopal',
+    containedInPlace: { '@type': 'State', name: 'Madhya Pradesh' },
+  },
+  ...(site.office.mapUrl ? { hasMap: site.office.mapUrl } : {}),
+};
+
+const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: Astro.site ? String(Astro.site).replace(/\/$/, '') + '/' : '/' },
+    ...breadcrumbs.map((b, i) => ({
+      '@type': 'ListItem',
+      position: i + 2,
+      name: b.name,
+      item: b.url,
+    })),
+  ],
+} : null;
+
+const allSchemas = [businessSchema, ...(breadcrumbSchema ? [breadcrumbSchema] : []), ...extraSchemas];
+---
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{pageTitle}</title>
+  <meta name="description" content={description} />
+  {!site.indexable && <meta name="robots" content="noindex, nofollow" />}
+  {canonical && <link rel="canonical" href={canonical} />}
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content={pageTitle} />
+  <meta property="og:description" content={description} />
+  <meta property="og:type" content="website" />
+  {canonical && <meta property="og:url" content={canonical} />}
+  {ogImage && <meta property="og:image" content={ogImage} />}
+  <meta property="og:locale" content="en_IN" />
+  <meta property="og:site_name" content={site.name} />
+
+  <!-- Structured data -->
+  {allSchemas.map(schema => (
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+  ))}
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <Header />
+  <main id="main-content">
+    <slot />
+  </main>
+  <Footer />
+  <MobileBar />
+</body>
+</html>

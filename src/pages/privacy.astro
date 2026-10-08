@@ -1,0 +1,72 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../config/site';
+const year = new Date().getFullYear();
+---
+
+<Base
+  title="Privacy policy"
+  description="Privacy policy for Siddhivinayak Developers, Neelbad, Bhopal. How we collect and use your data under India's DPDP Act, 2023."
+  breadcrumbs={[{ name: 'Privacy policy', url: '/privacy' }]}
+>
+  <section class="page-hero">
+    <div class="container">
+      <h1>Privacy policy</h1>
+      <p>Last updated: {year}. Please read before submitting your details.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="prose">
+        <p>
+          <strong>Note:</strong> This is a draft privacy policy. Have a lawyer review it before
+          going live — forms on this site collect personal data, which is regulated under
+          India's Digital Personal Data Protection Act (DPDP Act), 2023.
+        </p>
+
+        <h2>Who we are</h2>
+        <p>
+          {site.name} is a real estate business based in Bhopal, Madhya Pradesh.
+          Office: {site.office.lines.join(', ')}.
+        </p>
+
+        <h2>What data we collect</h2>
+        <p>When you submit a form on this website we collect:</p>
+        <ul>
+          <li>Your name</li>
+          <li>Your mobile number</li>
+          <li>Your email address (optional)</li>
+          <li>Your enquiry or message</li>
+        </ul>
+
+        <h2>Why we collect it</h2>
+        <p>
+          We collect this data only to respond to your enquiry about buying, selling or
+          building a property. We do not use it for any other purpose and we do not share it
+          with any third party except as required to deliver our service (for example, our
+          email provider).
+        </p>
+
+        <h2>How we store it</h2>
+        <p>
+          Enquiries are stored securely. We keep them for as long as is necessary to respond
+          to you and complete any transaction, and no longer.
+        </p>
+
+        <h2>Your rights</h2>
+        <p>
+          You can ask us to correct or delete the data we hold about you at any time.
+          {site.contact.email
+            ? `Email us at ${site.contact.email}.`
+            : site.contact.phone
+              ? `Call us at ${site.contact.phone}.`
+              : 'Use the contact form on this website.'}
+        </p>
+
+        <h2>Cookies</h2>
+        <p>This site does not use tracking cookies or analytics.</p>
+      </div>
+    </div>
+  </section>
+</Base>

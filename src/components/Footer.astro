@@ -1,0 +1,79 @@
+---
+import { site, telHref, whatsappHref } from '../config/site';
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="site-footer__grid">
+      <!-- Brand -->
+      <div>
+        <a href="/" class="site-footer__logo">{site.name}</a>
+        <p>{site.tagline}</p>
+        {site.contact.hours && <p style="margin-top:0.5rem;color:rgba(255,255,255,0.55);">{site.contact.hours}</p>}
+      </div>
+
+      <!-- Office -->
+      <div>
+        <h4>{site.office.label}</h4>
+        <address>
+          {site.office.lines.map(l => <>{l}<br /></>)}
+        </address>
+        {site.office.mapUrl && (
+          <a href={site.office.mapUrl} target="_blank" rel="noopener noreferrer" style="margin-top:0.5rem;display:inline-block;font-size:0.85rem;">
+            View on Google Maps
+          </a>
+        )}
+      </div>
+
+      <!-- Site location -->
+      <div>
+        <h4>{site.projectSite.label}</h4>
+        <address>
+          {site.projectSite.lines.map(l => <>{l}<br /></>)}
+        </address>
+        {site.projectSite.mapUrl && (
+          <a href={site.projectSite.mapUrl} target="_blank" rel="noopener noreferrer" style="margin-top:0.5rem;display:inline-block;font-size:0.85rem;">
+            View on Google Maps
+          </a>
+        )}
+      </div>
+
+      <!-- Contact -->
+      <div>
+        <h4>Contact</h4>
+        {site.contact.phone && (
+          <p><a href={telHref(site.contact.phone)}>{site.contact.phone}</a></p>
+        )}
+        {site.contact.whatsapp && (
+          <p>
+            <a href={whatsappHref(site.contact.whatsapp, `Hi, I'm interested in a property.`)}>
+              WhatsApp
+            </a>
+          </p>
+        )}
+        {site.contact.email && (
+          <p><a href={`mailto:${site.contact.email}`}>{site.contact.email}</a></p>
+        )}
+      </div>
+
+      <!-- Quick links -->
+      <div>
+        <h4>Quick links</h4>
+        <ul class="site-footer__links">
+          <li><a href="/properties">Properties</a></li>
+          <li><a href="/construction">Construction</a></li>
+          <li><a href="/requirement">Book a site visit</a></li>
+          <li><a href="/sell">Sell your property</a></li>
+          <li><a href="/faq">FAQ</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="site-footer__bottom">
+      <span>© {year} {site.name}</span>
+      <a href="/privacy">Privacy policy</a>
+    </div>
+  </div>
+</footer>

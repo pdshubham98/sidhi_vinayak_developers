@@ -1,0 +1,15 @@
+---
+// Hidden field that humans never fill but bots usually do.
+// The action handler silently drops submissions where this field is non-empty.
+---
+
+<div aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden;" tabindex="-1">
+  <label for="website">Website (leave blank)</label>
+  <input
+    id="website"
+    name="website"
+    type="text"
+    autocomplete="off"
+    tabindex="-1"
+  />
+</div>

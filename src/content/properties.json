@@ -1,0 +1,50 @@
+[
+  {
+    "id": "vatika-green-farm-house",
+    "title": "Vatika Green Farm House",
+    "type": "farm-house-plot",
+    "status": "available",
+    "location": "Vatika Green Parisar, Khuraniya, near Bilkisganj",
+    "featured": true,
+    "summary": "Farm house plots at Vatika Green Parisar near Bilkisganj.",
+    "description": "Vatika Green is our farm house project at Khuraniya, near Bilkisganj. Call us or share your requirement for plot sizes, current prices and a site visit.",
+    "highlights": [],
+    "images": [
+      { "src": "/images/vatika-green.svg", "alt": "Illustration of Vatika Green farm house plots", "placeholder": true }
+    ],
+    "listedOn": "2026-10-08"
+  },
+  {
+    "id": "sample-residential-plot",
+    "title": "Residential plot",
+    "type": "plot",
+    "status": "available",
+    "location": "Neelbad, Bhopal",
+    "price": 1850000,
+    "size": "1,200 sq ft",
+    "offer": "Example offer text",
+    "summary": "Sample listing to preview how a plot appears on the site.",
+    "highlights": ["Example highlight", "Another example highlight"],
+    "images": [
+      { "src": "/images/plot.svg", "alt": "Illustration of a residential plot layout", "placeholder": true }
+    ],
+    "sample": true,
+    "listedOn": "2026-10-07"
+  },
+  {
+    "id": "sample-independent-house",
+    "title": "Independent house",
+    "type": "house",
+    "status": "booked",
+    "location": "Bhopal",
+    "price": 6500000,
+    "size": "2 floors, 1,500 sq ft plot",
+    "summary": "Sample listing to preview how a house and a booked status appear.",
+    "highlights": ["Example highlight"],
+    "images": [
+      { "src": "/images/house.svg", "alt": "Illustration of an independent house", "placeholder": true }
+    ],
+    "sample": true,
+    "listedOn": "2026-10-06"
+  }
+]

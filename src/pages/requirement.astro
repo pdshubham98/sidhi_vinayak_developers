@@ -1,0 +1,95 @@
+---
+export const prerender = false;
+
+import { actions, isInputError } from 'astro:actions';
+import Base from '../layouts/Base.astro';
+import Field from '../components/Field.astro';
+import ChoiceGroup from '../components/ChoiceGroup.astro';
+import Consent from '../components/Consent.astro';
+import Honeypot from '../components/Honeypot.astro';
+import { lookingForOptions, budgetOptions, timelineOptions } from '../lib/form-options';
+
+const result = Astro.getActionResult(actions.requirement);
+if (result?.data?.received) {
+  return Astro.redirect('/thank-you');
+}
+
+const errors = result && isInputError(result.error) ? result.error.fields : {};
+
+// Read ?need= to preselect the "Looking for" choice
+const needParam = Astro.url.searchParams.get('need') ?? '';
+---
+
+<Base
+  title="Book a site visit"
+  description="Tell us what you are looking for — plots, farm house land, or construction in Bhopal — and we will arrange a site visit and find the right options for you."
+  breadcrumbs={[{ name: 'Book a site visit', url: '/requirement' }]}
+>
+  <section class="page-hero">
+    <div class="container">
+      <h1>Book a site visit</h1>
+      <p>Tell us what you are looking for and we will arrange a visit and find the right options for you.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container" style="max-width:680px;">
+      <form
+        method="POST"
+        action={actions.requirement}
+        class="form-stack"
+        id="requirement-form"
+        novalidate
+      >
+        <Honeypot />
+
+        <div class="form-row">
+          <Field id="name" label="Your name" required error={errors.name?.[0]} autocomplete="name" />
+          <Field id="phone" label="Mobile number" type="tel" required error={errors.phone?.[0]} hint="10-digit Indian mobile number" autocomplete="tel" />
+        </div>
+
+        <Field id="email" label="Email address" type="email" error={errors.email?.[0]} autocomplete="email" />
+
+        <ChoiceGroup
+          id="lookingFor"
+          label="What are you looking for?"
+          options={lookingForOptions}
+          required
+          value={needParam}
+          error={errors.lookingFor?.[0]}
+        />
+
+        <Field id="preferredArea" label="Preferred area or locality" placeholder="e.g. Neelbad, Bilkisganj" error={errors.preferredArea?.[0]} />
+
+        <ChoiceGroup
+          id="budget"
+          label="Budget"
+          options={budgetOptions}
+          required
+          error={errors.budget?.[0]}
+          asSelect
+        />
+
+        <ChoiceGroup
+          id="timeline"
+          label="When do you want to buy?"
+          options={timelineOptions}
+          required
+          error={errors.timeline?.[0]}
+        />
+
+        <Field id="message" label="Anything else we should know?" type="textarea" error={errors.message?.[0]} />
+
+        <Consent error={errors.consent?.[0]} />
+
+        <div class="form-submit">
+          <button type="submit" class="btn btn-primary">Send requirement</button>
+        </div>
+      </form>
+    </div>
+  </section>
+</Base>
+
+<script>
+  import '/src/scripts/enhance-form.ts';
+</script>

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400">
+  <rect width="640" height="400" fill="#D9E5D3"/>
+  <!-- Plot outline -->
+  <rect x="60" y="40" width="520" height="320" rx="8" fill="#F3F6F1" stroke="#C9D6C3" stroke-width="2"/>
+  <!-- Corner markers -->
+  <circle cx="60" cy="40" r="6" fill="#24533B"/>
+  <circle cx="580" cy="40" r="6" fill="#24533B"/>
+  <circle cx="60" cy="360" r="6" fill="#24533B"/>
+  <circle cx="580" cy="360" r="6" fill="#24533B"/>
+  <!-- Dimension lines -->
+  <line x1="60" y1="30" x2="580" y2="30" stroke="#24533B" stroke-width="1" stroke-dasharray="4 3"/>
+  <line x1="590" y1="40" x2="590" y2="360" stroke="#24533B" stroke-width="1" stroke-dasharray="4 3"/>
+  <!-- Trees in corners -->
+  <ellipse cx="100" cy="80" rx="22" ry="26" fill="#2d6b4a" opacity="0.6"/>
+  <ellipse cx="540" cy="80" rx="22" ry="26" fill="#2d6b4a" opacity="0.6"/>
+  <ellipse cx="100" cy="320" rx="22" ry="26" fill="#2d6b4a" opacity="0.6"/>
+  <ellipse cx="540" cy="320" rx="22" ry="26" fill="#2d6b4a" opacity="0.6"/>
+  <!-- Label -->
+  <text x="320" y="205" text-anchor="middle" font-family="Georgia,serif" font-size="28" fill="#24533B" opacity="0.4">Plot</text>
+  <text x="320" y="235" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#4a6054">Sample listing</text>
+</svg>

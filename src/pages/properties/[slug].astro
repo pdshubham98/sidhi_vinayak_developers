@@ -1,0 +1,175 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { typeLabels, statusLabels, formatPrice } from '../../lib/properties';
+import { site } from '../../config/site';
+
+export async function getStaticPaths() {
+  const properties = await getCollection('properties');
+  return properties.map(p => ({ params: { slug: p.id } }));
+}
+
+const { slug } = Astro.params;
+const properties = await getCollection('properties');
+const property = properties.find(p => p.id === slug);
+
+if (!property) {
+  return Astro.redirect('/404');
+}
+
+const { title, type, status, location, price, size, offer, summary, description, highlights, images, sample } = property.data;
+
+const statusClass = {
+  available: 'badge-available',
+  booked: 'badge-booked',
+  sold: 'badge-sold',
+  upcoming: 'badge-upcoming',
+}[status];
+
+const mainImage = images?.[0];
+const thumbImages = images?.slice(1) ?? [];
+
+const whatsappMsg = `Hi, I'm interested in the property: ${title} in ${location}. Please share more details.`;
+const whatsappLink = site.contact.whatsapp
+  ? `https://wa.me/${site.contact.whatsapp.replace(/\D/g, '')}?text=${encodeURIComponent(whatsappMsg)}`
+  : null;
+
+// RealEstateListing structured data
+const listingSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'RealEstateListing',
+  name: title,
+  description: summary,
+  url: Astro.site ? `${String(Astro.site).replace(/\/$/, '')}/properties/${slug}` : undefined,
+  ...(price ? { price, priceCurrency: 'INR' } : {}),
+  ...(size ? { floorSize: { '@type': 'QuantitativeValue', description: size } } : {}),
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: location,
+    addressRegion: 'Madhya Pradesh',
+    addressCountry: 'IN',
+  },
+  ...(mainImage && !mainImage.placeholder ? { image: mainImage.src } : {}),
+};
+---
+
+<Base
+  title={`${title} – ${location}`}
+  description={`${summary} ${size ? size + '. ' : ''}${formatPrice(price)}. ${location}, Bhopal.`}
+  breadcrumbs={[
+    { name: 'Properties', url: '/properties' },
+    { name: title, url: `/properties/${slug}` },
+  ]}
+  extraSchemas={[listingSchema]}
+>
+  <section class="page-hero">
+    <div class="container">
+      <div style="display:flex;flex-wrap:wrap;align-items:center;gap:0.75rem;margin-bottom:0.75rem;">
+        <span class={`badge ${statusClass}`}>{statusLabels[status]}</span>
+        <span class="badge" style="background:rgba(255,255,255,0.15);color:rgba(255,255,255,0.9);">{typeLabels[type]}</span>
+        {sample && <span class="badge badge-sample">Sample listing</span>}
+      </div>
+      <h1>{title}</h1>
+      <p>📍 {location}</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="property-detail">
+        <!-- Main content -->
+        <div>
+          <!-- Gallery -->
+          {mainImage && (
+            <div class="property-gallery" style="margin-bottom:2rem;">
+              <div class="property-gallery__main" style="position:relative;">
+                <img src={mainImage.src} alt={mainImage.alt} width="960" height="720" />
+                {mainImage.placeholder && (
+                  <div style="position:absolute;bottom:0.75rem;left:0.75rem;">
+                    <span class="badge badge-sample">Photo coming soon</span>
+                  </div>
+                )}
+              </div>
+              {thumbImages.length > 0 && (
+                <div class="property-gallery__thumbs">
+                  {thumbImages.map(img => (
+                    <div class="property-gallery__thumb">
+                      <img src={img.src} alt={img.alt} width="160" height="120" loading="lazy" />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          <!-- Description -->
+          {description && (
+            <div style="margin-bottom:2rem;">
+              <h2 style="font-size:1.3rem;margin-bottom:0.75rem;">About this property</h2>
+              <p>{description}</p>
+            </div>
+          )}
+
+          <!-- Highlights -->
+          {highlights && highlights.length > 0 && (
+            <div style="margin-bottom:2rem;">
+              <h2 style="font-size:1.3rem;margin-bottom:0.75rem;">Highlights</h2>
+              <ul class="highlights-list">
+                {highlights.map(h => <li>{h}</li>)}
+              </ul>
+            </div>
+          )}
+
+          <!-- FAQ teaser -->
+          <div style="margin-bottom:2rem;padding:1.25rem;background:var(--sage);border-radius:var(--radius-lg);">
+            <p style="font-weight:600;margin-bottom:0.25rem;">Have questions about buying a plot in Bhopal?</p>
+            <p style="font-size:0.9rem;color:#4a6054;margin-bottom:0.75rem;">We've answered the most common ones — documents needed, registration process, and more.</p>
+            <a href="/faq" style="font-size:0.9rem;font-weight:600;color:var(--forest);">Read the FAQ</a>
+          </div>
+
+          <div style="margin-top:1rem;">
+            <a href="/properties" style="font-size:0.9rem;color:var(--forest);font-weight:600;">← Back to all properties</a>
+          </div>
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="detail-sidebar">
+          <div class="detail-sidebar-card">
+            <div style="margin-bottom:1.25rem;">
+              <div style="font-size:1.5rem;font-weight:700;color:var(--forest-deep);">{formatPrice(price)}</div>
+              {size && <div style="font-size:0.9rem;color:#4a6054;margin-top:0.2rem;">{size}</div>}
+              {offer && (
+                <div style="margin-top:0.5rem;">
+                  <span class="property-card__offer">{offer}</span>
+                </div>
+              )}
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:0.6rem;">
+              <a href={`/requirement?need=${type === 'farm-house-plot' ? 'farm-house' : 'plot'}`} class="btn btn-primary" style="justify-content:center;">
+                Book a site visit
+              </a>
+              <a href={`/contact?property=${encodeURIComponent(title)}`} class="btn btn-outline" style="justify-content:center;">
+                Send an enquiry
+              </a>
+              {whatsappLink && (
+                <a href={whatsappLink} class="btn btn-ghost" target="_blank" rel="noopener noreferrer" style="justify-content:center;">
+                  💬 WhatsApp us
+                </a>
+              )}
+              {site.contact.phone && (
+                <a href={`tel:${site.contact.phone.replace(/\s/g,'')}`} class="btn btn-ghost" style="justify-content:center;">
+                  📞 Call us
+                </a>
+              )}
+            </div>
+
+            {site.contact.hours && (
+              <p style="margin-top:1rem;font-size:0.8rem;color:#4a6054;text-align:center;">{site.contact.hours}</p>
+            )}
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+</Base>

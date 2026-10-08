@@ -1,0 +1,77 @@
+---
+import type { Option } from '../lib/form-options';
+
+interface Props {
+  id: string;
+  label: string;
+  name?: string;
+  options: readonly Option[];
+  required?: boolean;
+  value?: string;
+  error?: string;
+  /** Render as a <select> dropdown instead of radio buttons (use for long lists). */
+  asSelect?: boolean;
+}
+
+const {
+  id,
+  label,
+  name = id,
+  options,
+  required = false,
+  value = '',
+  error,
+  asSelect = false,
+} = Astro.props;
+
+const errorId = `${id}-error`;
+---
+
+<div class="form-group">
+  {asSelect ? (
+    <>
+      <label for={id}>
+        {label}
+        {required && <span class="required" aria-hidden="true">*</span>}
+      </label>
+      <select
+        id={id}
+        name={name}
+        class="field-select"
+        aria-required={required ? 'true' : undefined}
+        aria-invalid={error ? 'true' : undefined}
+        aria-describedby={error ? errorId : undefined}
+      >
+        <option value="">Choose…</option>
+        {options.map(o => (
+          <option value={o.value} selected={value === o.value}>{o.label}</option>
+        ))}
+      </select>
+    </>
+  ) : (
+    <>
+      <fieldset style="border:none;padding:0;margin:0;">
+        <legend style="font-weight:600;font-size:0.95rem;margin-bottom:0.4rem;float:left;width:100%;">
+          {label}
+          {required && <span class="required" aria-hidden="true">*</span>}
+        </legend>
+        <div class="choice-group" role="group" aria-invalid={error ? 'true' : undefined} aria-describedby={error ? errorId : undefined}>
+          {options.map(o => (
+            <label class="choice-label">
+              <input
+                type="radio"
+                name={name}
+                value={o.value}
+                checked={value === o.value}
+                aria-required={required ? 'true' : undefined}
+              />
+              {o.label}
+            </label>
+          ))}
+        </div>
+      </fieldset>
+    </>
+  )}
+
+  {error && <p id={errorId} class="field-error" role="alert">{error}</p>}
+</div>
