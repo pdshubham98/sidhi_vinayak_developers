@@ -4,8 +4,10 @@ import { typeLabels, statusLabels, formatPrice } from '../lib/properties';
 
 interface Props {
   property: Property;
+  /** Show the "Book site visit" CTA button on the card. Default true. */
+  showCta?: boolean;
 }
-const { property: p } = Astro.props;
+const { property: p, showCta = true } = Astro.props;
 const id = p.id;
 const { title, type, status, location, price, size, offer, summary, images, sample } = p.data;
 const image = images?.[0];
@@ -15,6 +17,9 @@ const statusClass = {
   sold: 'badge-sold',
   upcoming: 'badge-upcoming',
 }[status];
+
+const needParam = type === 'farm-house-plot' ? 'farm-house' : 'plot';
+const isAvailable = status === 'available' || status === 'upcoming';
 ---
 
 <article class="property-card" data-type={type} data-status={status}>
@@ -44,12 +49,47 @@ const statusClass = {
 
     <p class="property-card__location">📍 {location}</p>
 
-    {summary && <p style="font-size:0.9rem;color:#4a6054;">{summary}</p>}
+    {summary && <p style="font-size:0.875rem;color:#4a6054;line-height:1.5;">{summary}</p>}
 
     <div class="property-card__footer">
-      <span class="property-card__price">{formatPrice(price)}</span>
-      {size && <span class="property-card__size">{size}</span>}
+      <div>
+        <span class="property-card__price">{formatPrice(price)}</span>
+        {size && <span class="property-card__size">{size}</span>}
+      </div>
       {offer && <span class="property-card__offer">{offer}</span>}
     </div>
+
+    {showCta && isAvailable && (
+      <div class="property-card__cta">
+        <a href={`/requirement?need=${needParam}`} class="btn btn-primary" style="width:100%;justify-content:center;font-size:0.9rem;min-height:44px;">
+          Book a site visit
+        </a>
+        <a href={`/properties/${id}`} style="display:block;text-align:center;font-size:0.85rem;color:var(--forest);font-weight:600;margin-top:0.4rem;">
+          View details
+        </a>
+      </div>
+    )}
+    {showCta && !isAvailable && (
+      <div class="property-card__cta">
+        <a href={`/properties/${id}`} class="btn btn-ghost" style="width:100%;justify-content:center;font-size:0.9rem;min-height:44px;">
+          View details
+        </a>
+      </div>
+    )}
   </div>
 </article>
+
+<style>
+  .property-card__footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.4rem;
+  }
+  .property-card__cta {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--line);
+  }
+</style>

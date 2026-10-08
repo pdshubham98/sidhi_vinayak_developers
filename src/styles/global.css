@@ -651,3 +651,48 @@ label .required { color: #c0392b; margin-left: 2px; }
   color: #4a6054;
 }
 .empty-state p { margin-top: 0.5rem; font-size: 0.95rem; }
+
+/* ─── Improvements ───────────────────────────────────────────────────────── */
+
+/* Property card lift on hover */
+.property-card {
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.property-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 32px rgba(23, 38, 29, 0.12);
+}
+
+/* Hero path row subtle arrow */
+.hero-path::after {
+  content: '›';
+  font-size: 1.4rem;
+  opacity: 0.5;
+  margin-left: auto;
+  padding-left: 0.5rem;
+}
+
+/* Step number uses ochre colour already; add a subtle left border accent */
+.step {
+  border-left: 3px solid var(--ochre);
+}
+
+/* FAQ item open state — highlight question */
+details[open] .faq-question {
+  color: var(--forest);
+}
+
+/* Better select arrow */
+.field-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2324533B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  padding-right: 2.5rem;
+}
+
+/* Ochre strip */
+.ochre-strip {
+  background: var(--ochre);
+  color: var(--ink);
+}

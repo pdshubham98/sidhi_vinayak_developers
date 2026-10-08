@@ -27,6 +27,9 @@ const {
   rows = 4,
 } = Astro.props;
 
+// Mobile keyboards: tel fields get a numeric pad
+const inputMode = type === 'tel' ? 'tel' : undefined;
+
 const errorId = `${id}-error`;
 const hintId  = `${id}-hint`;
 const describedBy = [error ? errorId : '', hint ? hintId : ''].filter(Boolean).join(' ') || undefined;
@@ -63,6 +66,7 @@ const describedBy = [error ? errorId : '', hint ? hintId : ''].filter(Boolean).j
       aria-invalid={error ? 'true' : undefined}
       aria-describedby={describedBy}
       autocomplete={autocomplete}
+      inputmode={inputMode}
     />
   )}
 

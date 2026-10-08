@@ -3,6 +3,7 @@ import { site } from '../config/site';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import MobileBar from '../components/MobileBar.astro';
+import WhatsAppFloat from '../components/WhatsAppFloat.astro';
 import '../styles/global.css';
 
 interface BreadcrumbItem {
@@ -109,5 +110,6 @@ const allSchemas = [businessSchema, ...(breadcrumbSchema ? [breadcrumbSchema] : 
   </main>
   <Footer />
   <MobileBar />
+  <WhatsAppFloat />
 </body>
 </html>

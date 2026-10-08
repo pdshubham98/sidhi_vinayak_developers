@@ -1,0 +1,7 @@
+User-agent: *
+# Site is not yet live on its permanent domain. Disallow all until indexable: true is set in site.ts.
+Disallow: /
+
+# At go-live: replace the above two lines with:
+# Allow: /
+# Sitemap: https://www.yourdomain.com/sitemap-index.xml

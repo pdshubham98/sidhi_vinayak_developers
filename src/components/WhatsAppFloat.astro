@@ -1,0 +1,55 @@
+---
+import { site, whatsappHref } from '../config/site';
+if (!site.contact.whatsapp) return;
+const href = whatsappHref(site.contact.whatsapp, "Hi, I'm interested in a property. Please share details.");
+---
+
+<a
+  href={href}
+  class="wa-float"
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="Chat on WhatsApp"
+  title="Chat on WhatsApp"
+>
+  <!-- WhatsApp logo SVG -->
+  <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="28" height="28">
+    <path fill="#fff" d="M16 2C8.268 2 2 8.268 2 16c0 2.49.655 4.826 1.8 6.845L2 30l7.363-1.772A13.93 13.93 0 0 0 16 30c7.732 0 14-6.268 14-14S23.732 2 16 2zm0 25.5a11.44 11.44 0 0 1-5.844-1.6l-.42-.25-4.37 1.052 1.084-4.253-.274-.436A11.45 11.45 0 0 1 4.5 16C4.5 9.596 9.596 4.5 16 4.5S27.5 9.596 27.5 16 22.404 27.5 16 27.5z"/>
+    <path fill="#fff" d="M22.003 18.808c-.32-.16-1.893-.934-2.186-1.04-.293-.107-.506-.16-.719.16-.213.32-.825.04-1.012 1.04-.187.106-.4.12-.612.013-.213-.107-.9-.332-1.713-1.059-.633-.565-1.06-1.263-1.185-1.476-.12-.213-.013-.328.093-.434.093-.095.213-.24.32-.36.107-.12.14-.2.213-.333.07-.133.036-.253-.018-.36-.053-.106-.719-1.733-.985-2.373-.26-.627-.52-.533-.719-.546-.186-.013-.4-.013-.613-.013a1.18 1.18 0 0 0-.852.4c-.293.32-1.12 1.093-1.12 2.666s1.147 3.093 1.307 3.307c.16.213 2.253 3.44 5.46 4.827.76.327 1.354.52 1.814.666.76.24 1.454.207 2 .127.613-.093 1.893-.773 2.16-1.52.267-.746.267-1.386.187-1.52-.08-.12-.293-.186-.613-.346z"/>
+  </svg>
+  <span class="wa-float__label">WhatsApp</span>
+</a>
+
+<style>
+  .wa-float {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: 300;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #25D366;
+    color: #fff;
+    border-radius: 999px;
+    padding: 0.65rem 1.1rem 0.65rem 0.75rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    box-shadow: 0 4px 16px rgba(37, 211, 102, 0.45);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .wa-float:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(37, 211, 102, 0.55);
+  }
+  .wa-float:focus-visible {
+    outline: 3px solid #fff;
+    outline-offset: 3px;
+  }
+
+  /* On mobile, hide the label (mobile bar already has WhatsApp) */
+  @media (max-width: 767px) {
+    .wa-float { display: none; }
+  }
+</style>
