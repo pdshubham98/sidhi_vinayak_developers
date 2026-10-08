@@ -15,12 +15,12 @@ export const site = {
 
   contact: {
     /** Shown as text and used for tap-to-call, e.g. '+91 98765 43210'. */
-    phone: '',
+    phone: '+91 98765 43210',       // TODO: replace with real number
     /** WhatsApp number with country code, digits only, e.g. '919876543210'. */
-    whatsapp: '',
-    email: '',
+    whatsapp: '919876543210',       // TODO: replace with real number
+    email: 'info@siddhivinayak.in', // TODO: replace with real email
     /** e.g. 'Mon to Sat, 10 am to 7 pm' */
-    hours: '',
+    hours: 'Mon to Sat, 10 am to 7 pm',
   },
 
   office: {
