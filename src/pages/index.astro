@@ -4,6 +4,7 @@ import { site } from '../config/site';
 import { getProperties } from '../lib/properties';
 import PropertyCard from '../components/PropertyCard.astro';
 import PlotGrid from '../components/PlotGrid.astro';
+import { url } from '../lib/url';
 
 const allProperties = await getProperties();
 const featured = allProperties.find(p => p.data.featured);
@@ -27,7 +28,7 @@ const latest = allProperties.filter(p => !p.data.featured).slice(0, 3);
           </p>
 
           <nav class="hero-paths" aria-label="What are you looking for?">
-            <a href="/properties" class="hero-path">
+            <a href={url('/properties')} class="hero-path">
               <span class="hero-path__icon">
                 <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><path d="M11 8v6M8 11h6"/></svg>
               </span>
@@ -36,7 +37,7 @@ const latest = allProperties.filter(p => !p.data.featured).slice(0, 3);
                 <span class="hero-path__sub">Farm house plots and residential plots</span>
               </span>
             </a>
-            <a href="/construction" class="hero-path">
+            <a href={url('/construction')} class="hero-path">
               <span class="hero-path__icon">
                 <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/><line x1="17" y1="5" x2="22" y2="5"/><line x1="19.5" y1="2.5" x2="19.5" y2="7.5"/></svg>
               </span>
@@ -45,7 +46,7 @@ const latest = allProperties.filter(p => !p.data.featured).slice(0, 3);
                 <span class="hero-path__sub">Construction on your plot in Bhopal</span>
               </span>
             </a>
-            <a href="/sell" class="hero-path">
+            <a href={url('/sell')} class="hero-path">
               <span class="hero-path__icon">
                 <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
               </span>
@@ -79,11 +80,11 @@ const latest = allProperties.filter(p => !p.data.featured).slice(0, 3);
           <div class="featured-cta-wrap">
             <p class="featured-cta-desc">Visit the site in person, see the layout, and ask us anything. We are available Mon to Sat.</p>
             <div class="featured-cta-btns">
-              <a href="/requirement?need=farm-house" class="btn btn-ochre">
+              <a href={url('/requirement?need=farm-house')} class="btn btn-ochre">
                 <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
                 Book a site visit
               </a>
-              <a href="/properties/vatika-green-farm-house" class="btn btn-outline-light">
+              <a href={url('/properties/vatika-green-farm-house')} class="btn btn-outline-light">
                 See full details
               </a>
             </div>
@@ -105,7 +106,7 @@ const latest = allProperties.filter(p => !p.data.featured).slice(0, 3);
           {latest.map(p => <PropertyCard property={p} />)}
         </div>
         <div style="margin-top:1.75rem;">
-          <a href="/properties" class="btn btn-outline">See all properties</a>
+          <a href={url('/properties')} class="btn btn-outline">See all properties</a>
         </div>
       </div>
     </section>
@@ -125,7 +126,7 @@ const latest = allProperties.filter(p => !p.data.featured).slice(0, 3);
           </div>
           <h3>Plot and farm house sales</h3>
           <p>Residential plots and farm house plots around Bhopal, including our Vatika Green project near Bilkisganj.</p>
-          <a href="/properties" class="service-link">Browse properties</a>
+          <a href={url('/properties')} class="service-link">Browse properties</a>
         </div>
         <div class="service-card">
           <div class="service-card__icon">
@@ -133,7 +134,7 @@ const latest = allProperties.filter(p => !p.data.featured).slice(0, 3);
           </div>
           <h3>Resale</h3>
           <p>Buying and selling residential and commercial properties in Bhopal. We help both sides find the right match.</p>
-          <a href="/sell" class="service-link">List your property</a>
+          <a href={url('/sell')} class="service-link">List your property</a>
         </div>
         <div class="service-card">
           <div class="service-card__icon">
@@ -141,7 +142,7 @@ const latest = allProperties.filter(p => !p.data.featured).slice(0, 3);
           </div>
           <h3>House construction</h3>
           <p>Build your home on your plot in Bhopal. We guide you from design and approvals through to handover.</p>
-          <a href="/construction" class="service-link">How it works</a>
+          <a href={url('/construction')} class="service-link">How it works</a>
         </div>
       </div>
     </div>
@@ -165,7 +166,7 @@ const latest = allProperties.filter(p => !p.data.featured).slice(0, 3);
             Our office is at Plot No. 31, AM Point, Near Durga Mandir, Neelbad, Bhopal.
           </p>
         </div>
-        <a href="/contact" class="btn btn-outline" style="margin-top:1.5rem;">Get in touch</a>
+        <a href={url('/contact')} class="btn btn-outline" style="margin-top:1.5rem;">Get in touch</a>
       </div>
     </div>
   </section>
@@ -196,7 +197,7 @@ const latest = allProperties.filter(p => !p.data.featured).slice(0, 3);
         </div>
       </div>
       <div style="margin-top:2rem;">
-        <a href="/faq" class="btn btn-outline">Read frequently asked questions</a>
+        <a href={url('/faq')} class="btn btn-outline">Read frequently asked questions</a>
       </div>
     </div>
   </section>
@@ -209,7 +210,7 @@ const latest = allProperties.filter(p => !p.data.featured).slice(0, 3);
           <h2>Want to sell your property in Bhopal?</h2>
           <p>Share the details and we will connect you with genuine buyers.</p>
         </div>
-        <a href="/sell" class="btn btn-primary">List your property</a>
+        <a href={url('/sell')} class="btn btn-primary">List your property</a>
       </div>
     </div>
   </section>

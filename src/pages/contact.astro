@@ -6,6 +6,7 @@ import Honeypot from '../components/Honeypot.astro';
 import { site, telHref, whatsappHref } from '../config/site';
 
 const errors: Record<string, string[] | undefined> = {};
+import { url } from '../lib/url';
 ---
 
 <Base

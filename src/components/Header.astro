@@ -1,13 +1,18 @@
 ---
 import { site } from '../config/site';
+import { url } from '../lib/url';
 const path = Astro.url.pathname;
-const is = (p: string) => path === p || path === p + '/' ? 'page' : undefined;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const is = (p: string) => {
+  const full = base + p;
+  return path === full || path === full + '/' ? 'page' : undefined;
+};
 ---
 
 <header class="site-header">
   <div class="container">
     <div class="site-header__inner">
-      <a href="/" class="site-header__logo" aria-label={site.name + ' – home'}>
+      <a href={url('/')} class="site-header__logo" aria-label={site.name + ' – home'}>
         {site.name}
         <span>{site.tagline}</span>
       </a>
@@ -27,11 +32,11 @@ const is = (p: string) => path === p || path === p + '/' ? 'page' : undefined;
       </button>
 
       <nav class="site-nav" id="site-nav" aria-label="Main navigation">
-        <a href="/properties" aria-current={is('/properties')}>Properties</a>
-        <a href="/construction" aria-current={is('/construction')}>Construction</a>
-        <a href="/faq" aria-current={is('/faq')}>FAQ</a>
-        <a href="/contact" aria-current={is('/contact')}>Contact</a>
-        <a href="/requirement" class="btn btn-primary">Book a site visit</a>
+        <a href={url('/properties')} aria-current={is('/properties')}>Properties</a>
+        <a href={url('/construction')} aria-current={is('/construction')}>Construction</a>
+        <a href={url('/faq')} aria-current={is('/faq')}>FAQ</a>
+        <a href={url('/contact')} aria-current={is('/contact')}>Contact</a>
+        <a href={url('/requirement')} class="btn btn-primary">Book a site visit</a>
       </nav>
     </div>
   </div>
@@ -48,7 +53,6 @@ const is = (p: string) => path === p || path === p + '/' ? 'page' : undefined;
     nav.classList.toggle('is-open', !open);
   });
 
-  // Close nav when a link is clicked
   nav.querySelectorAll('a').forEach((link) => {
     link.addEventListener('click', () => {
       toggle.setAttribute('aria-expanded', 'false');
@@ -57,7 +61,6 @@ const is = (p: string) => path === p || path === p + '/' ? 'page' : undefined;
     });
   });
 
-  // Close nav on Escape
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && nav.classList.contains('is-open')) {
       toggle.setAttribute('aria-expanded', 'false');

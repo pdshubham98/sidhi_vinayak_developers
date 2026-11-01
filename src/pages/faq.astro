@@ -54,6 +54,7 @@ const faqSchema = {
     acceptedAnswer: { '@type': 'Answer', text: a },
   })),
 };
+import { url } from '../lib/url';
 ---
 
 <Base
@@ -89,7 +90,7 @@ const faqSchema = {
         <h2 style="font-size:1.3rem;margin-bottom:0.4rem;">Still have a question?</h2>
         <p style="color:#4a6054;margin-bottom:1.25rem;">Call us or send a message and we will get back to you quickly.</p>
         <div style="display:flex;flex-wrap:wrap;gap:0.75rem;">
-          <a href="/contact" class="btn btn-primary">Send a message</a>
+          <a href={url('/contact')} class="btn btn-primary">Send a message</a>
           {site.contact.phone && (
             <a href={`tel:${site.contact.phone.replace(/\s/g,'')}`} class="btn btn-outline">Call us</a>
           )}

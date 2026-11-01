@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import { url } from '../lib/url';
 ---
 
 <Base
@@ -12,7 +13,7 @@ import Base from '../layouts/Base.astro';
         <div style="font-size:3rem;margin-bottom:1rem;" aria-hidden="true">✅</div>
         <h1>Thank you</h1>
         <p>Your message has been received. We will be in touch with you shortly.</p>
-        <a href="/" class="btn btn-primary">Back to home</a>
+        <a href={url('/')} class="btn btn-primary">Back to home</a>
       </div>
     </div>
   </section>

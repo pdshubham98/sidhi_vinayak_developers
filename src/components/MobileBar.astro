@@ -1,5 +1,6 @@
 ---
 import { site, telHref, whatsappHref } from '../config/site';
+import { url } from '../lib/url';
 const hasPhone = !!site.contact.phone;
 const hasWhatsapp = !!site.contact.whatsapp;
 ---
@@ -23,7 +24,7 @@ const hasWhatsapp = !!site.contact.whatsapp;
         WhatsApp
       </a>
     )}
-    <a href="/requirement" class="btn btn-ghost">
+    <a href={url('/requirement')} class="btn btn-ghost">
       <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
       Enquire
     </a>
@@ -32,6 +33,6 @@ const hasWhatsapp = !!site.contact.whatsapp;
 
 {!hasPhone && !hasWhatsapp && (
   <div class="mobile-bar" role="navigation" aria-label="Quick contact">
-    <a href="/requirement" class="btn btn-primary">Enquire now</a>
+    <a href={url('/requirement')} class="btn btn-primary">Enquire now</a>
   </div>
 )}

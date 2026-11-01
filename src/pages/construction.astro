@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import { site } from '../config/site';
+import { url } from '../lib/url';
 ---
 
 <Base
@@ -57,8 +58,8 @@ import { site } from '../config/site';
         <h2 style="font-size:1.4rem;margin-bottom:0.5rem;">Get a free estimate</h2>
         <p style="color:#4a6054;margin-bottom:1.25rem;">Share your plot details and we will visit the site and give you an honest estimate for construction in Bhopal.</p>
         <div style="display:flex;flex-wrap:wrap;gap:0.75rem;">
-          <a href="/requirement?need=construction" class="btn btn-primary">Book a site visit</a>
-          <a href="/faq" class="btn btn-outline">Read FAQ</a>
+          <a href={url('/requirement?need=construction')} class="btn btn-primary">Book a site visit</a>
+          <a href={url('/faq')} class="btn btn-outline">Read FAQ</a>
         </div>
       </div>
     </div>

@@ -13,6 +13,7 @@ const typeEntries   = Object.entries(typeLabels).filter(([v]) => usedTypes.has(v
 const statusEntries = Object.entries(statusLabels).filter(([v]) => usedStatuses.has(v as any));
 
 const total = properties.length;
+import { url } from '../../lib/url';
 ---
 
 <Base
@@ -65,7 +66,7 @@ const total = properties.length;
         {properties.map(p => <PropertyCard property={p} />)}
         <div class="empty-state" id="empty-state" hidden aria-live="polite">
           <strong>No properties match those filters.</strong>
-          <p>Try a different combination, or <a href="/requirement">share your requirement</a> and we will find something for you.</p>
+          <p>Try a different combination, or <a href={url('/requirement')}>share your requirement</a> and we will find something for you.</p>
         </div>
       </div>
 
@@ -73,7 +74,7 @@ const total = properties.length;
       <div style="margin-top:2.5rem;padding-top:2rem;border-top:1px solid var(--line);">
         <p style="font-weight:600;margin-bottom:0.5rem;">Can't find what you're looking for?</p>
         <p style="color:#4a6054;font-size:0.95rem;margin-bottom:1rem;">Share your requirement and we'll find the right property in Bhopal for you.</p>
-        <a href="/requirement" class="btn btn-primary">Share your requirement</a>
+        <a href={url('/requirement')} class="btn btn-primary">Share your requirement</a>
       </div>
     </div>
   </section>

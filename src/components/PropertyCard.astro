@@ -1,6 +1,7 @@
 ---
 import type { Property } from '../lib/properties';
 import { typeLabels, statusLabels, formatPrice } from '../lib/properties';
+import { url } from '../lib/url';
 
 interface Props {
   property: Property;
@@ -23,7 +24,7 @@ const isAvailable = status === 'available' || status === 'upcoming';
 ---
 
 <article class="property-card" data-type={type} data-status={status}>
-  <a href={`/properties/${id}`} class="property-card__image" tabindex="-1" aria-hidden="true">
+  <a href={url(`/properties/${id}`)} class="property-card__image" tabindex="-1" aria-hidden="true">
     {image ? (
       <img src={image.src} alt={image.alt} loading="lazy" width="640" height="400" />
     ) : (
@@ -44,7 +45,7 @@ const isAvailable = status === 'available' || status === 'upcoming';
     </div>
 
     <h3 class="property-card__title">
-      <a href={`/properties/${id}`}>{title}</a>
+      <a href={url(`/properties/${id}`)}>{title}</a>
     </h3>
 
     <p class="property-card__location">
@@ -63,17 +64,17 @@ const isAvailable = status === 'available' || status === 'upcoming';
 
     {showCta && isAvailable && (
       <div class="property-card__cta">
-        <a href={`/requirement?need=${needParam}`} class="btn btn-primary" style="width:100%;justify-content:center;font-size:0.9rem;min-height:44px;">
+        <a href={url(`/requirement?need=${needParam}`)} class="btn btn-primary" style="width:100%;justify-content:center;font-size:0.9rem;min-height:44px;">
           Book a site visit
         </a>
-        <a href={`/properties/${id}`} style="display:block;text-align:center;font-size:0.85rem;color:var(--forest);font-weight:600;margin-top:0.4rem;">
+        <a href={url(`/properties/${id}`)} style="display:block;text-align:center;font-size:0.85rem;color:var(--forest);font-weight:600;margin-top:0.4rem;">
           View details
         </a>
       </div>
     )}
     {showCta && !isAvailable && (
       <div class="property-card__cta">
-        <a href={`/properties/${id}`} class="btn btn-ghost" style="width:100%;justify-content:center;font-size:0.9rem;min-height:44px;">
+        <a href={url(`/properties/${id}`)} class="btn btn-ghost" style="width:100%;justify-content:center;font-size:0.9rem;min-height:44px;">
           View details
         </a>
       </div>
