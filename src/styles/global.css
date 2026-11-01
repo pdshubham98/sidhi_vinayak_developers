@@ -394,7 +394,7 @@ label .required { color: #c0392b; margin-left: 2px; }
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
 }
-.service-card__icon { font-size: 2rem; margin-bottom: 0.75rem; }
+.service-card__icon { line-height: 0; margin-bottom: 0.75rem; color: var(--forest); }
 .service-card h3 { margin-bottom: 0.5rem; }
 .service-card p { color: #4a6054; font-size: 0.95rem; }
 

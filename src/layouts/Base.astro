@@ -35,9 +35,12 @@ const {
 
 const pageTitle = title === site.name ? site.name : `${title} – ${site.name}`;
 
+// Auto-generate canonical from current URL when Astro.site is set
+const canonicalUrl = canonical ?? (Astro.site ? new URL(Astro.url.pathname, Astro.site).toString() : undefined);
+
 const businessSchema = {
   '@context': 'https://schema.org',
-  '@type': 'RealEstateAgent',
+  '@type': ['RealEstateAgent', 'LocalBusiness'],
   name: site.name,
   description: site.description,
   url: Astro.site ? String(Astro.site) : undefined,
@@ -52,11 +55,16 @@ const businessSchema = {
     postalCode: '462044',
     addressCountry: 'IN',
   },
-  areaServed: {
-    '@type': 'City',
-    name: 'Bhopal',
-    containedInPlace: { '@type': 'State', name: 'Madhya Pradesh' },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: '23.1765',
+    longitude: '77.4346',
   },
+  areaServed: [
+    { '@type': 'City', name: 'Bhopal' },
+    { '@type': 'State', name: 'Madhya Pradesh' },
+  ],
+  keywords: 'plots in Bhopal, farm house plots Bhopal, property in Bhopal, plots near Bilkisganj, Neelbad property, Madhya Pradesh real estate',
   ...(site.office.mapUrl ? { hasMap: site.office.mapUrl } : {}),
 };
 
@@ -85,14 +93,21 @@ const allSchemas = [businessSchema, ...(breadcrumbSchema ? [breadcrumbSchema] : 
   <title>{pageTitle}</title>
   <meta name="description" content={description} />
   {!site.indexable && <meta name="robots" content="noindex, nofollow" />}
-  {canonical && <link rel="canonical" href={canonical} />}
+  {site.indexable && <meta name="robots" content="index, follow" />}
+  {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+  <!-- Geo / local SEO -->
+  <meta name="geo.region" content="IN-MP" />
+  <meta name="geo.placename" content="Bhopal, Madhya Pradesh" />
+  <meta name="geo.position" content="23.1765;77.4346" />
+  <meta name="ICBM" content="23.1765, 77.4346" />
 
   <!-- Open Graph -->
   <meta property="og:title" content={pageTitle} />
   <meta property="og:description" content={description} />
   <meta property="og:type" content="website" />
-  {canonical && <meta property="og:url" content={canonical} />}
+  {canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
   {ogImage && <meta property="og:image" content={ogImage} />}
   <meta property="og:locale" content="en_IN" />
   <meta property="og:site_name" content={site.name} />

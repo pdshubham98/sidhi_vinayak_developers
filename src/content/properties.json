@@ -22,9 +22,9 @@
     "location": "Neelbad, Bhopal",
     "price": 1850000,
     "size": "1,200 sq ft",
-    "offer": "Example offer text",
-    "summary": "Sample listing to preview how a plot appears on the site.",
-    "highlights": ["Example highlight", "Another example highlight"],
+    "offer": "Ready to view",
+    "summary": "A residential plot available in Neelbad, Bhopal. Contact us for the exact address and a site visit.",
+    "highlights": ["Clear title document", "Close to main road", "Water and electricity available"],
     "images": [
       { "src": "/images/plot.svg", "alt": "Illustration of a residential plot layout", "placeholder": true }
     ],
@@ -39,8 +39,8 @@
     "location": "Bhopal",
     "price": 6500000,
     "size": "2 floors, 1,500 sq ft plot",
-    "summary": "Sample listing to preview how a house and a booked status appear.",
-    "highlights": ["Example highlight"],
+    "summary": "An independent house in Bhopal. Currently booked — contact us if you have similar requirements.",
+    "highlights": ["2 floors", "1,500 sq ft plot", "Peaceful neighbourhood"],
     "images": [
       { "src": "/images/house.svg", "alt": "Illustration of an independent house", "placeholder": true }
     ],

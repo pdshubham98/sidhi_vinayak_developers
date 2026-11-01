@@ -4,42 +4,61 @@ import { getProperties, typeLabels, statusLabels } from '../../lib/properties';
 import PropertyCard from '../../components/PropertyCard.astro';
 
 const properties = await getProperties();
+
+// Only show filter buttons for types / statuses that actually have listings.
+const usedTypes   = new Set(properties.map(p => p.data.type));
+const usedStatuses = new Set(properties.map(p => p.data.status));
+
+const typeEntries   = Object.entries(typeLabels).filter(([v]) => usedTypes.has(v as any));
+const statusEntries = Object.entries(statusLabels).filter(([v]) => usedStatuses.has(v as any));
+
+const total = properties.length;
 ---
 
 <Base
-  title="Properties in Bhopal"
-  description="Browse residential plots and farm house plots available around Bhopal, Madhya Pradesh. Vatika Green near Bilkisganj. Filter by type or availability."
+  title="Properties in Bhopal – Plots &amp; Farm Houses"
+  description={`Browse ${total} residential plot${total !== 1 ? 's' : ''} and farm house plot${total !== 1 ? 's' : ''} available around Bhopal, Madhya Pradesh. Vatika Green near Bilkisganj. Filter by type or availability.`}
   breadcrumbs={[{ name: 'Properties', url: '/properties' }]}
 >
   <section class="page-hero">
     <div class="container">
-      <h1>Properties</h1>
-      <p>Plots and farm house plots around Bhopal. Call or share your requirement for current prices and a site visit.</p>
+      <h1>Properties in Bhopal</h1>
+      <p>Plots and farm house plots around Bhopal, Madhya Pradesh. Call or share your requirement for current prices and a site visit.</p>
     </div>
   </section>
 
   <section class="section">
     <div class="container">
-      <!-- Filters -->
-      <div style="margin-bottom:1.75rem;">
-        <p style="font-size:0.85rem;font-weight:600;color:#4a6054;margin-bottom:0.6rem;text-transform:uppercase;letter-spacing:0.06em;">Filter by type</p>
-        <div class="filter-bar" id="type-filters" role="group" aria-label="Filter by property type">
-          <button class="filter-btn" data-filter="all" aria-pressed="true">All</button>
-          {Object.entries(typeLabels).map(([value, label]) => (
-            <button class="filter-btn" data-filter={value} aria-pressed="false">{label}</button>
-          ))}
+      <!-- Filters (only shown when >1 type or status exists) -->
+      {typeEntries.length > 1 && (
+        <div style="margin-bottom:1.75rem;">
+          <p style="font-size:0.85rem;font-weight:600;color:#4a6054;margin-bottom:0.6rem;text-transform:uppercase;letter-spacing:0.06em;">Filter by type</p>
+          <div class="filter-bar" id="type-filters" role="group" aria-label="Filter by property type">
+            <button class="filter-btn" data-filter="all" aria-pressed="true">All ({total})</button>
+            {typeEntries.map(([value, label]) => {
+              const count = properties.filter(p => p.data.type === value).length;
+              return (
+                <button class="filter-btn" data-filter={value} aria-pressed="false">{label} ({count})</button>
+              );
+            })}
+          </div>
         </div>
-      </div>
+      )}
 
-      <div style="margin-bottom:2rem;">
-        <p style="font-size:0.85rem;font-weight:600;color:#4a6054;margin-bottom:0.6rem;text-transform:uppercase;letter-spacing:0.06em;">Filter by status</p>
-        <div class="filter-bar" id="status-filters" role="group" aria-label="Filter by availability">
-          <button class="filter-btn" data-filter-status="all" aria-pressed="true">All</button>
-          {Object.entries(statusLabels).map(([value, label]) => (
-            <button class="filter-btn" data-filter-status={value} aria-pressed="false">{label}</button>
-          ))}
+      {statusEntries.length > 1 && (
+        <div style="margin-bottom:2rem;">
+          <p style="font-size:0.85rem;font-weight:600;color:#4a6054;margin-bottom:0.6rem;text-transform:uppercase;letter-spacing:0.06em;">Filter by availability</p>
+          <div class="filter-bar" id="status-filters" role="group" aria-label="Filter by availability">
+            <button class="filter-btn" data-filter-status="all" aria-pressed="true">All</button>
+            {statusEntries.map(([value, label]) => (
+              <button class="filter-btn" data-filter-status={value} aria-pressed="false">{label}</button>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
+
+      <!-- Count -->
+      <p style="font-size:0.9rem;color:#4a6054;margin-bottom:1.25rem;" id="result-count">{total} propert{total !== 1 ? 'ies' : 'y'} listed</p>
 
       <!-- Grid -->
       <div class="property-grid" id="property-grid">
@@ -48,6 +67,13 @@ const properties = await getProperties();
           <strong>No properties match those filters.</strong>
           <p>Try a different combination, or <a href="/requirement">share your requirement</a> and we will find something for you.</p>
         </div>
+      </div>
+
+      <!-- CTA -->
+      <div style="margin-top:2.5rem;padding-top:2rem;border-top:1px solid var(--line);">
+        <p style="font-weight:600;margin-bottom:0.5rem;">Can't find what you're looking for?</p>
+        <p style="color:#4a6054;font-size:0.95rem;margin-bottom:1rem;">Share your requirement and we'll find the right property in Bhopal for you.</p>
+        <a href="/requirement" class="btn btn-primary">Share your requirement</a>
       </div>
     </div>
   </section>
@@ -73,27 +99,34 @@ const properties = await getProperties();
 
     const empty = document.getElementById('empty-state')!;
     empty.hidden = visible > 0;
+
+    const count = document.getElementById('result-count');
+    if (count) count.textContent = `${visible} propert${visible !== 1 ? 'ies' : 'y'} listed`;
   }
 
-  // Type filters
-  document.getElementById('type-filters')!.addEventListener('click', e => {
-    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.filter-btn');
-    if (!btn) return;
-    activeType = btn.dataset.filter ?? 'all';
-    document.querySelectorAll('#type-filters .filter-btn').forEach(b =>
-      b.setAttribute('aria-pressed', String(b === btn))
-    );
-    applyFilters();
-  });
+  const typeFilters = document.getElementById('type-filters');
+  if (typeFilters) {
+    typeFilters.addEventListener('click', e => {
+      const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.filter-btn');
+      if (!btn) return;
+      activeType = btn.dataset.filter ?? 'all';
+      typeFilters.querySelectorAll('.filter-btn').forEach(b =>
+        b.setAttribute('aria-pressed', String(b === btn))
+      );
+      applyFilters();
+    });
+  }
 
-  // Status filters
-  document.getElementById('status-filters')!.addEventListener('click', e => {
-    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.filter-btn');
-    if (!btn) return;
-    activeStatus = btn.dataset.filterStatus ?? 'all';
-    document.querySelectorAll('#status-filters .filter-btn').forEach(b =>
-      b.setAttribute('aria-pressed', String(b === btn))
-    );
-    applyFilters();
-  });
+  const statusFilters = document.getElementById('status-filters');
+  if (statusFilters) {
+    statusFilters.addEventListener('click', e => {
+      const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.filter-btn');
+      if (!btn) return;
+      activeStatus = btn.dataset.filterStatus ?? 'all';
+      statusFilters.querySelectorAll('.filter-btn').forEach(b =>
+        b.setAttribute('aria-pressed', String(b === btn))
+      );
+      applyFilters();
+    });
+  }
 </script>
