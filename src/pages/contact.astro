@@ -1,22 +1,11 @@
 ---
-export const prerender = false;
-
-import { actions, isInputError } from 'astro:actions';
 import Base from '../layouts/Base.astro';
 import Field from '../components/Field.astro';
 import Consent from '../components/Consent.astro';
 import Honeypot from '../components/Honeypot.astro';
 import { site, telHref, whatsappHref } from '../config/site';
 
-const result = Astro.getActionResult(actions.contact);
-if (result?.data?.received) {
-  return Astro.redirect('/thank-you');
-}
-
-const errors = result && isInputError(result.error) ? result.error.fields : {};
-
-// ?property= prefills a hidden field
-const propertyParam = Astro.url.searchParams.get('property') ?? '';
+const errors: Record<string, string[] | undefined> = {};
 ---
 
 <Base
@@ -74,16 +63,14 @@ const propertyParam = Astro.url.searchParams.get('property') ?? '';
           <h2 style="margin-bottom:1.5rem;">Send a message</h2>
           <form
             method="POST"
-            action={actions.contact}
+            action=""
             class="form-stack"
             id="contact-form"
             novalidate
           >
             <Honeypot />
 
-            {propertyParam && (
-              <input type="hidden" name="property" value={propertyParam} />
-            )}
+            <input type="hidden" name="property" id="property-field" value="" />
 
             <div class="form-row">
               <Field id="name" label="Your name" required error={errors.name?.[0]} autocomplete="name" />
@@ -106,5 +93,5 @@ const propertyParam = Astro.url.searchParams.get('property') ?? '';
 </Base>
 
 <script>
-  import '/src/scripts/enhance-form.ts';
+  import '/src/scripts/whatsapp-form.ts';
 </script>

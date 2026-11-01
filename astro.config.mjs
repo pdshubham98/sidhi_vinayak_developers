@@ -2,18 +2,18 @@
 import { defineConfig } from 'astro/config';
 import cloudflare from '@astrojs/cloudflare';
 
-// Static pages are prerendered at build time; only the form pages run on demand.
+// Set DEPLOY_TARGET=github in CI to build for GitHub Pages.
+// Unset (or any other value) builds for Cloudflare Workers.
+const githubPages = process.env.DEPLOY_TARGET === 'github';
+
 export default defineConfig({
-  // Set to the real domain at go-live (used for canonical URLs and the sitemap).
-  // e.g. site: 'https://www.siddhivinayakdevelopers.com',
-  // site: 'https://www.example.com',
+  // GitHub Pages serves the site at /sidhi_vinayak_developers/
+  // Cloudflare Workers serves at the root.
+  base: githubPages ? '/sidhi_vinayak_developers' : undefined,
 
-  // Go-live SEO step: add @astrojs/sitemap to generate /sitemap-index.xml
-  // Run: npm install @astrojs/sitemap
-  // Then: import sitemap from '@astrojs/sitemap'; and add sitemap() to integrations: [sitemap()]
+  session: false,
 
-  session: false, // Not needed: form results are returned directly, no server-side session state.
-  adapter: cloudflare({
-    imageService: 'passthrough', // Images are served as-is; listing photos will come from the CMS image CDN.
-  }),
+  // No adapter = static output (for GitHub Pages).
+  // Cloudflare adapter = server output with edge functions (for the full deployment).
+  adapter: githubPages ? undefined : cloudflare({ imageService: 'passthrough' }),
 });

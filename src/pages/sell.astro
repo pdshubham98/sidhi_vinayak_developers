@@ -1,7 +1,4 @@
 ---
-export const prerender = false;
-
-import { actions, isInputError } from 'astro:actions';
 import Base from '../layouts/Base.astro';
 import Field from '../components/Field.astro';
 import ChoiceGroup from '../components/ChoiceGroup.astro';
@@ -9,12 +6,7 @@ import Consent from '../components/Consent.astro';
 import Honeypot from '../components/Honeypot.astro';
 import { sellTypeOptions } from '../lib/form-options';
 
-const result = Astro.getActionResult(actions.sell);
-if (result?.data?.received) {
-  return Astro.redirect('/thank-you');
-}
-
-const errors = result && isInputError(result.error) ? result.error.fields : {};
+const errors: Record<string, string[] | undefined> = {};
 ---
 
 <Base
@@ -33,7 +25,7 @@ const errors = result && isInputError(result.error) ? result.error.fields : {};
     <div class="container" style="max-width:680px;">
       <form
         method="POST"
-        action={actions.sell}
+        action=""
         class="form-stack"
         id="sell-form"
         novalidate
@@ -76,5 +68,5 @@ const errors = result && isInputError(result.error) ? result.error.fields : {};
 </Base>
 
 <script>
-  import '/src/scripts/enhance-form.ts';
+  import '/src/scripts/whatsapp-form.ts';
 </script>

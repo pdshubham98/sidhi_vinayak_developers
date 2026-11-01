@@ -1,7 +1,4 @@
 ---
-export const prerender = false;
-
-import { actions, isInputError } from 'astro:actions';
 import Base from '../layouts/Base.astro';
 import Field from '../components/Field.astro';
 import ChoiceGroup from '../components/ChoiceGroup.astro';
@@ -9,15 +6,7 @@ import Consent from '../components/Consent.astro';
 import Honeypot from '../components/Honeypot.astro';
 import { lookingForOptions, budgetOptions, timelineOptions } from '../lib/form-options';
 
-const result = Astro.getActionResult(actions.requirement);
-if (result?.data?.received) {
-  return Astro.redirect('/thank-you');
-}
-
-const errors = result && isInputError(result.error) ? result.error.fields : {};
-
-// Read ?need= to preselect the "Looking for" choice
-const needParam = Astro.url.searchParams.get('need') ?? '';
+const errors: Record<string, string[] | undefined> = {};
 ---
 
 <Base
@@ -36,7 +25,7 @@ const needParam = Astro.url.searchParams.get('need') ?? '';
     <div class="container" style="max-width:680px;">
       <form
         method="POST"
-        action={actions.requirement}
+        action=""
         class="form-stack"
         id="requirement-form"
         novalidate
@@ -55,7 +44,7 @@ const needParam = Astro.url.searchParams.get('need') ?? '';
           label="What are you looking for?"
           options={lookingForOptions}
           required
-          value={needParam}
+          value=""
           error={errors.lookingFor?.[0]}
         />
 
@@ -91,5 +80,5 @@ const needParam = Astro.url.searchParams.get('need') ?? '';
 </Base>
 
 <script>
-  import '/src/scripts/enhance-form.ts';
+  import '/src/scripts/whatsapp-form.ts';
 </script>

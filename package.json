@@ -13,9 +13,11 @@
     "@astrojs/cloudflare": "^14.3.4",
     "@fontsource/mukta": "^5.3.0",
     "@fontsource/young-serif": "^5.3.0",
+    "@sanity/client": "^8.14.1",
     "astro": "^7.3.7"
   },
   "devDependencies": {
+    "sanity": "^6.21.0",
     "wrangler": "^4.148.0"
   }
 }
