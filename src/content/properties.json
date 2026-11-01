@@ -6,45 +6,13 @@
     "status": "available",
     "location": "Vatika Green Parisar, Khuraniya, near Bilkisganj",
     "featured": true,
-    "summary": "Farm house plots at Vatika Green Parisar near Bilkisganj.",
-    "description": "Vatika Green is our farm house project at Khuraniya, near Bilkisganj. Call us or share your requirement for plot sizes, current prices and a site visit.",
-    "highlights": [],
+    "published": true,
+    "summary": "Farm house plots at Vatika Green Parisar near Bilkisganj — a planned layout with an internal road and tree planting.",
+    "description": "Vatika Green is our farm house project at Khuraniya, near Bilkisganj. The layout is planned with plots on both sides of an internal road, green spaces, and trees. Call us or share your requirement for current plot sizes, pricing, and to arrange a site visit.",
+    "highlights": ["Planned internal road", "Tree-lined layout", "Close to Bilkisganj"],
     "images": [
-      { "src": "/images/vatika-green.svg", "alt": "Illustration of Vatika Green farm house plots", "placeholder": true }
+      { "src": "/images/vatika-green.svg", "alt": "Vatika Green farm house plot layout, Khuraniya near Bilkisganj", "placeholder": true }
     ],
     "listedOn": "2026-10-08"
-  },
-  {
-    "id": "sample-residential-plot",
-    "title": "Residential plot",
-    "type": "plot",
-    "status": "available",
-    "location": "Neelbad, Bhopal",
-    "price": 1850000,
-    "size": "1,200 sq ft",
-    "offer": "Ready to view",
-    "summary": "A residential plot available in Neelbad, Bhopal. Contact us for the exact address and a site visit.",
-    "highlights": ["Clear title document", "Close to main road", "Water and electricity available"],
-    "images": [
-      { "src": "/images/plot.svg", "alt": "Illustration of a residential plot layout", "placeholder": true }
-    ],
-    "sample": true,
-    "listedOn": "2026-10-07"
-  },
-  {
-    "id": "sample-independent-house",
-    "title": "Independent house",
-    "type": "house",
-    "status": "booked",
-    "location": "Bhopal",
-    "price": 6500000,
-    "size": "2 floors, 1,500 sq ft plot",
-    "summary": "An independent house in Bhopal. Currently booked — contact us if you have similar requirements.",
-    "highlights": ["2 floors", "1,500 sq ft plot", "Peaceful neighbourhood"],
-    "images": [
-      { "src": "/images/house.svg", "alt": "Illustration of an independent house", "placeholder": true }
-    ],
-    "sample": true,
-    "listedOn": "2026-10-06"
   }
 ]

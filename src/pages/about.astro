@@ -1,0 +1,231 @@
+---
+import Base from '../layouts/Base.astro';
+import { site, telHref, whatsappHref } from '../config/site';
+import { url } from '../lib/url';
+---
+
+<Base
+  title="About Sidhivinayak Developers"
+  description="Sidhivinayak Developers is a family real estate business based in Neelbad, Bhopal. We help clients buy plots and farmhouses, build homes, and sell property in Bhopal and Madhya Pradesh."
+  breadcrumbs={[{ name: 'About', url: '/about' }]}
+>
+  <section class="page-hero">
+    <div class="container">
+      <p class="hero-eyebrow-sm">Bhopal, Madhya Pradesh</p>
+      <h1>About Sidhivinayak Developers</h1>
+      <p>A family business that personally works with every client — from the first site visit to registration.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="about-layout">
+        <div class="about-main">
+          <div class="about-block">
+            <h2>Who we are</h2>
+            <p>
+              Sidhivinayak Developers is a family-run real estate business based in Neelbad, Bhopal, Madhya Pradesh.
+              We focus on residential plots and farmhouse land around Bhopal — helping families buy the right property,
+              build their homes, and sell when the time comes.
+            </p>
+            <p>
+              We do not work through agents or middlemen. Every client works with us directly, from the first conversation
+              to the day the property is registered in their name.
+            </p>
+          </div>
+
+          <div class="about-block">
+            <h2>What we do</h2>
+            <div class="about-services">
+              <div class="about-service">
+                <div class="about-service__icon">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="8" height="8" rx="1"/><rect x="14" y="3" width="8" height="8" rx="1"/><rect x="2" y="13" width="8" height="8" rx="1"/><rect x="14" y="13" width="8" height="8" rx="1"/></svg>
+                </div>
+                <div>
+                  <h3>Property sales</h3>
+                  <p>Residential plots and farmhouse plots around Bhopal. Our current project, Vatika Green Farm House, is at Khuraniya, near Bilkisganj.</p>
+                </div>
+              </div>
+              <div class="about-service">
+                <div class="about-service__icon">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                </div>
+                <div>
+                  <h3>Resale</h3>
+                  <p>We help both buyers and sellers with residential and commercial properties across Bhopal.</p>
+                </div>
+              </div>
+              <div class="about-service">
+                <div class="about-service__icon">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                </div>
+                <div>
+                  <h3>House construction</h3>
+                  <p>We build homes on your plot anywhere in Bhopal — design, approvals, construction, and handover.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="about-block">
+            <h2>Our commitment</h2>
+            <p>
+              We only present property information that has been verified. We guide buyers through document checks,
+              legal processes, and registration. We do not claim a property is cleared, approved, or RERA-registered
+              without the relevant documentation.
+            </p>
+            <p>
+              If you have a question about a property, we will give you an honest answer — or tell you when we do not know.
+            </p>
+          </div>
+        </div>
+
+        <aside class="about-sidebar">
+          <!-- Office card -->
+          <div class="about-card">
+            <h3>Our office</h3>
+            <address>
+              {site.office.lines.map(l => <>{l}<br /></>)}
+            </address>
+            {site.office.mapUrl && (
+              <a href={site.office.mapUrl} target="_blank" rel="noopener noreferrer" class="map-link">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                View on Google Maps
+              </a>
+            )}
+          </div>
+
+          <!-- Contact card -->
+          <div class="about-card">
+            <h3>Get in touch</h3>
+            {site.contact.hours && <p class="hours">{site.contact.hours}</p>}
+            <div class="contact-actions">
+              {site.contact.phone && (
+                <a href={telHref(site.contact.phone)} class="btn btn-outline" style="width:100%;justify-content:center;">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.15 12 19.79 19.79 0 0 1 1.08 3.45 2 2 0 0 1 3.06 1h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                  {site.contact.phone}
+                </a>
+              )}
+              {site.contact.whatsapp && (
+                <a
+                  href={whatsappHref(site.contact.whatsapp, `Hello, I'd like to know more about Sidhivinayak Developers.`)}
+                  class="btn btn-primary"
+                  style="width:100%;justify-content:center;"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  WhatsApp us
+                </a>
+              )}
+              <a href={url('/contact')} class="btn btn-ghost" style="width:100%;justify-content:center;">
+                Send a message
+              </a>
+            </div>
+          </div>
+
+          <!-- Site card -->
+          <div class="about-card">
+            <h3>Vatika Green site</h3>
+            <address>
+              {site.projectSite.lines.map(l => <>{l}<br /></>)}
+            </address>
+            {site.projectSite.mapUrl && (
+              <a href={site.projectSite.mapUrl} target="_blank" rel="noopener noreferrer" class="map-link">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                View on Google Maps
+              </a>
+            )}
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section" style="background:var(--sage);">
+    <div class="container">
+      <div class="sell-banner">
+        <div class="sell-banner__text">
+          <h2>Ready to start?</h2>
+          <p>Browse available properties or book a site visit — no pressure, just a conversation.</p>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:0.75rem;">
+          <a href={url('/properties')} class="btn btn-primary">See Properties</a>
+          <a href={url('/requirement')} class="btn btn-outline">Book a Site Visit</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero-eyebrow-sm {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+  .about-layout {
+    display: grid;
+    gap: 3rem;
+    align-items: start;
+  }
+  @media (min-width: 900px) {
+    .about-layout { grid-template-columns: 1fr 300px; }
+  }
+  .about-main { display: flex; flex-direction: column; gap: 2.5rem; }
+  .about-block h2 { margin-bottom: 0.75rem; }
+  .about-block p { color: var(--muted); line-height: 1.75; max-width: 64ch; }
+  .about-block p + p { margin-top: 0.75rem; }
+  .about-services { display: flex; flex-direction: column; gap: 1.25rem; margin-top: 1rem; }
+  .about-service {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    padding: 1rem 1.25rem;
+    background: var(--paper);
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+  }
+  .about-service__icon {
+    flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+    background: #fff;
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--forest);
+    border: 1px solid var(--line);
+  }
+  .about-service h3 { font-size: 1rem; margin-bottom: 0.25rem; }
+  .about-service p { font-size: 0.875rem; color: var(--muted); }
+
+  .about-sidebar { display: flex; flex-direction: column; gap: 1.25rem; }
+  .about-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem 1.5rem;
+  }
+  .about-card h3 { font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin-bottom: 0.75rem; }
+  .about-card address { font-style: normal; font-size: 0.9rem; line-height: 1.8; color: var(--ink); }
+  .hours { font-size: 0.85rem; color: var(--muted); margin-bottom: 0.75rem; }
+  .contact-actions { display: flex; flex-direction: column; gap: 0.5rem; }
+  .map-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em;
+    margin-top: 0.6rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--forest);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.15s;
+  }
+  .map-link:hover { border-bottom-color: var(--forest); }
+</style>

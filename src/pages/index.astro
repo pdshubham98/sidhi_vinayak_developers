@@ -1,9 +1,8 @@
 ---
 import Base from '../layouts/Base.astro';
-import { site } from '../config/site';
+import { site, whatsappHref } from '../config/site';
 import { getProperties } from '../lib/properties';
 import PropertyCard from '../components/PropertyCard.astro';
-import PlotGrid from '../components/PlotGrid.astro';
 import { url } from '../lib/url';
 
 const allProperties = await getProperties();
@@ -13,293 +12,576 @@ const latest = allProperties.filter(p => !p.data.featured).slice(0, 3);
 
 <Base
   title={site.name}
-  description="Buy plots and farm house plots near Bhopal, build your home, or sell your property. Vatika Green Farm House near Bilkisganj. Office in Neelbad, Bhopal."
+  description={site.description}
 >
-  <!-- Hero -->
+  <!-- ─── Hero ─────────────────────────────────────────────────── -->
   <section class="hero">
     <div class="container">
       <div class="hero__inner">
-        <div>
-          <p class="hero__eyebrow">Plots &amp; farm houses · Bhopal, Madhya Pradesh</p>
-          <h1>Plots and farm houses around Bhopal</h1>
-          <p class="hero__sub">
-            Buy a plot or farm house near Bilkisganj, build your home in Bhopal,
-            or sell your property. We work personally with every client.
+        <div class="hero__content">
+          <p class="hero__eyebrow">
+            <span>Plots</span><span aria-hidden="true">·</span><span>Farmhouses</span><span aria-hidden="true">·</span><span>Construction</span>
           </p>
-
-          <nav class="hero-paths" aria-label="What are you looking for?">
-            <a href={url('/properties')} class="hero-path">
-              <span class="hero-path__icon">
-                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><path d="M11 8v6M8 11h6"/></svg>
-              </span>
-              <span class="hero-path__label">
-                I want to buy
-                <span class="hero-path__sub">Farm house plots and residential plots</span>
-              </span>
+          <h1 class="hero__headline">Find Your Land.<br />Build Your Dream.</h1>
+          <p class="hero__desc">
+            Buy a plot or farmhouse near Bhopal, build your dream home, or sell your property —
+            with personal guidance at every step.
+          </p>
+          <div class="hero__actions">
+            <a href={url('/properties')} class="btn btn-gold">
+              Explore Available Properties
             </a>
-            <a href={url('/construction')} class="hero-path">
-              <span class="hero-path__icon">
-                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/><line x1="17" y1="5" x2="22" y2="5"/><line x1="19.5" y1="2.5" x2="19.5" y2="7.5"/></svg>
-              </span>
-              <span class="hero-path__label">
-                I want to build a house
-                <span class="hero-path__sub">Construction on your plot in Bhopal</span>
-              </span>
+            <a href={url('/requirement')} class="btn btn-outline-white">
+              Book a Site Visit
             </a>
-            <a href={url('/sell')} class="hero-path">
-              <span class="hero-path__icon">
-                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-              </span>
-              <span class="hero-path__label">
-                I want to sell
-                <span class="hero-path__sub">List your property with us</span>
-              </span>
-            </a>
-          </nav>
+          </div>
+          <p class="hero__tagline">{site.tagline}</p>
         </div>
 
-        <div>
-          <PlotGrid />
+        <div class="hero__visual" aria-hidden="true">
+          <div class="hero__paths">
+            <a href={url('/properties')} class="hero-path" tabindex="-1">
+              <span class="hero-path__icon">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="8" height="8" rx="1"/><rect x="14" y="3" width="8" height="8" rx="1"/><rect x="2" y="13" width="8" height="8" rx="1"/><rect x="14" y="13" width="8" height="8" rx="1"/></svg>
+              </span>
+              <span>
+                <strong>Buy a plot or farmhouse</strong>
+                <span>Browse available properties in Bhopal</span>
+              </span>
+              <svg class="arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <a href={url('/construction')} class="hero-path" tabindex="-1">
+              <span class="hero-path__icon">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              </span>
+              <span>
+                <strong>Build your home</strong>
+                <span>Construction on your plot in Bhopal</span>
+              </span>
+              <svg class="arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <a href={url('/sell')} class="hero-path" tabindex="-1">
+              <span class="hero-path__icon">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+              </span>
+              <span>
+                <strong>Sell your property</strong>
+                <span>List your property with us</span>
+              </span>
+              <svg class="arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Featured project -->
+  <!-- ─── Featured property ─────────────────────────────────────── -->
   {featured && (
     <section class="section featured-section">
       <div class="container">
-        <div class="section-heading">
-          <h2>Vatika Green Farm House, Khuraniya</h2>
-          <p>Farm house plots at Vatika Green Parisar, Khuraniya, near Bilkisganj, Bhopal — a planned layout with an internal road and trees.</p>
-        </div>
+        <div class="section-label">Featured Project</div>
         <div class="featured-layout">
+          <div class="featured-info">
+            <h2>Vatika Green Farm House</h2>
+            <p class="featured-loc">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+              Khuraniya, near Bilkisganj, Bhopal
+            </p>
+            <p class="featured-desc">
+              Farm house plots at Vatika Green Parisar — a planned layout with an internal road,
+              tree planting, and open green spaces. Available for site visits Mon to Sat.
+            </p>
+            <ul class="featured-highlights">
+              <li>Planned internal road</li>
+              <li>Tree-lined layout</li>
+              <li>Close to Bilkisganj</li>
+              <li>Personal guidance included</li>
+            </ul>
+            <div class="featured-actions">
+              <a href={url('/requirement?need=farm-house')} class="btn btn-primary">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                Book a Site Visit
+              </a>
+              <a href={url('/properties/vatika-green-farm-house')} class="btn btn-outline">
+                See Full Details
+              </a>
+              {site.contact.whatsapp && (
+                <a
+                  href={whatsappHref(site.contact.whatsapp, `Hello Sidhivinayak Developers, I am interested in Vatika Green Farm House plots. Please share details, current availability, pricing, and site visit options.`)}
+                  class="btn btn-whatsapp"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.38 1.25 4.79L2.05 22l5.42-1.42c1.35.73 2.9 1.14 4.56 1.14h.01c5.45 0 9.9-4.45 9.9-9.91S17.49 2 12.04 2zm0 18.13c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.24 8.24 0 0 1-1.26-4.37c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c-.01 4.54-3.7 8.22-8.22 8.22zm4.52-6.16c-.25-.12-1.47-.72-1.69-.8-.23-.08-.39-.12-.56.12-.17.25-.64.8-.78 1-.15.2-.29.21-.54.08-.25-.12-.95-.35-1.8-.11-.69.21-1.12.69-1.29.9-.17.21-.09.31.09.41.27.14 1.42.92 1.97 2.17.54 1.24-.39 2.64-.52 2.83-.13.2-.39.25-.58.16-.2-.09-.82-.3-1.56-.95-.58-.52-.97-1.16-1.08-1.35-.11-.2-.01-.3.09-.4.09-.09.2-.24.3-.35.1-.12.13-.2.2-.33.06-.14.03-.26-.02-.35-.05-.1-.56-1.35-.77-1.85-.2-.49-.4-.42-.56-.43-.14-.01-.31-.01-.47-.01-.17 0-.44.06-.66.31-.23.25-.87.85-.87 2.07s.89 2.4 1.01 2.57c.13.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.47-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.1-.23-.15-.48-.27z"/></svg>
+                  WhatsApp Enquiry
+                </a>
+              )}
+            </div>
+          </div>
           <div class="featured-card-wrap">
             <PropertyCard property={featured} showCta={false} />
-          </div>
-          <div class="featured-cta-wrap">
-            <p class="featured-cta-desc">Visit the site in person, see the layout, and ask us anything. We are available Mon to Sat.</p>
-            <div class="featured-cta-btns">
-              <a href={url('/requirement?need=farm-house')} class="btn btn-ochre">
-                <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                Book a site visit
-              </a>
-              <a href={url('/properties/vatika-green-farm-house')} class="btn btn-outline-light">
-                See full details
-              </a>
-            </div>
           </div>
         </div>
       </div>
     </section>
   )}
 
-  <!-- Latest listings -->
+  <!-- ─── Other listings ────────────────────────────────────────── -->
   {latest.length > 0 && (
     <section class="section">
       <div class="container">
         <div class="section-heading">
-          <h2>Latest properties in Bhopal</h2>
-          <p>Plots and houses currently listed. Prices on request — call or send your requirement.</p>
+          <h2>More Properties</h2>
+          <p>Other plots and properties currently listed in and around Bhopal.</p>
         </div>
         <div class="property-grid">
           {latest.map(p => <PropertyCard property={p} />)}
         </div>
-        <div style="margin-top:1.75rem;">
+        <div style="margin-top:2rem;">
           <a href={url('/properties')} class="btn btn-outline">See all properties</a>
         </div>
       </div>
     </section>
   )}
 
-  <!-- What we do -->
-  <section class="section" style="background:var(--sage);">
+  <!-- ─── Services ──────────────────────────────────────────────── -->
+  <section class="section services-section">
     <div class="container">
-      <div class="section-heading">
-        <h2>What we do</h2>
-        <p>A family business based in Neelbad, Bhopal. We sell plots, handle resale, and build homes — personally, without agents or middlemen.</p>
+      <div class="section-heading centered">
+        <div class="section-label">How We Help</div>
+        <h2>Three ways we work with you</h2>
+        <p>Whether you're buying, building, or selling — we're with you at every step, personally.</p>
       </div>
       <div class="service-grid">
         <div class="service-card">
+          <div class="service-card__number">01</div>
           <div class="service-card__icon">
-            <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="8" height="8" rx="1"/><rect x="14" y="3" width="8" height="8" rx="1"/><rect x="2" y="13" width="8" height="8" rx="1"/><rect x="14" y="13" width="8" height="8" rx="1"/></svg>
           </div>
-          <h3>Plot and farm house sales</h3>
-          <p>Residential plots and farm house plots around Bhopal, including our Vatika Green project near Bilkisganj.</p>
-          <a href={url('/properties')} class="service-link">Browse properties</a>
+          <h3>I Want to Buy</h3>
+          <p>Browse residential plots and farmhouse plots around Bhopal. We take you to the site personally and help you choose the right property.</p>
+          <a href={url('/properties')} class="service-link">
+            Explore Properties
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+        <div class="service-card service-card--featured">
+          <div class="service-card__number">02</div>
+          <div class="service-card__icon">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          </div>
+          <h3>I Want to Build</h3>
+          <p>Own a plot? We design, plan, and build your home anywhere in Bhopal. We handle approvals, give regular updates, and hand you the keys.</p>
+          <a href={url('/construction')} class="service-link">
+            Discuss Your Project
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
         </div>
         <div class="service-card">
+          <div class="service-card__number">03</div>
           <div class="service-card__icon">
-            <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
           </div>
-          <h3>Resale</h3>
-          <p>Buying and selling residential and commercial properties in Bhopal. We help both sides find the right match.</p>
-          <a href={url('/sell')} class="service-link">List your property</a>
+          <h3>I Want to Sell</h3>
+          <p>Share your property details and we'll find genuine buyers. We handle plots, farm land, houses, and commercial properties in Bhopal.</p>
+          <a href={url('/sell')} class="service-link">
+            List Your Property
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
         </div>
-        <div class="service-card">
-          <div class="service-card__icon">
-            <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/><line x1="17" y1="5" x2="22" y2="5"/><line x1="19.5" y1="2.5" x2="19.5" y2="7.5"/></svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Why us ────────────────────────────────────────────────── -->
+  <section class="section why-section">
+    <div class="container">
+      <div class="why-layout">
+        <div class="why-text">
+          <div class="section-label">Why Choose Us</div>
+          <h2>A personal approach to property in Bhopal</h2>
+          <p>
+            Sidhivinayak Developers is a family business based in Neelbad, Bhopal.
+            We do not work through agents. Every client works directly with us —
+            from the first site visit to registration and beyond.
+          </p>
+          <div class="why-points">
+            <div class="why-point">
+              <div class="why-point__icon">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              </div>
+              <div>
+                <h4>Personal attention</h4>
+                <p>You deal with us directly — no middlemen, no confusion.</p>
+              </div>
+            </div>
+            <div class="why-point">
+              <div class="why-point__icon">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+              </div>
+              <div>
+                <h4>Local knowledge</h4>
+                <p>Deep knowledge of Bhopal, Neelbad, Bilkisganj, and surrounding areas.</p>
+              </div>
+            </div>
+            <div class="why-point">
+              <div class="why-point__icon">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+              </div>
+              <div>
+                <h4>Clear information</h4>
+                <p>We verify all property documents and guide you through the registration process.</p>
+              </div>
+            </div>
+            <div class="why-point">
+              <div class="why-point__icon">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.15 12 19.79 19.79 0 0 1 1.08 3.45 2 2 0 0 1 3.06 1h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              </div>
+              <div>
+                <h4>Always reachable</h4>
+                <p>Call or WhatsApp us — we respond quickly, Mon to Sat.</p>
+              </div>
+            </div>
           </div>
-          <h3>House construction</h3>
-          <p>Build your home on your plot in Bhopal. We guide you from design and approvals through to handover.</p>
-          <a href={url('/construction')} class="service-link">How it works</a>
+          <a href={url('/about')} class="btn btn-outline" style="margin-top:1.5rem;">About us</a>
+        </div>
+        <div class="why-steps">
+          <div class="section-label">How It Works</div>
+          <h3 style="margin-bottom:1.5rem;">From first call to registration</h3>
+          <div class="process-steps">
+            <div class="process-step">
+              <div class="process-step__num">1</div>
+              <div>
+                <h4>Share your requirement</h4>
+                <p>Tell us what you need and your budget.</p>
+              </div>
+            </div>
+            <div class="process-step">
+              <div class="process-step__num">2</div>
+              <div>
+                <h4>Visit the property</h4>
+                <p>We take you to the site and answer every question plainly.</p>
+              </div>
+            </div>
+            <div class="process-step">
+              <div class="process-step__num">3</div>
+              <div>
+                <h4>Finalise and verify</h4>
+                <p>Agree on terms, we verify all documents.</p>
+              </div>
+            </div>
+            <div class="process-step">
+              <div class="process-step__num">4</div>
+              <div>
+                <h4>Registration</h4>
+                <p>Property registered in your name at the Bhopal sub-registrar office.</p>
+              </div>
+            </div>
+          </div>
+          <a href={url('/requirement')} class="btn btn-primary" style="margin-top:1.5rem;">Start with a site visit</a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- About -->
-  <section class="section">
-    <div class="container">
-      <div style="max-width:640px;">
-        <h2>About Siddhivinayak Developers</h2>
-        <div class="about-text">
-          <p>
-            We are a family-run real estate business based in Neelbad, Bhopal, Madhya Pradesh.
-            We focus on residential plots and farm house land around Bhopal — buying, selling, and construction.
-          </p>
-          <p>
-            Our current project is Vatika Green Farm House at Khuraniya, near Bilkisganj.
-            We are personally involved in every transaction, from the first site visit to registration.
-          </p>
-          <p>
-            Our office is at Plot No. 31, AM Point, Near Durga Mandir, Neelbad, Bhopal.
-          </p>
-        </div>
-        <a href={url('/contact')} class="btn btn-outline" style="margin-top:1.5rem;">Get in touch</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- How a purchase works -->
-  <section class="section" style="background:var(--sage);">
-    <div class="container">
-      <div class="section-heading">
-        <h2>How a purchase works</h2>
-        <p>Four straightforward steps from your first call to registration in Bhopal.</p>
-      </div>
-      <div class="steps">
-        <div class="step">
-          <h3>Share your requirement</h3>
-          <p>Tell us what you are looking for and your budget. We find the right options for you.</p>
-        </div>
-        <div class="step">
-          <h3>Book a site visit</h3>
-          <p>We take you to see the property in Bhopal or near Bilkisganj. Ask every question — we answer plainly.</p>
-        </div>
-        <div class="step">
-          <h3>Finalise the deal</h3>
-          <p>Agree on the price and terms. We handle the paperwork and verify all documents.</p>
-        </div>
-        <div class="step">
-          <h3>Registration</h3>
-          <p>The property is registered in your name at the Bhopal sub-registrar office. We stay available throughout.</p>
-        </div>
-      </div>
-      <div style="margin-top:2rem;">
-        <a href={url('/faq')} class="btn btn-outline">Read frequently asked questions</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Sell banner -->
+  <!-- ─── Sell banner ───────────────────────────────────────────── -->
   <section class="section">
     <div class="container">
       <div class="sell-banner">
         <div class="sell-banner__text">
           <h2>Want to sell your property in Bhopal?</h2>
-          <p>Share the details and we will connect you with genuine buyers.</p>
+          <p>Share the details and we will connect you with genuine buyers — no commission talk upfront, just a conversation.</p>
         </div>
-        <a href={url('/sell')} class="btn btn-primary">List your property</a>
+        <a href={url('/sell')} class="btn btn-primary">List Your Property</a>
       </div>
     </div>
   </section>
 </Base>
 
 <style>
-  /* Featured section layout */
-  .featured-layout {
+  /* ── Hero ── */
+  .hero {
+    background: var(--forest-deep);
+    color: #fff;
+    padding-block: clamp(4rem, 9vw, 7rem);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 70% 40%, rgba(211,161,75,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero__inner {
     display: grid;
-    gap: 2.5rem;
-    align-items: start;
+    gap: clamp(2.5rem, 6vw, 5rem);
+    align-items: center;
   }
-  @media (min-width: 768px) {
-    .featured-layout { grid-template-columns: 380px 1fr; }
+  @media (min-width: 900px) {
+    .hero__inner { grid-template-columns: 1fr 420px; }
   }
-  .featured-card-wrap { max-width: 420px; }
-  .featured-cta-wrap {
+  .hero__eyebrow {
     display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    padding-top: 0.5rem;
+    flex-wrap: wrap;
+    gap: 0.4em;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 1.25rem;
   }
-  .featured-cta-desc {
-    color: rgba(255,255,255,0.75);
-    font-size: 1.05rem;
-    max-width: 44ch;
+  .hero__headline {
+    font-size: clamp(2.25rem, 5.5vw, 3.5rem);
+    color: #fff;
+    line-height: 1.1;
+    margin-bottom: 1.25rem;
+  }
+  .hero__desc {
+    font-size: 1.1rem;
+    color: rgba(255,255,255,0.72);
+    max-width: 48ch;
     line-height: 1.7;
+    margin-bottom: 2rem;
   }
-  .featured-cta-btns {
+  .hero__actions {
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem;
+    margin-bottom: 1.75rem;
   }
-  .btn-ochre {
-    display: inline-flex;
+  .hero__tagline {
+    font-size: 0.85rem;
+    font-style: italic;
+    color: rgba(255,255,255,0.45);
+    letter-spacing: 0.03em;
+  }
+
+  /* ── Hero path rows ── */
+  .hero__paths {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .hero-path {
+    display: flex;
     align-items: center;
-    gap: 0.4em;
-    padding: 0.65em 1.4em;
-    border: 2px solid var(--ochre);
-    border-radius: var(--radius);
-    font-family: var(--font-sans);
-    font-size: 1rem;
-    font-weight: 600;
+    gap: 1rem;
+    padding: 1rem 1.1rem;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: var(--radius-lg);
+    color: #fff;
     text-decoration: none;
-    white-space: nowrap;
-    min-height: 48px;
-    background: var(--ochre);
-    color: var(--ink);
     transition: background 0.15s, border-color 0.15s;
   }
-  .btn-ochre:hover { background: #b5751f; border-color: #b5751f; }
-  .btn-outline-light {
-    display: inline-flex;
+  .hero-path:hover { background: rgba(255,255,255,0.11); border-color: rgba(255,255,255,0.25); }
+  .hero-path__icon {
+    display: flex;
     align-items: center;
-    gap: 0.4em;
-    padding: 0.65em 1.4em;
-    border: 2px solid rgba(255,255,255,0.35);
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: rgba(211,161,75,0.15);
     border-radius: var(--radius);
-    font-family: var(--font-sans);
-    font-size: 1rem;
-    font-weight: 600;
-    text-decoration: none;
-    white-space: nowrap;
-    min-height: 48px;
+    flex-shrink: 0;
+    color: var(--gold);
+  }
+  .hero-path strong { display: block; font-size: 0.95rem; font-weight: 600; }
+  .hero-path span span { display: block; font-size: 0.8rem; color: rgba(255,255,255,0.55); margin-top: 0.1rem; }
+  .hero-path .arrow { margin-left: auto; opacity: 0.4; flex-shrink: 0; }
+
+  /* ── Gold and outline-white buttons ── */
+  .btn-gold {
+    background: var(--gold);
+    color: var(--ink);
+    border-color: var(--gold);
+  }
+  .btn-gold:hover { background: #c4902e; border-color: #c4902e; }
+  .btn-outline-white {
     background: transparent;
     color: #fff;
-    transition: background 0.15s, border-color 0.15s;
+    border-color: rgba(255,255,255,0.35);
   }
-  .btn-outline-light:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.55); }
+  .btn-outline-white:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.55); }
+  .btn-whatsapp {
+    background: #25d366;
+    color: #fff;
+    border-color: #25d366;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+  }
+  .btn-whatsapp:hover { background: #1da851; border-color: #1da851; }
 
-  /* Service card link */
-  .service-link {
-    display: inline-block;
-    margin-top: 0.75rem;
-    font-weight: 600;
-    color: var(--forest);
+  /* ── Featured section ── */
+  .featured-section {
+    background: var(--forest-deep);
+    color: #fff;
+  }
+  .featured-layout {
+    display: grid;
+    gap: 3rem;
+    align-items: start;
+  }
+  @media (min-width: 860px) {
+    .featured-layout { grid-template-columns: 1fr 360px; }
+  }
+  .featured-info h2 { color: #fff; margin-bottom: 0.5rem; }
+  .featured-loc {
+    display: flex;
+    align-items: center;
+    gap: 0.35em;
     font-size: 0.9rem;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 1rem;
+  }
+  .featured-desc { color: rgba(255,255,255,0.72); max-width: 52ch; line-height: 1.7; margin-bottom: 1.25rem; }
+  .featured-highlights {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 1.75rem;
+  }
+  .featured-highlights li {
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.7);
+    padding-left: 1.25em;
+    position: relative;
+  }
+  .featured-highlights li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--gold);
+  }
+  .featured-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+
+  /* ── Section label ── */
+  .section-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+  .section-heading.centered { text-align: center; }
+  .section-heading.centered p { margin-inline: auto; }
+
+  /* ── Services ── */
+  .services-section { background: var(--paper); }
+  .service-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+  }
+  .service-card {
+    padding: 2rem 1.75rem;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    position: relative;
+    transition: box-shadow 0.2s;
+  }
+  .service-card:hover { box-shadow: var(--shadow-card); }
+  .service-card--featured {
+    border-color: var(--forest);
+    background: var(--forest-deep);
+    color: #fff;
+  }
+  .service-card--featured h3,
+  .service-card--featured p { color: rgba(255,255,255,0.85); }
+  .service-card--featured .service-card__icon { color: var(--gold); }
+  .service-card--featured .service-link { color: var(--gold); }
+  .service-card__number {
+    font-family: var(--font-serif);
+    font-size: 3rem;
+    color: var(--line);
+    line-height: 1;
+    margin-bottom: 0.75rem;
+    position: absolute;
+    top: 1.25rem;
+    right: 1.5rem;
+  }
+  .service-card--featured .service-card__number { color: rgba(255,255,255,0.1); }
+  .service-card__icon { color: var(--forest); margin-bottom: 1rem; line-height: 0; }
+  .service-card h3 { margin-bottom: 0.6rem; font-size: 1.15rem; }
+  .service-card p { color: var(--muted); font-size: 0.95rem; line-height: 1.65; margin-bottom: 1.25rem; }
+  .service-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--forest);
     text-decoration: none;
     border-bottom: 1.5px solid transparent;
-    transition: border-color 0.15s;
+    transition: border-color 0.15s, gap 0.15s;
   }
-  .service-link:hover { border-bottom-color: var(--forest); }
+  .service-link:hover { border-bottom-color: currentColor; gap: 0.6em; }
 
-  /* Service card icon */
-  .service-card__icon { color: var(--forest); margin-bottom: 0.9rem; line-height: 0; }
+  /* ── Why section ── */
+  .why-section { background: var(--sage); }
+  .why-layout {
+    display: grid;
+    gap: 4rem;
+    align-items: start;
+  }
+  @media (min-width: 900px) {
+    .why-layout { grid-template-columns: 1fr 1fr; }
+  }
+  .why-text h2 { margin-bottom: 1rem; }
+  .why-text > p { color: var(--muted); max-width: 52ch; margin-bottom: 1.75rem; line-height: 1.7; }
+  .why-points { display: flex; flex-direction: column; gap: 1.25rem; }
+  .why-point {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+  .why-point__icon {
+    flex-shrink: 0;
+    width: 38px;
+    height: 38px;
+    background: #fff;
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--forest);
+    box-shadow: 0 1px 3px rgba(23,63,45,0.1);
+  }
+  .why-point h4 { font-size: 0.95rem; margin-bottom: 0.2rem; }
+  .why-point p { font-size: 0.875rem; color: var(--muted); }
 
-  /* About text */
-  .about-text { margin-top: 1rem; color: #4a6054; display: flex; flex-direction: column; gap: 0.75rem; max-width: 60ch; }
-
-  /* Hero path icon alignment */
-  .hero-path__icon { display: flex; align-items: center; justify-content: center; flex-shrink: 0; width: 32px; height: 32px; }
+  /* ── Process steps ── */
+  .process-steps { display: flex; flex-direction: column; gap: 1rem; }
+  .process-step {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    padding: 1rem 1.25rem;
+    background: #fff;
+    border-radius: var(--radius);
+    border-left: 3px solid var(--gold);
+  }
+  .process-step__num {
+    font-family: var(--font-serif);
+    font-size: 1.6rem;
+    color: var(--gold);
+    line-height: 1;
+    flex-shrink: 0;
+    min-width: 24px;
+  }
+  .process-step h4 { font-size: 0.95rem; margin-bottom: 0.2rem; }
+  .process-step p { font-size: 0.85rem; color: var(--muted); }
 </style>

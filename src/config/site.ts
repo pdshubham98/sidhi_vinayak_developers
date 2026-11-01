@@ -5,10 +5,10 @@
  * Contact fields left empty are hidden on the site (no broken call/WhatsApp buttons).
  */
 export const site = {
-  name: 'Siddhivinayak Developers',
-  tagline: 'Plots, farm houses and home construction around Bhopal',
+  name: 'Sidhivinayak Developers',
+  tagline: 'Buy It. Build It. Sell It. We\'re With You.',
   description:
-    'Buy plots and farm houses, build your house, or sell your property around Bhopal. Visit Vatika Green near Bilkisganj or our office in Neelbad.',
+    'Explore residential plots and farmhouses near Bhopal, plan your home construction, or enquire about selling your property with Sidhivinayak Developers.',
 
   /** Keep false until the site is live on its own domain, so search engines don't index the temporary address. */
   indexable: false,
@@ -18,7 +18,7 @@ export const site = {
     phone: '+91 78692 46638',
     /** WhatsApp number with country code, digits only, e.g. '919876543210'. */
     whatsapp: '917869246638',
-    email: 'info@siddhivinayak.in', // TODO: replace with real email
+    email: '', // TODO: add real email address
     /** e.g. 'Mon to Sat, 10 am to 7 pm' */
     hours: 'Mon to Sat, 10 am to 7 pm',
   },

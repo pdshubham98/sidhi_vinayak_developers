@@ -74,7 +74,7 @@ const FORM_TITLES: Record<string, string> = {
     const title = FORM_TITLES[formId] ?? 'Enquiry';
     const lines: string[] = [
       `*${title}*`,
-      `_via siddhivinayakdevelopers.com_`,
+      `_via sidhivinayakdevelopers.com_`,
       '',
     ];
 

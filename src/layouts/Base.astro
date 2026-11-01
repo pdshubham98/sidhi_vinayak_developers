@@ -33,7 +33,8 @@ const {
   extraSchemas = [],
 } = Astro.props;
 
-const pageTitle = title === site.name ? site.name : `${title} – ${site.name}`;
+const siteSeoName = 'Sidhivinayak Developers | Plots, Farmhouses & Construction in Bhopal';
+const pageTitle = title === site.name ? siteSeoName : `${title} – ${site.name}`;
 
 // Auto-generate canonical from current URL when Astro.site is set
 const canonicalUrl = canonical ?? (Astro.site ? new URL(Astro.url.pathname, Astro.site).toString() : undefined);
