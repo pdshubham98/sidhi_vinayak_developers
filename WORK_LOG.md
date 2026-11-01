@@ -54,3 +54,30 @@ Do not edit past entries. Add new entries at the bottom.
 - Set up real domain and flip indexable: true
 
 ---
+
+## 2026-11-01 (evening) — UX redesign on branch `improve/ux-redesign`
+
+**Audit findings:**
+- Name "Siddhivinayak" was used throughout code — corrected to "Sidhivinayak" everywhere
+- Sample/demo listings showing publicly — removed from properties.json (only Vatika Green remains)
+- No About page existed; Nav missing "Sell Property" and "About"
+- Hero copy generic, tagline wrong, color tokens didn't match brand brief
+
+**Done on this branch:**
+- Corrected name throughout all affected source files
+- New tagline: "Buy It. Build It. Sell It. We're With You."
+- New color palette: forest-deep #173F2D, forest #20583F, gold #D3A14B
+- Logo: SD monogram mark + Bhopal sub-label
+- Hero: "Find Your Land. Build Your Dream." + gold primary CTA + 3 path cards
+- Service section: 01 Buy / 02 Build / 03 Sell (featured middle)
+- Why us section: 4 trust points + process steps (no fake stats)
+- New About page (who we are, services, commitment, contact sidebar)
+- Updated nav: Properties, Construction, Sell Property, About, FAQ, Contact + CTA
+- FAQ and construction SEO titles improved
+- Build verified: 12 pages, 0 errors
+
+**To deploy:** Merge `improve/ux-redesign` into `main`
+
+**Still needed:** real email, Google Maps links, real photos of Vatika Green
+
+---
