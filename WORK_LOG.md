@@ -81,3 +81,31 @@ Do not edit past entries. Add new entries at the bottom.
 **Still needed:** real email, Google Maps links, real photos of Vatika Green
 
 ---
+
+## 2026-11-01 (night) — Product enhancement on branch `feature/product-enhancement`
+
+**Scope:** Full implementation of the Master Project Prompt brief. Confirmed business model: hybrid (own inventory + brokerage/assisted listings + construction).
+
+**Audit findings acted on:**
+- Hardcoded `#4a6054` color used in 12+ places instead of `var(--muted)` token
+- Property schema missing business-model fields: `ownershipType`, `published`, `updatedAt`
+- No disclosure of whether a listing is company-owned or assisted (brokerage)
+- Unpublished listings had no schema-level guard — could accidentally appear
+- Sell page had form only; no explanation of the selling process
+- Construction page lacked detail on what is actually handled and what the steps are
+
+**Done on this branch:**
+- Added `ownershipType` (own/assisted), `published`, `updatedAt` to property schema
+- `getProperties()` now filters out unpublished listings
+- Added `ownershipLabels` export for display in UI
+- "Our project" gold badge on owned listings in property cards + detail pages
+- Ownership disclosure notice on property detail page (gold for own, sage for assisted)
+- Updated/listed date shown in sidebar of property detail page
+- Enhanced Vatika Green listing: confirmed as `ownershipType: "own"`, updated highlights
+- Replaced all hardcoded `#4a6054` → `var(--muted)` across all pages and components
+- Added `.badge-own` and `.badge-type` to global badge system
+- Sell page: added 4-step process explanation + honest disclaimer before the form
+- Construction page: rebuilt with what-we-handle grid, dark-bg step flow, notes grid
+- Build: 12 pages, 0 errors
+
+**Next:** Merge to main and deploy. Real email, Google Maps, Vatika Green photos still needed.
