@@ -1,7 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
-import { typeLabels, statusLabels, formatPrice } from '../../lib/properties';
+import { typeLabels, statusLabels, ownershipLabels, formatPrice } from '../../lib/properties';
 import { site } from '../../config/site';
 
 export async function getStaticPaths() {
@@ -17,7 +17,7 @@ if (!property) {
   return Astro.redirect('/404');
 }
 
-const { title, type, status, location, price, size, offer, summary, description, highlights, images, sample } = property.data;
+const { title, type, status, location, price, size, offer, summary, description, highlights, images, sample, ownershipType, updatedAt, listedOn } = property.data;
 
 const statusClass = {
   available: 'badge-available',
@@ -68,6 +68,7 @@ import { url } from '../../lib/url';
       <div style="display:flex;flex-wrap:wrap;align-items:center;gap:0.75rem;margin-bottom:0.75rem;">
         <span class={`badge ${statusClass}`}>{statusLabels[status]}</span>
         <span class="badge" style="background:rgba(255,255,255,0.15);color:rgba(255,255,255,0.9);">{typeLabels[type]}</span>
+        {ownershipType === 'own' && <span class="badge" style="background:var(--gold);color:var(--forest-deep);font-weight:700;">Our project</span>}
         {sample && <span class="badge badge-sample">Sample listing</span>}
       </div>
       <h1>{title}</h1>
@@ -106,6 +107,21 @@ import { url } from '../../lib/url';
             </div>
           )}
 
+          <!-- Ownership disclosure -->
+          <div class="ownership-notice" data-type={ownershipType}>
+            {ownershipType === 'own' ? (
+              <>
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                <span><strong>Our project</strong> — this property is directly owned and sold by Sidhivinayak Developers. You deal with us, not an agent.</span>
+              </>
+            ) : (
+              <>
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                <span><strong>Assisted listing</strong> — we are assisting the seller with this property. All details shared by the owner; we verify documents before any transaction.</span>
+              </>
+            )}
+          </div>
+
           <!-- Description -->
           {description && (
             <div style="margin-bottom:2rem;">
@@ -127,7 +143,7 @@ import { url } from '../../lib/url';
           <!-- FAQ teaser -->
           <div style="margin-bottom:2rem;padding:1.25rem;background:var(--sage);border-radius:var(--radius-lg);">
             <p style="font-weight:600;margin-bottom:0.25rem;">Have questions about buying a plot in Bhopal?</p>
-            <p style="font-size:0.9rem;color:#4a6054;margin-bottom:0.75rem;">We've answered the most common ones — documents needed, registration process, and more.</p>
+            <p style="font-size:0.9rem;color:var(--muted);margin-bottom:0.75rem;">We've answered the most common ones — documents needed, registration process, and more.</p>
             <a href={url('/faq')} style="font-size:0.9rem;font-weight:600;color:var(--forest);">Read the FAQ</a>
           </div>
 
@@ -141,7 +157,7 @@ import { url } from '../../lib/url';
           <div class="detail-sidebar-card">
             <div style="margin-bottom:1.25rem;">
               <div style="font-size:1.5rem;font-weight:700;color:var(--forest-deep);">{formatPrice(price)}</div>
-              {size && <div style="font-size:0.9rem;color:#4a6054;margin-top:0.2rem;">{size}</div>}
+              {size && <div style="font-size:0.9rem;color:var(--muted);margin-top:0.2rem;">{size}</div>}
               {offer && (
                 <div style="margin-top:0.5rem;">
                   <span class="property-card__offer">{offer}</span>
@@ -171,7 +187,16 @@ import { url } from '../../lib/url';
             </div>
 
             {site.contact.hours && (
-              <p style="margin-top:1rem;font-size:0.8rem;color:#4a6054;text-align:center;">{site.contact.hours}</p>
+              <p style="margin-top:1rem;font-size:0.8rem;color:var(--muted);text-align:center;">{site.contact.hours}</p>
+            )}
+
+            {(updatedAt || listedOn) && (
+              <p style="margin-top:0.75rem;font-size:0.75rem;color:var(--muted);text-align:center;border-top:1px solid var(--line);padding-top:0.75rem;">
+                {updatedAt
+                  ? `Updated ${updatedAt.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}`
+                  : `Listed ${listedOn.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}`
+                }
+              </p>
             )}
           </div>
         </aside>
@@ -179,3 +204,27 @@ import { url } from '../../lib/url';
     </div>
   </section>
 </Base>
+
+<style>
+  .ownership-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    padding: 0.9rem 1.1rem;
+    border-radius: var(--radius);
+    font-size: 0.875rem;
+    line-height: 1.55;
+    margin-bottom: 1.75rem;
+  }
+  .ownership-notice[data-type="own"] {
+    background: var(--ochre-light);
+    color: #5a3f0a;
+    border: 1px solid #e8c87a;
+  }
+  .ownership-notice[data-type="assisted"] {
+    background: var(--sage);
+    color: var(--ink);
+    border: 1px solid var(--line);
+  }
+  .ownership-notice svg { flex-shrink: 0; margin-top: 2px; }
+</style>

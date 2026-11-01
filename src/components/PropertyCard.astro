@@ -1,6 +1,6 @@
 ---
 import type { Property } from '../lib/properties';
-import { typeLabels, statusLabels, formatPrice } from '../lib/properties';
+import { typeLabels, statusLabels, ownershipLabels, formatPrice } from '../lib/properties';
 import { url } from '../lib/url';
 
 interface Props {
@@ -10,7 +10,7 @@ interface Props {
 }
 const { property: p, showCta = true } = Astro.props;
 const id = p.id;
-const { title, type, status, location, price, size, offer, summary, images, sample } = p.data;
+const { title, type, status, location, price, size, offer, summary, images, sample, ownershipType } = p.data;
 const image = images?.[0];
 const statusClass = {
   available: 'badge-available',
@@ -40,7 +40,8 @@ const isAvailable = status === 'available' || status === 'upcoming';
   <div class="property-card__body">
     <div class="property-card__meta">
       <span class={`badge ${statusClass}`}>{statusLabels[status]}</span>
-      <span class="badge" style="background:var(--grey-light);color:#4a6054;">{typeLabels[type]}</span>
+      <span class="badge badge-type">{typeLabels[type]}</span>
+      {ownershipType === 'own' && <span class="badge badge-own">Our project</span>}
       {sample && <span class="badge badge-sample">Sample listing</span>}
     </div>
 
@@ -52,7 +53,7 @@ const isAvailable = status === 'available' || status === 'upcoming';
       <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline;vertical-align:middle;margin-right:3px;margin-top:-2px;flex-shrink:0;"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>{location}
     </p>
 
-    {summary && <p style="font-size:0.875rem;color:#4a6054;line-height:1.5;">{summary}</p>}
+    {summary && <p style="font-size:0.875rem;color:var(--muted);line-height:1.5;">{summary}</p>}
 
     <div class="property-card__footer">
       <div>
@@ -95,4 +96,6 @@ const isAvailable = status === 'available' || status === 'upcoming';
     padding-top: 0.75rem;
     border-top: 1px solid var(--line);
   }
+  .badge-type { background: var(--grey-light); color: var(--muted); }
+  .badge-own { background: var(--ochre-light); color: #7a5a1a; font-weight: 600; }
 </style>

@@ -21,6 +21,14 @@ const propertySchema = z.object({
   size: z.string().optional(),
   offer: z.string().optional(),
   featured: z.boolean().default(false),
+  /**
+   * Relationship between the business and this listing:
+   * - "own"      — company's own inventory/project
+   * - "assisted" — brokerage/consultancy listing for a third-party seller
+   */
+  ownershipType: z.enum(['own', 'assisted']).default('assisted'),
+  /** Whether this listing is publicly visible. */
+  published: z.boolean().default(true),
   summary: z.string(),
   description: z.string().optional(),
   highlights: z.array(z.string()).default([]),
@@ -39,6 +47,8 @@ const propertySchema = z.object({
   sample: z.boolean().default(false),
   /** Newer dates show first. */
   listedOn: z.coerce.date(),
+  /** Last time listing details were verified/updated. */
+  updatedAt: z.coerce.date().optional(),
 });
 
 const properties = defineCollection({

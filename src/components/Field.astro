@@ -41,7 +41,7 @@ const describedBy = [error ? errorId : '', hint ? hintId : ''].filter(Boolean).j
     {required && <span class="required" aria-hidden="true">*</span>}
   </label>
 
-  {hint && <p id={hintId} style="font-size:0.875rem;color:#4a6054;margin-bottom:0.1rem;">{hint}</p>}
+  {hint && <p id={hintId} style="font-size:0.875rem;color:var(--muted);margin-bottom:0.1rem;">{hint}</p>}
 
   {type === 'textarea' ? (
     <textarea

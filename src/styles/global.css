@@ -165,6 +165,8 @@ p + p { margin-top: 1em; }
 .badge-sold      { background: var(--grey-light); color: var(--grey); }
 .badge-upcoming  { background: var(--blue-light); color: var(--blue); }
 .badge-sample    { background: #ffe4e4; color: #8B1A1A; }
+.badge-own       { background: var(--ochre-light); color: #7a5a1a; font-weight: 700; }
+.badge-type      { background: var(--grey-light); color: var(--muted); }
 
 /* ─── Forms ──────────────────────────────────────────────────────────────── */
 .form-group { display: flex; flex-direction: column; gap: 0.4rem; }

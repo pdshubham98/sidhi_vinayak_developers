@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import { site } from '../config/site';
+import { site, whatsappHref } from '../config/site';
 import { url } from '../lib/url';
 ---
 
@@ -11,57 +11,242 @@ import { url } from '../lib/url';
 >
   <section class="page-hero">
     <div class="container">
-      <h1>House construction</h1>
-      <p>Build your home on your plot. We guide you from design through to handover.</p>
+      <p class="page-eyebrow">Bhopal, Madhya Pradesh</p>
+      <h1>Build your home on your plot</h1>
+      <p>We guide you from the first conversation all the way to handing over the keys — design, approvals, construction, and beyond.</p>
     </div>
   </section>
 
+  <!-- What we handle -->
   <section class="section">
+    <div class="container" style="max-width:900px;">
+      <div class="section-heading">
+        <div class="section-label">What we handle</div>
+        <h2>End-to-end construction in Bhopal</h2>
+        <p>Own a plot anywhere around Bhopal? We manage the full process so you don't have to coordinate with multiple contractors.</p>
+      </div>
+      <div class="service-items">
+        <div class="service-item">
+          <div class="service-item__icon">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+          </div>
+          <div>
+            <h3>Floor plan and layout design</h3>
+            <p>We prepare the layout plan based on your requirements, plot dimensions, and budget. You approve it before work begins.</p>
+          </div>
+        </div>
+        <div class="service-item">
+          <div class="service-item__icon">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          </div>
+          <div>
+            <h3>Permits and approvals</h3>
+            <p>We handle the municipal permit applications and ensure the required approvals are obtained before construction begins. We will confirm applicable requirements for your specific plot.</p>
+          </div>
+        </div>
+        <div class="service-item">
+          <div class="service-item__icon">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 20h.01M7 20v-4M12 20v-8M17 20V8M22 4v16"/></svg>
+          </div>
+          <div>
+            <h3>Construction with regular updates</h3>
+            <p>Work proceeds on site with periodic updates. You can visit at any time. No hidden changes — if anything affects scope or budget, we tell you first.</p>
+          </div>
+        </div>
+        <div class="service-item">
+          <div class="service-item__icon">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          </div>
+          <div>
+            <h3>Inspection and handover</h3>
+            <p>We walk you through the completed house, address any finishing touches, and hand over the keys once you are satisfied.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Step-by-step process -->
+  <section class="section" style="background:var(--forest-deep);color:#fff;">
     <div class="container" style="max-width:800px;">
       <div class="section-heading">
-        <h2>How it works</h2>
-        <p>A straightforward process from the first meeting to the day you move in.</p>
+        <div class="section-label" style="color:var(--gold);">Step by step</div>
+        <h2 style="color:#fff;">From your first call to moving in</h2>
       </div>
-
       <div class="construction-steps">
         <div class="construction-step">
           <div class="construction-step__num">1</div>
           <div>
             <h3>Tell us about your plot and plans</h3>
-            <p>Share the plot details, your requirements and your budget. We will visit the site and give you an honest estimate.</p>
+            <p>Share the plot location, size, your requirements, and your budget. We visit the site and give you an honest estimate — no obligation.</p>
           </div>
         </div>
         <div class="construction-step">
           <div class="construction-step__num">2</div>
           <div>
             <h3>Design and approval</h3>
-            <p>We prepare the layout plan, get the necessary approvals and finalise the design with you before any work begins.</p>
+            <p>We prepare the layout plan and get necessary municipal approvals. You review and approve the design before any work begins.</p>
           </div>
         </div>
         <div class="construction-step">
           <div class="construction-step__num">3</div>
           <div>
-            <h3>Construction</h3>
-            <p>Work begins on site. We give you regular updates and you can visit whenever you like. No surprises.</p>
+            <h3>Construction begins</h3>
+            <p>Work starts on site. We give you regular progress updates. You can visit whenever you like. No surprises on scope or costs without your approval.</p>
           </div>
         </div>
         <div class="construction-step">
           <div class="construction-step__num">4</div>
           <div>
-            <h3>Handover</h3>
-            <p>We walk you through the completed house, handle any finishing touches, and hand over the keys.</p>
+            <h3>Inspection and handover</h3>
+            <p>We walk through the completed home together, handle any remaining finishing items, and hand over the keys.</p>
           </div>
         </div>
       </div>
+    </div>
+  </section>
 
-      <div style="margin-top:3rem;padding:2rem;background:var(--sage);border-radius:var(--radius-lg);">
-        <h2 style="font-size:1.4rem;margin-bottom:0.5rem;">Get a free estimate</h2>
-        <p style="color:#4a6054;margin-bottom:1.25rem;">Share your plot details and we will visit the site and give you an honest estimate for construction in Bhopal.</p>
+  <!-- Important notes -->
+  <section class="section">
+    <div class="container" style="max-width:800px;">
+      <div class="notes-grid">
+        <div class="note-card">
+          <h3>Where we build</h3>
+          <p>We take on construction projects on plots across Bhopal and nearby areas. Call us to confirm availability for your specific location.</p>
+        </div>
+        <div class="note-card">
+          <h3>No invented guarantees</h3>
+          <p>We do not provide fixed delivery timelines before visiting the site. Realistic timelines are discussed after the site assessment and based on actual scope.</p>
+        </div>
+        <div class="note-card">
+          <h3>What we do not invent</h3>
+          <p>We will not promise a budget, credential, or timeline we have not verified. We give you honest information and let you decide.</p>
+        </div>
+        <div class="note-card">
+          <h3>Permits and compliance</h3>
+          <p>Permit requirements vary by plot size, location, and intended use. We will confirm applicable approvals for your plot during the site visit.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section" style="background:var(--sage);">
+    <div class="container" style="max-width:680px;">
+      <div class="sell-banner">
+        <div class="sell-banner__text">
+          <h2>Ready to discuss your construction project?</h2>
+          <p>Share your plot details and we will arrange a site visit and give you an honest estimate.</p>
+        </div>
         <div style="display:flex;flex-wrap:wrap;gap:0.75rem;">
           <a href={url('/requirement?need=construction')} class="btn btn-primary">Book a site visit</a>
-          <a href={url('/faq')} class="btn btn-outline">Read FAQ</a>
+          {site.contact.whatsapp && (
+            <a
+              href={whatsappHref(site.contact.whatsapp, `Hello Sidhivinayak Developers, I'd like to discuss house construction on my plot in Bhopal. Please let me know how to proceed.`)}
+              class="btn btn-outline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              WhatsApp us
+            </a>
+          )}
         </div>
       </div>
     </div>
   </section>
 </Base>
+
+<style>
+  .page-eyebrow {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+  .section-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+  .section-heading { margin-bottom: 2.5rem; }
+  .section-heading h2 { margin-bottom: 0.5rem; }
+  .section-heading p { color: var(--muted); max-width: 56ch; }
+
+  /* Service items */
+  .service-items {
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr));
+  }
+  .service-item {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    padding: 1.25rem;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+  }
+  .service-item__icon {
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    background: var(--sage);
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--forest);
+  }
+  .service-item h3 { font-size: 1rem; margin-bottom: 0.3rem; }
+  .service-item p { font-size: 0.875rem; color: var(--muted); line-height: 1.6; }
+
+  /* Steps */
+  .construction-steps { display: flex; flex-direction: column; gap: 1.25rem; }
+  .construction-step {
+    display: flex;
+    gap: 1.25rem;
+    align-items: flex-start;
+    padding: 1.25rem 1.5rem;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: var(--radius-lg);
+  }
+  .construction-step__num {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    background: var(--gold);
+    color: var(--forest-deep);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    font-weight: 700;
+  }
+  .construction-step h3 { font-size: 1rem; color: #fff; margin-bottom: 0.3rem; }
+  .construction-step p { font-size: 0.875rem; color: rgba(255,255,255,0.7); line-height: 1.65; }
+
+  /* Notes grid */
+  .notes-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+  }
+  .note-card {
+    padding: 1.25rem;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    border-left: 3px solid var(--gold);
+  }
+  .note-card h3 { font-size: 0.95rem; margin-bottom: 0.4rem; }
+  .note-card p { font-size: 0.875rem; color: var(--muted); line-height: 1.6; }
+</style>

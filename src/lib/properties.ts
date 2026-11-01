@@ -19,14 +19,21 @@ export const statusLabels: Record<PropertyStatus, string> = {
   upcoming: 'Coming soon',
 };
 
-/** All listings: featured first, then newest. */
+export const ownershipLabels: Record<string, string> = {
+  own: 'Our project',
+  assisted: 'Assisted listing',
+};
+
+/** All published listings: featured first, then newest. */
 export async function getProperties(): Promise<Property[]> {
   const all = await getCollection('properties');
-  return all.sort(
-    (a, b) =>
-      Number(b.data.featured) - Number(a.data.featured) ||
-      b.data.listedOn.getTime() - a.data.listedOn.getTime(),
-  );
+  return all
+    .filter(p => p.data.published !== false)
+    .sort(
+      (a, b) =>
+        Number(b.data.featured) - Number(a.data.featured) ||
+        b.data.listedOn.getTime() - a.data.listedOn.getTime(),
+    );
 }
 
 /** Formats rupees the way buyers in India read prices: Lakh and Crore. */

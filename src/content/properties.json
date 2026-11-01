@@ -6,13 +6,21 @@
     "status": "available",
     "location": "Vatika Green Parisar, Khuraniya, near Bilkisganj",
     "featured": true,
+    "ownershipType": "own",
     "published": true,
     "summary": "Farm house plots at Vatika Green Parisar near Bilkisganj — a planned layout with an internal road and tree planting.",
-    "description": "Vatika Green is our farm house project at Khuraniya, near Bilkisganj. The layout is planned with plots on both sides of an internal road, green spaces, and trees. Call us or share your requirement for current plot sizes, pricing, and to arrange a site visit.",
-    "highlights": ["Planned internal road", "Tree-lined layout", "Close to Bilkisganj"],
+    "description": "Vatika Green is our own farm house project at Khuraniya, near Bilkisganj. The layout is planned with plots on both sides of an internal road, green spaces, and trees. We personally take every visitor to the site. Call us or share your requirement for current plot sizes, pricing, and to arrange a site visit.",
+    "highlights": [
+      "Company-owned project with direct sale — no middlemen",
+      "Planned internal road",
+      "Tree-lined layout",
+      "Close to Bilkisganj",
+      "Personal guidance and site visit included"
+    ],
     "images": [
       { "src": "/images/vatika-green.svg", "alt": "Vatika Green farm house plot layout, Khuraniya near Bilkisganj", "placeholder": true }
     ],
-    "listedOn": "2026-10-08"
+    "listedOn": "2026-10-08",
+    "updatedAt": "2026-11-01"
   }
 ]

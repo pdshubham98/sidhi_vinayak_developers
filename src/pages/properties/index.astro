@@ -33,7 +33,7 @@ import { url } from '../../lib/url';
       <!-- Filters (only shown when >1 type or status exists) -->
       {typeEntries.length > 1 && (
         <div style="margin-bottom:1.75rem;">
-          <p style="font-size:0.85rem;font-weight:600;color:#4a6054;margin-bottom:0.6rem;text-transform:uppercase;letter-spacing:0.06em;">Filter by type</p>
+          <p style="font-size:0.85rem;font-weight:600;color:var(--muted);margin-bottom:0.6rem;text-transform:uppercase;letter-spacing:0.06em;">Filter by type</p>
           <div class="filter-bar" id="type-filters" role="group" aria-label="Filter by property type">
             <button class="filter-btn" data-filter="all" aria-pressed="true">All ({total})</button>
             {typeEntries.map(([value, label]) => {
@@ -48,7 +48,7 @@ import { url } from '../../lib/url';
 
       {statusEntries.length > 1 && (
         <div style="margin-bottom:2rem;">
-          <p style="font-size:0.85rem;font-weight:600;color:#4a6054;margin-bottom:0.6rem;text-transform:uppercase;letter-spacing:0.06em;">Filter by availability</p>
+          <p style="font-size:0.85rem;font-weight:600;color:var(--muted);margin-bottom:0.6rem;text-transform:uppercase;letter-spacing:0.06em;">Filter by availability</p>
           <div class="filter-bar" id="status-filters" role="group" aria-label="Filter by availability">
             <button class="filter-btn" data-filter-status="all" aria-pressed="true">All</button>
             {statusEntries.map(([value, label]) => (
@@ -59,7 +59,7 @@ import { url } from '../../lib/url';
       )}
 
       <!-- Count -->
-      <p style="font-size:0.9rem;color:#4a6054;margin-bottom:1.25rem;" id="result-count">{total} propert{total !== 1 ? 'ies' : 'y'} listed</p>
+      <p style="font-size:0.9rem;color:var(--muted);margin-bottom:1.25rem;" id="result-count">{total} propert{total !== 1 ? 'ies' : 'y'} listed</p>
 
       <!-- Grid -->
       <div class="property-grid" id="property-grid">
@@ -73,7 +73,7 @@ import { url } from '../../lib/url';
       <!-- CTA -->
       <div style="margin-top:2.5rem;padding-top:2rem;border-top:1px solid var(--line);">
         <p style="font-weight:600;margin-bottom:0.5rem;">Can't find what you're looking for?</p>
-        <p style="color:#4a6054;font-size:0.95rem;margin-bottom:1rem;">Share your requirement and we'll find the right property in Bhopal for you.</p>
+        <p style="color:var(--muted);font-size:0.95rem;margin-bottom:1rem;">Share your requirement and we'll find the right property in Bhopal for you.</p>
         <a href={url('/requirement')} class="btn btn-primary">Share your requirement</a>
       </div>
     </div>

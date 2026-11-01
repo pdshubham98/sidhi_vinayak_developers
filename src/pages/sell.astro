@@ -17,13 +17,54 @@ import { url } from '../lib/url';
 >
   <section class="page-hero">
     <div class="container">
-      <h1>Sell your property</h1>
-      <p>Share the details and we will reach out with genuine buyers.</p>
+      <h1>Sell your property in Bhopal</h1>
+      <p>Share your property details and we will connect you with genuine buyers — no upfront charges, just a conversation first.</p>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section class="section" style="padding-block:2rem 0;">
+    <div class="container" style="max-width:680px;">
+      <div class="sell-steps">
+        <div class="sell-step">
+          <div class="sell-step__num">1</div>
+          <div>
+            <h3>Share your details</h3>
+            <p>Fill in the form below with your property type, location, approximate size, and expected price. This takes about 2 minutes.</p>
+          </div>
+        </div>
+        <div class="sell-step">
+          <div class="sell-step__num">2</div>
+          <div>
+            <h3>We call you back</h3>
+            <p>We review your submission and call you to understand the property and confirm details. No commitment required at this stage.</p>
+          </div>
+        </div>
+        <div class="sell-step">
+          <div class="sell-step__num">3</div>
+          <div>
+            <h3>Property assessment</h3>
+            <p>We visit the property, assess it, and suggest a realistic market price based on current demand in Bhopal.</p>
+          </div>
+        </div>
+        <div class="sell-step">
+          <div class="sell-step__num">4</div>
+          <div>
+            <h3>Connecting with buyers</h3>
+            <p>We connect you with genuine buyers from our network. We verify documents and guide both parties through the registration process.</p>
+          </div>
+        </div>
+      </div>
+      <p class="sell-disclaimer">
+        Submitting this form is an initial enquiry, not a confirmed listing or guaranteed sale.
+        We will contact you to discuss the next steps.
+      </p>
     </div>
   </section>
 
   <section class="section">
     <div class="container" style="max-width:680px;">
+      <h2 style="margin-bottom:1.5rem;">Tell us about your property</h2>
       <form
         method="POST"
         action=""
@@ -71,3 +112,46 @@ import { url } from '../lib/url';
 <script>
   import '/src/scripts/whatsapp-form.ts';
 </script>
+
+<style>
+  .sell-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-bottom: 1.5rem;
+  }
+  .sell-step {
+    display: flex;
+    gap: 1.1rem;
+    align-items: flex-start;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .sell-step:first-child { padding-top: 0; }
+  .sell-step:last-child { border-bottom: none; }
+  .sell-step__num {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    background: var(--forest-deep);
+    color: var(--gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-serif);
+    font-size: 0.95rem;
+    margin-top: 2px;
+  }
+  .sell-step h3 { font-size: 1rem; margin-bottom: 0.25rem; }
+  .sell-step p { font-size: 0.875rem; color: var(--muted); line-height: 1.6; }
+  .sell-disclaimer {
+    font-size: 0.8rem;
+    color: var(--muted);
+    padding: 0.75rem 1rem;
+    background: var(--sage);
+    border-radius: var(--radius);
+    line-height: 1.55;
+    margin-top: 1rem;
+  }
+</style>

@@ -30,7 +30,7 @@ import { url } from '../lib/url';
               <div style="font-size:1.5rem;margin-bottom:0.5rem;">📞</div>
               <h3 style="margin-bottom:0.25rem;">Call us</h3>
               <a href={telHref(site.contact.phone)} style="color:var(--forest);font-weight:600;">{site.contact.phone}</a>
-              {site.contact.hours && <p style="font-size:0.875rem;color:#4a6054;margin-top:0.25rem;">{site.contact.hours}</p>}
+              {site.contact.hours && <p style="font-size:0.875rem;color:var(--muted);margin-top:0.25rem;">{site.contact.hours}</p>}
             </div>
           )}
           {site.contact.whatsapp && (
@@ -50,7 +50,7 @@ import { url } from '../lib/url';
           <div style="padding:1.25rem;background:#fff;border:1px solid var(--line);border-radius:var(--radius-lg);">
             <div style="font-size:1.5rem;margin-bottom:0.5rem;">📍</div>
             <h3 style="margin-bottom:0.25rem;">Office</h3>
-            <address style="font-style:normal;font-size:0.9rem;color:#4a6054;line-height:1.6;">
+            <address style="font-style:normal;font-size:0.9rem;color:var(--muted);line-height:1.6;">
               {site.office.lines.map(l => <>{l}<br /></>)}
             </address>
             {site.office.mapUrl && (
