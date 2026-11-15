@@ -129,3 +129,20 @@ Do not edit past entries. Add new entries at the bottom.
 **Consolidated:** `kv-properties.ts` + content loader → `src/lib/properties.ts`; labels/badge classes/types → `src/lib/property-meta.ts`; lead sending + phone check → `src/scripts/lead.ts`; detail page uses `whatsappHref`/`telHref`. Removed unused Astro Actions (`src/actions`, `leads.ts`, `enhance-form.ts`).
 
 **Verified:** `astro check` 0 errors/0 warnings; Cloudflare and GitHub Pages builds pass; Playwright E2E 130/130 locally (incl. full admin CRUD with cleanup) and 96/96 read-only against production. Deployed version e2c94706.
+
+## 2026-11-15 — UX audit fixes (branch `ux-improvements`, not deployed)
+
+**Fixed:** header "Book a site visit" button had dark text on green (nav-link colour overrode `.btn-primary`); hero path rows showed two arrows; sold project was listed under "Available for sale"; Kanha showed a "Photo coming soon" thumbnail next to its real plan (placeholders are now hidden once a listing has a real photo); consent text read "ourprivacy policy".
+
+**Changed:**
+- Home: 9 sections → 4 (hero with one CTA + Buy/Build/Sell rows, "Our projects" with featured project + ongoing + completed, why us + how it works, one combined sell/partner banner). Phone height 8,818px → ~5,800px.
+- Removed all-caps eyebrow labels (home, construction, about, popup, footer headings) per the design plan; sentence-case buttons everywhere.
+- Property cards: no "Our project" badge, no price divider, summary capped at 2 lines.
+- Property page: swipeable photo strip with thumbnails; price + "Book a site visit" + WhatsApp/Call row + map link sits right under the photos on phones; shorter ownership note; site-visit link carries the property name into the lead.
+- Enquiry form: only name, phone, "looking for" and consent required; email/area/budget/timeline/call time/message in an optional "Tell us more" section; seller/broker role removed (sent as `userRole=buyer`).
+- Popup: name + phone only; never shown on the requirement/contact/sell/thank-you pages.
+- Footer: outdated "Vatika Green site" column replaced by an "Explore" link list; compact on phones.
+- Header uses the cropped icon `public/images/logo-mark.png` next to the typed name.
+- Tighter section spacing on phones.
+
+**Verified:** `astro check` 0 errors; Playwright E2E 148/148 against local `wrangler dev` (new checks for every item above, incl. admin CRUD on local KV); screenshots at 390px and 1440px reviewed.

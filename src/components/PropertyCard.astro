@@ -10,7 +10,7 @@ interface Props {
 }
 const { property: p, showCta = true } = Astro.props;
 const id = p.id;
-const { title, type, status, location, price, size, offer, summary, images, sample, ownershipType } = p.data;
+const { title, type, status, location, price, size, offer, summary, images, sample } = p.data;
 const image = images?.[0];
 const statusClass = statusBadgeClass[status];
 const isAvailable = status === 'available' || status === 'upcoming';
@@ -34,7 +34,6 @@ const isAvailable = status === 'available' || status === 'upcoming';
     <div class="property-card__meta">
       <span class={`badge ${statusClass}`}>{statusLabels[status]}</span>
       <span class="badge badge-type">{typeLabels[type]}</span>
-      {ownershipType === 'own' && <span class="badge badge-own">Our project</span>}
       {sample && <span class="badge badge-sample">Sample listing</span>}
     </div>
 
@@ -46,7 +45,7 @@ const isAvailable = status === 'available' || status === 'upcoming';
       <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline;vertical-align:middle;margin-right:3px;margin-top:-2px;flex-shrink:0;"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>{location}
     </p>
 
-    {summary && <p style="font-size:0.875rem;color:var(--muted);line-height:1.5;">{summary}</p>}
+    {summary && <p class="property-card__summary">{summary}</p>}
 
     <div class="property-card__footer">
       <div>
@@ -74,11 +73,5 @@ const isAvailable = status === 'available' || status === 'upcoming';
     justify-content: space-between;
     gap: 0.4rem;
   }
-  .property-card__cta {
-    margin-top: 0.75rem;
-    padding-top: 0.75rem;
-    border-top: 1px solid var(--line);
-  }
-  .badge-type { background: var(--grey-light); color: var(--muted); }
-  .badge-own { background: var(--ochre-light); color: #7a5a1a; font-weight: 600; }
+  .property-card__cta { margin-top: 0.75rem; }
 </style>

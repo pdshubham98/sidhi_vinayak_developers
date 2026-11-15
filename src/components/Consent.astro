@@ -20,8 +20,7 @@ const errorId = 'consent-error';
       aria-describedby={error ? errorId : undefined}
     />
     <span>
-      I agree to be contacted by Sidhivinayak Developers about my enquiry. See our
-      <a href={url('/privacy')} target="_blank">privacy policy</a>.
+      I agree to be contacted by Sidhivinayak Developers about my enquiry. See our{' '}<a href={url('/privacy')} target="_blank">privacy policy</a>.
     </span>
   </label>
   {error && <p id={errorId} class="field-error" role="alert">{error}</p>}

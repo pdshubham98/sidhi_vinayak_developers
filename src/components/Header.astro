@@ -13,7 +13,7 @@ const is = (p: string) => {
   <div class="container">
     <div class="site-header__inner">
       <a href={url('/')} class="site-header__logo" aria-label={site.name + ' – home'}>
-        <img src={url('/images/logo.png')} alt={site.name + ' logo'} class="logo-img" width="44" height="44" />
+        <img src={url('/images/logo-mark.png')} alt="" class="logo-img" width="57" height="40" />
         <span class="logo-name">Sidhivinayak<br/><span class="logo-name-sub">Developers</span></span>
       </a>
 
@@ -34,10 +34,10 @@ const is = (p: string) => {
       <nav class="site-nav" id="site-nav" aria-label="Main navigation">
         <a href={url('/properties')} aria-current={is('/properties')}>Properties</a>
         <a href={url('/construction')} aria-current={is('/construction')}>Construction</a>
-        <a href={url('/sell')} aria-current={is('/sell')}>Sell Property</a>
+        <a href={url('/sell')} aria-current={is('/sell')}>Sell property</a>
         <a href={url('/about')} aria-current={is('/about')}>About</a>
         <a href={url('/contact')} aria-current={is('/contact')}>Contact</a>
-        <a href={url('/requirement')} class="btn btn-primary nav-cta">Book Site Visit</a>
+        <a href={url('/requirement')} class="btn btn-primary nav-cta">Book a site visit</a>
       </nav>
     </div>
   </div>
@@ -45,9 +45,9 @@ const is = (p: string) => {
 
 <style>
   .site-header__logo { display: flex; align-items: center; gap: 0.6rem; text-decoration: none; }
-  .logo-img { height: 44px; width: 44px; display: block; object-fit: contain; flex-shrink: 0; }
+  .logo-img { height: 40px; width: auto; display: block; object-fit: contain; flex-shrink: 0; }
   .logo-name { font-family: 'Young Serif', serif; font-size: 1rem; line-height: 1.15; color: var(--forest-deep); letter-spacing: 0.01em; }
-  .logo-name-sub { font-size: 0.75rem; color: var(--ochre); font-family: 'Mukta', sans-serif; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
+  .logo-name-sub { font-size: 0.85rem; color: #8a6420; font-family: 'Mukta', sans-serif; font-weight: 600; }
   .nav-cta { padding: 0.4em 1.1em; min-height: 40px; font-size: 0.9rem; }
 </style>
 

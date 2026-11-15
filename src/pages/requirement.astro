@@ -4,20 +4,20 @@ import Field from '../components/Field.astro';
 import ChoiceGroup from '../components/ChoiceGroup.astro';
 import Consent from '../components/Consent.astro';
 import Honeypot from '../components/Honeypot.astro';
-import { lookingForOptions, budgetOptions, timelineOptions, userRoleOptions, callbackTimeOptions } from '../lib/form-options';
+import { lookingForOptions, budgetOptions, timelineOptions, callbackTimeOptions } from '../lib/form-options';
 
 const errors: Record<string, string[] | undefined> = {};
 ---
 
 <Base
-  title="Send an Enquiry"
+  title="Book a site visit"
   description="Tell us what you are looking for — plots, farm house land, or construction in Bhopal — and we will get back to you personally."
   breadcrumbs={[{ name: 'Enquiry', url: '/requirement' }]}
 >
   <section class="page-hero">
     <div class="container">
-      <h1>Send an Enquiry</h1>
-      <p>Fill in the details below and we'll get back to you personally — no middlemen, no waiting.</p>
+      <h1>Book a site visit</h1>
+      <p>Leave your name and number and we will call you to fix a time. It takes less than a minute.</p>
     </div>
   </section>
 
@@ -32,21 +32,13 @@ const errors: Record<string, string[] | undefined> = {};
       >
         <Honeypot />
 
+        <input type="hidden" name="property" id="property-field" value="" />
+        <input type="hidden" name="userRole" value="buyer" />
+
         <div class="form-row">
           <Field id="name" label="Your name" required error={errors.name?.[0]} autocomplete="name" />
           <Field id="phone" label="Mobile number" type="tel" required error={errors.phone?.[0]} hint="10-digit Indian mobile number" autocomplete="tel" />
         </div>
-
-        <Field id="email" label="Email address" type="email" error={errors.email?.[0]} autocomplete="email" />
-
-        <ChoiceGroup
-          id="userRole"
-          label="I am a…"
-          options={userRoleOptions}
-          required
-          value=""
-          error={errors.userRole?.[0]}
-        />
 
         <ChoiceGroup
           id="lookingFor"
@@ -57,44 +49,45 @@ const errors: Record<string, string[] | undefined> = {};
           error={errors.lookingFor?.[0]}
         />
 
-        <Field id="preferredArea" label="Preferred area or locality" placeholder="e.g. Neelbad, Bilkisganj" error={errors.preferredArea?.[0]} />
-
-        <ChoiceGroup
-          id="budget"
-          label="Budget"
-          options={budgetOptions}
-          required
-          error={errors.budget?.[0]}
-          asSelect
-        />
-
-        <ChoiceGroup
-          id="timeline"
-          label="When do you want to buy?"
-          options={timelineOptions}
-          required
-          error={errors.timeline?.[0]}
-        />
-
-        <ChoiceGroup
-          id="callbackTime"
-          label="Best time to call you back"
-          options={callbackTimeOptions}
-          value=""
-          error={errors.callbackTime?.[0]}
-        />
-
-        <Field id="message" label="Anything else we should know?" type="textarea" error={errors.message?.[0]} placeholder="e.g. Looking for a 2,000 sq.ft plot near Bilkisganj, budget ₹25L, available for site visit this Sunday." />
+        <details class="more-details">
+          <summary>Tell us more (optional)</summary>
+          <div class="form-stack more-details__body">
+            <Field id="email" label="Email address" type="email" error={errors.email?.[0]} autocomplete="email" />
+            <Field id="preferredArea" label="Preferred area or locality" placeholder="e.g. Neelbad, Bilkisganj" error={errors.preferredArea?.[0]} />
+            <div class="form-row">
+              <ChoiceGroup id="budget" label="Budget" options={budgetOptions} error={errors.budget?.[0]} asSelect />
+              <ChoiceGroup id="timeline" label="When do you want to buy?" options={timelineOptions} error={errors.timeline?.[0]} asSelect />
+            </div>
+            <ChoiceGroup id="callbackTime" label="Best time to call you back" options={callbackTimeOptions} value="" error={errors.callbackTime?.[0]} asSelect />
+            <Field id="message" label="Anything else we should know?" type="textarea" error={errors.message?.[0]} placeholder="e.g. Looking for a 2,000 sq.ft plot near Bilkisganj, available for a site visit this Sunday." />
+          </div>
+        </details>
 
         <Consent error={errors.consent?.[0]} />
 
         <div class="form-submit">
-          <button type="submit" class="btn btn-primary">Submit Enquiry</button>
+          <button type="submit" class="btn btn-primary">Request a call back</button>
         </div>
       </form>
     </div>
   </section>
 </Base>
+
+<style>
+  .more-details {
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: #fff;
+  }
+  .more-details summary {
+    cursor: pointer;
+    padding: 0.8rem 1rem;
+    min-height: 48px;
+    font-weight: 600;
+    color: var(--forest);
+  }
+  .more-details__body { padding: 0 1rem 1.25rem; }
+</style>
 
 <script>
   import '../scripts/whatsapp-form.ts';

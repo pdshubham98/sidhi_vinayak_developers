@@ -1,6 +1,5 @@
 ---
 import { site } from '../config/site';
-import { userRoleOptions, lookingForOptions, callbackTimeOptions } from '../lib/form-options';
 ---
 
 <div
@@ -19,9 +18,8 @@ import { userRoleOptions, lookingForOptions, callbackTimeOptions } from '../lib/
 
     <!-- Form state -->
     <div id="popup-form-state">
-      <p class="popup-cta__eyebrow">Your dream property awaits</p>
-      <h2 class="popup-cta__heading" id="popup-heading">Quick Enquiry</h2>
-      <p class="popup-cta__body">Tell us what you need — we'll call you back personally.</p>
+      <h2 class="popup-cta__heading" id="popup-heading">Want us to call you?</h2>
+      <p class="popup-cta__body">Leave your number and we will call you back about plots, farmhouses or construction.</p>
 
       <form id="popup-inquiry-form" novalidate>
         <div class="popup-form-row">
@@ -35,42 +33,6 @@ import { userRoleOptions, lookingForOptions, callbackTimeOptions } from '../lib/
           </div>
         </div>
 
-        <fieldset class="popup-fieldset">
-          <legend class="popup-label">I am a… <span class="required" aria-hidden="true">*</span></legend>
-          <div class="popup-choices">
-            {userRoleOptions.map(o => (
-              <label class="popup-choice">
-                <input type="radio" name="userRole" value={o.value} />
-                {o.label}
-              </label>
-            ))}
-          </div>
-        </fieldset>
-
-        <fieldset class="popup-fieldset">
-          <legend class="popup-label">What are you looking for? <span class="required" aria-hidden="true">*</span></legend>
-          <div class="popup-choices">
-            {lookingForOptions.map(o => (
-              <label class="popup-choice">
-                <input type="radio" name="lookingFor" value={o.value} />
-                {o.label}
-              </label>
-            ))}
-          </div>
-        </fieldset>
-
-        <fieldset class="popup-fieldset">
-          <legend class="popup-label">Best time to call you back</legend>
-          <div class="popup-choices">
-            {callbackTimeOptions.map(o => (
-              <label class="popup-choice">
-                <input type="radio" name="callbackTime" value={o.value} />
-                {o.label}
-              </label>
-            ))}
-          </div>
-        </fieldset>
-
         <label class="popup-consent-label">
           <input type="checkbox" name="consent" id="popup-consent" />
           I agree to be contacted by {site.name}.
@@ -78,7 +40,7 @@ import { userRoleOptions, lookingForOptions, callbackTimeOptions } from '../lib/
 
         <p id="popup-form-error" class="popup-error" hidden>Please fill in your name, mobile, and tick the consent box.</p>
 
-        <button type="submit" class="btn btn-primary popup-submit">Submit Enquiry</button>
+        <button type="submit" class="btn btn-primary popup-submit">Call me back</button>
       </form>
     </div>
 
@@ -154,14 +116,6 @@ import { userRoleOptions, lookingForOptions, callbackTimeOptions } from '../lib/
   }
   .popup-cta__close:hover { background: var(--line); }
 
-  .popup-cta__eyebrow {
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 0.4rem;
-  }
   .popup-cta__heading {
     font-size: 1.4rem;
     margin-bottom: 0.4rem;
@@ -203,36 +157,6 @@ import { userRoleOptions, lookingForOptions, callbackTimeOptions } from '../lib/
     background: #fff;
   }
   .popup-input:focus { outline: 2px solid var(--forest); outline-offset: 1px; border-color: var(--forest); }
-
-  .popup-fieldset {
-    border: none;
-    padding: 0;
-    margin: 0 0 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-  }
-
-  .popup-choices { display: flex; flex-wrap: wrap; gap: 0.35rem; }
-
-  .popup-choice {
-    display: flex;
-    align-items: center;
-    gap: 0.35em;
-    padding: 0.35em 0.65em;
-    border: 1.5px solid var(--line);
-    border-radius: var(--radius);
-    cursor: pointer;
-    font-size: 0.82rem;
-    min-height: 36px;
-    user-select: none;
-    transition: border-color 0.15s, background 0.15s;
-  }
-  .popup-choice:has(input:checked) {
-    border-color: var(--forest);
-    background: var(--sage);
-  }
-  .popup-choice input { accent-color: var(--forest); }
 
   .popup-consent-label {
     display: flex;
@@ -302,6 +226,8 @@ import { userRoleOptions, lookingForOptions, callbackTimeOptions } from '../lib/
     }
 
     if (dismissed()) return;
+    // Never interrupt someone who is already filling in a form or has just sent one.
+    if (document.querySelector('#requirement-form, #sell-form, #contact-form') || /\/thank-you\/?$/.test(location.pathname)) return;
 
     var interacted = false;
     var events = ['click', 'keydown', 'scroll', 'touchstart'];
@@ -342,10 +268,6 @@ import { userRoleOptions, lookingForOptions, callbackTimeOptions } from '../lib/
           if (errEl) errEl.hidden = true;
 
           var payload: Record<string, string> = { formType: 'popup-inquiry', name: name, phone: phone };
-          ['userRole', 'lookingFor', 'callbackTime'].forEach(function(k) {
-            var val = data.get(k);
-            if (val) payload[k] = val.toString();
-          });
           sendLead(payload);
 
           // Show success

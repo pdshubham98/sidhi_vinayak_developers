@@ -6,8 +6,9 @@ import { getProperties } from '../../lib/properties';
 
 const properties = await getProperties();
 
-const forSale  = properties.filter(p => p.data.status !== 'upcoming');
-const upcoming = properties.filter(p => p.data.status === 'upcoming');
+const forSale   = properties.filter(p => p.data.status === 'available' || p.data.status === 'booked');
+const upcoming  = properties.filter(p => p.data.status === 'upcoming');
+const completed = properties.filter(p => p.data.status === 'sold');
 ---
 
 <Base
@@ -28,7 +29,7 @@ const upcoming = properties.filter(p => p.data.status === 'upcoming');
       {forSale.length > 0 && (
         <div class="listing-section">
           <div class="listing-section__header">
-            <h2>Available for Sale</h2>
+            <h2>Available for sale</h2>
             <p>Ready to visit. Call us or send an enquiry to arrange a site visit.</p>
           </div>
           <div class="property-grid">
@@ -40,11 +41,23 @@ const upcoming = properties.filter(p => p.data.status === 'upcoming');
       {upcoming.length > 0 && (
         <div class="listing-section">
           <div class="listing-section__header">
-            <h2>Upcoming Projects</h2>
+            <h2>Upcoming projects</h2>
             <p>Launching soon. Register your interest for early-bird pricing.</p>
           </div>
           <div class="property-grid">
             {upcoming.map(p => <PropertyCard property={p} />)}
+          </div>
+        </div>
+      )}
+
+      {completed.length > 0 && (
+        <div class="listing-section">
+          <div class="listing-section__header">
+            <h2>Completed projects</h2>
+            <p>Projects we have delivered and sold out.</p>
+          </div>
+          <div class="property-grid">
+            {completed.map(p => <PropertyCard property={p} />)}
           </div>
         </div>
       )}
@@ -56,7 +69,7 @@ const upcoming = properties.filter(p => p.data.status === 'upcoming');
       <div class="listing-cta">
         <p class="listing-cta__title">Can't find what you're looking for?</p>
         <p class="listing-cta__body">Share your requirement and we'll find the right property in Bhopal for you.</p>
-        <a href={url('/requirement')} class="btn btn-primary">Send an Enquiry</a>
+        <a href={url('/requirement')} class="btn btn-primary">Send an enquiry</a>
       </div>
 
     </div>

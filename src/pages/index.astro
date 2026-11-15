@@ -2,13 +2,18 @@
 import Base from '../layouts/Base.astro';
 import { site } from '../config/site';
 import { getProperties } from '../lib/properties';
+import { statusLabels, statusBadgeClass, formatPrice } from '../lib/property-meta';
 import PropertyCard from '../components/PropertyCard.astro';
-import { url } from '../lib/url';
+import { url, asset } from '../lib/url';
 
 const allProperties = await getProperties();
-const featured = allProperties.find(p => p.data.featured);
-// Everything except the hero listing, so a second "featured" property is never hidden.
-const latest = allProperties.filter(p => p !== featured).slice(0, 3);
+const ongoing = allProperties.filter(p => p.data.status !== 'sold');
+const completed = allProperties.filter(p => p.data.status === 'sold');
+// The highlighted project: the one marked featured, else the first ongoing one.
+const featured = ongoing.find(p => p.data.featured) ?? ongoing[0];
+const otherOngoing = ongoing.filter(p => p !== featured);
+const featuredImage = featured?.data.images?.[0];
+const needFor = (type: string) => (type === 'farm-house-plot' ? 'farm-house' : 'plot');
 ---
 
 <Base
@@ -20,161 +25,103 @@ const latest = allProperties.filter(p => p !== featured).slice(0, 3);
     <div class="container">
       <div class="hero__inner">
         <div class="hero__content">
-          <p class="hero__eyebrow">
-            <span>Plots</span><span aria-hidden="true">·</span><span>Farmhouses</span><span aria-hidden="true">·</span><span>Construction</span>
-          </p>
-          <h1 class="hero__headline">Find Your Land.<br />Build Your Dream.</h1>
+          <h1 class="hero__headline">Find your land.<br />Build your dream.</h1>
           <p class="hero__desc">
-            Buy a plot or farmhouse near Bhopal, build your dream home, or sell your property —
-            with personal guidance at every step.
+            Plots and farmhouses near Bhopal, home construction on your plot, and help selling
+            your property, all handled personally by our family.
           </p>
           <div class="hero__actions">
-            <a href={url('/properties')} class="btn btn-gold">
-              Explore Available Properties
-            </a>
-            <a href={url('/requirement')} class="btn btn-outline-white">
-              Book a Site Visit
-            </a>
+            <a href={url('/requirement')} class="btn btn-gold">Book a site visit</a>
           </div>
         </div>
 
-        <div class="hero__visual" aria-hidden="true">
+        <nav class="hero__visual" aria-label="What would you like to do?">
           <div class="hero__paths">
-            <a href={url('/properties')} class="hero-path" tabindex="-1">
-              <span class="hero-path__icon">
+            <a href={url('/properties')} class="hero-path">
+              <span class="hero-path__icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="8" height="8" rx="1"/><rect x="14" y="3" width="8" height="8" rx="1"/><rect x="2" y="13" width="8" height="8" rx="1"/><rect x="14" y="13" width="8" height="8" rx="1"/></svg>
               </span>
               <span>
                 <strong>Buy a plot or farmhouse</strong>
-                <span>Browse available properties in Bhopal</span>
+                <span>See our projects around Bhopal</span>
               </span>
-              <svg class="arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              <svg class="arrow" aria-hidden="true" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
-            <a href={url('/construction')} class="hero-path" tabindex="-1">
-              <span class="hero-path__icon">
+            <a href={url('/construction')} class="hero-path">
+              <span class="hero-path__icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
               </span>
               <span>
                 <strong>Build your home</strong>
                 <span>Construction on your plot in Bhopal</span>
               </span>
-              <svg class="arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              <svg class="arrow" aria-hidden="true" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
-            <a href={url('/sell')} class="hero-path" tabindex="-1">
-              <span class="hero-path__icon">
+            <a href={url('/sell')} class="hero-path">
+              <span class="hero-path__icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
               </span>
               <span>
                 <strong>Sell your property</strong>
                 <span>List your property with us</span>
               </span>
-              <svg class="arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              <svg class="arrow" aria-hidden="true" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
           </div>
-        </div>
+        </nav>
       </div>
     </div>
   </section>
 
-  <!-- ─── Featured property ─────────────────────────────────────── -->
-  {featured && (
-    <section class="section featured-section">
-      <div class="container">
-        <div class="section-label">Featured Project</div>
-        <div class="featured-layout">
-          <div class="featured-info">
-            <h2>{featured.data.title}</h2>
-            <p class="featured-loc">
-              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-              {featured.data.location}
-            </p>
-            <p class="featured-desc">{featured.data.summary}</p>
+  <!-- ─── Our projects ──────────────────────────────────────────── -->
+  <section class="section" id="projects">
+    <div class="container">
+      <div class="section-heading">
+        <h2>Our projects</h2>
+        <p>Plots and farmhouse plots we develop and sell directly, with no middlemen.</p>
+      </div>
+
+      {featured && (
+        <article class="featured">
+          <a href={url(`/properties/${featured.id}`)} class="featured__image" tabindex="-1" aria-hidden="true">
+            {featuredImage && <img src={asset(featuredImage.src)} alt="" width="960" height="600" />}
+            {featuredImage?.placeholder && <span class="badge badge-sample featured__tag">Photo coming soon</span>}
+          </a>
+          <div class="featured__body">
+            <span class={`badge ${statusBadgeClass[featured.data.status]}`}>{statusLabels[featured.data.status]}</span>
+            <h3 class="featured__title"><a href={url(`/properties/${featured.id}`)}>{featured.data.title}</a></h3>
+            <p class="featured__loc">{featured.data.location}</p>
+            <p class="featured__desc">{featured.data.summary}</p>
             {featured.data.highlights && featured.data.highlights.length > 0 && (
-              <ul class="featured-highlights">
-                {featured.data.highlights.slice(0, 4).map((h) => <li>{h}</li>)}
+              <ul class="featured__highlights">
+                {featured.data.highlights.slice(0, 3).map((h) => <li>{h}</li>)}
               </ul>
             )}
-            <div class="featured-actions">
-              <a href={url(`/requirement?need=${featured.data.type === 'farm-house-plot' ? 'farm-house' : 'plot'}`)} class="btn btn-primary">
-                Book a Site Visit
-              </a>
-              <a href={url(`/properties/${featured.id}`)} class="btn btn-outline-white">
-                See Full Details
-              </a>
+            <p class="featured__price">
+              {formatPrice(featured.data.price)}{featured.data.size && <span> · {featured.data.size}</span>}
+            </p>
+            <div class="featured__actions">
+              <a href={url(`/requirement?need=${needFor(featured.data.type)}`)} class="btn btn-primary">Book a site visit</a>
+              <a href={url(`/properties/${featured.id}`)} class="btn btn-ghost">See details</a>
             </div>
           </div>
-          <div class="featured-card-wrap">
-            <PropertyCard property={featured} showCta={false} />
-          </div>
-        </div>
-      </div>
-    </section>
-  )}
+        </article>
+      )}
 
-  <!-- ─── Other listings ────────────────────────────────────────── -->
-  {latest.length > 0 && (
-    <section class="section">
-      <div class="container">
-        <div class="section-heading">
-          <h2>More Properties</h2>
-          <p>Other plots and properties currently listed in and around Bhopal.</p>
+      {otherOngoing.length > 0 && (
+        <div class="property-grid" style="margin-top:1.5rem;">
+          {otherOngoing.map(p => <PropertyCard property={p} />)}
         </div>
-        <div class="property-grid">
-          {latest.map(p => <PropertyCard property={p} />)}
-        </div>
-        <div style="margin-top:2rem;">
-          <a href={url('/properties')} class="btn btn-outline">See all properties</a>
-        </div>
-      </div>
-    </section>
-  )}
+      )}
 
-  <!-- ─── Services ──────────────────────────────────────────────── -->
-  <section class="section services-section">
-    <div class="container">
-      <div class="section-heading centered">
-        <div class="section-label">How We Help</div>
-        <h2>Three ways we work with you</h2>
-        <p>Whether you're buying, building, or selling — we're with you at every step, personally.</p>
-      </div>
-      <div class="service-grid">
-        <div class="service-card">
-          <div class="service-card__number">01</div>
-          <div class="service-card__icon">
-            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="8" height="8" rx="1"/><rect x="14" y="3" width="8" height="8" rx="1"/><rect x="2" y="13" width="8" height="8" rx="1"/><rect x="14" y="13" width="8" height="8" rx="1"/></svg>
+      {completed.length > 0 && (
+        <div class="completed">
+          <h3 class="completed__title">Completed projects</h3>
+          <div class="property-grid">
+            {completed.map(p => <PropertyCard property={p} />)}
           </div>
-          <h3>I Want to Buy</h3>
-          <p>Browse residential plots and farmhouse plots around Bhopal. We take you to the site personally and help you choose the right property.</p>
-          <a href={url('/properties')} class="service-link">
-            Explore Properties
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
         </div>
-        <div class="service-card service-card--featured">
-          <div class="service-card__number">02</div>
-          <div class="service-card__icon">
-            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-          </div>
-          <h3>I Want to Build</h3>
-          <p>Own a plot? We design, plan, and build your home anywhere in Bhopal. We handle approvals, give regular updates, and hand you the keys.</p>
-          <a href={url('/construction')} class="service-link">
-            Discuss Your Project
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
-        </div>
-        <div class="service-card">
-          <div class="service-card__number">03</div>
-          <div class="service-card__icon">
-            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-          </div>
-          <h3>I Want to Sell</h3>
-          <p>Share your property details and we'll find genuine buyers. We handle plots, farm land, houses, and commercial properties in Bhopal.</p>
-          <a href={url('/sell')} class="service-link">
-            List Your Property
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
-        </div>
-      </div>
+      )}
     </div>
   </section>
 
@@ -183,7 +130,6 @@ const latest = allProperties.filter(p => p !== featured).slice(0, 3);
     <div class="container">
       <div class="why-layout">
         <div class="why-text">
-          <div class="section-label">Why Choose Us</div>
           <h2>A personal approach to property in Bhopal</h2>
           <p>
             Sidhivinayak Developers is a family business based in Neelbad, Bhopal.
@@ -231,8 +177,7 @@ const latest = allProperties.filter(p => p !== featured).slice(0, 3);
           <a href={url('/about')} class="btn btn-outline" style="margin-top:1.5rem;">About us</a>
         </div>
         <div class="why-steps">
-          <div class="section-label">How It Works</div>
-          <h3 style="margin-bottom:1.5rem;">From first call to registration</h3>
+          <h2 class="why-steps__title">From first call to registration</h2>
           <div class="process-steps">
             <div class="process-step">
               <div class="process-step__num">1</div>
@@ -269,37 +214,20 @@ const latest = allProperties.filter(p => p !== featured).slice(0, 3);
     </div>
   </section>
 
-  <!-- ─── Broker / Partner section ───────────────────────────────── -->
-  <section class="section">
-    <div class="container">
-      <div class="partner-banner">
-        <div class="partner-banner__text">
-          <div class="section-label">For Brokers &amp; Dealers</div>
-          <h2>Partner with us in Bhopal</h2>
-          <p>
-            Are you a broker, channel partner, or landowner in Bhopal? We work with trusted local
-            partners across Neelbad, Bilkisganj, Kolar Road, and surrounding areas — directly, without long chains.
-          </p>
-          <ul class="partner-points">
-            <li>Refer buyers and sellers — earn on every closed deal</li>
-            <li>List your land or inventory through our network</li>
-            <li>Direct coordination, no middlemen</li>
-          </ul>
-        </div>
-        <a href={url('/contact') + '?role=broker'} class="btn btn-outline">Get in touch to partner</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ─── Sell banner ───────────────────────────────────────────── -->
+  <!-- ─── Sell or partner ───────────────────────────────────────── -->
   <section class="section">
     <div class="container">
       <div class="sell-banner">
-        <div class="sell-banner__text">
-          <h2>Want to sell your property in Bhopal?</h2>
-          <p>Share the details and we will connect you with genuine buyers — no commission talk upfront, just a conversation.</p>
+        <div class="sell-banner__col">
+          <h2>Selling a property in Bhopal?</h2>
+          <p>Share the details and we will connect you with genuine buyers. No commission talk upfront, just a conversation.</p>
+          <a href={url('/sell')} class="btn btn-gold">List your property</a>
         </div>
-        <a href={url('/sell')} class="btn btn-primary">List Your Property</a>
+        <div class="sell-banner__col">
+          <h2>Broker or landowner?</h2>
+          <p>We work directly with trusted partners across Neelbad, Bilkisganj and Kolar Road. Refer buyers or list your land through us.</p>
+          <a href={url('/contact') + '?role=broker'} class="btn btn-outline-white">Partner with us</a>
+        </div>
       </div>
     </div>
   </section>
@@ -310,7 +238,7 @@ const latest = allProperties.filter(p => p !== featured).slice(0, 3);
   .hero {
     background: var(--forest-deep);
     color: #fff;
-    padding-block: clamp(4rem, 9vw, 7rem);
+    padding-block: clamp(3rem, 7vw, 5.5rem);
     position: relative;
     overflow: hidden;
   }
@@ -329,17 +257,6 @@ const latest = allProperties.filter(p => p !== featured).slice(0, 3);
   @media (min-width: 900px) {
     .hero__inner { grid-template-columns: 1fr 420px; }
   }
-  .hero__eyebrow {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4em;
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    color: var(--gold);
-    text-transform: uppercase;
-    margin-bottom: 1.25rem;
-  }
   .hero__headline {
     font-size: clamp(2.25rem, 5.5vw, 3.5rem);
     color: #fff;
@@ -357,13 +274,6 @@ const latest = allProperties.filter(p => p !== featured).slice(0, 3);
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem;
-    margin-bottom: 1.75rem;
-  }
-  .hero__tagline {
-    font-size: 0.85rem;
-    font-style: italic;
-    color: rgba(255,255,255,0.45);
-    letter-spacing: 0.03em;
   }
 
   /* ── Hero path rows ── */
@@ -423,124 +333,63 @@ const latest = allProperties.filter(p => p !== featured).slice(0, 3);
   }
   .btn-whatsapp:hover { background: #1da851; border-color: #1da851; }
 
-  /* ── Featured section ── */
-  .featured-section {
-    background: var(--forest-deep);
-    color: #fff;
-  }
-  .featured-layout {
+  /* ── Featured project ── */
+  .featured {
     display: grid;
-    gap: 3rem;
-    align-items: start;
-  }
-  @media (min-width: 860px) {
-    .featured-layout { grid-template-columns: 1fr 360px; }
-  }
-  .featured-info h2 { color: #fff; margin-bottom: 0.5rem; }
-  .featured-loc {
-    display: flex;
-    align-items: center;
-    gap: 0.35em;
-    font-size: 0.9rem;
-    color: rgba(255,255,255,0.6);
-    margin-bottom: 1rem;
-  }
-  .featured-desc { color: rgba(255,255,255,0.72); max-width: 52ch; line-height: 1.7; margin-bottom: 1.25rem; }
-  .featured-highlights {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-    margin-bottom: 1.75rem;
-  }
-  .featured-highlights li {
-    font-size: 0.9rem;
-    color: rgba(255,255,255,0.7);
-    padding-left: 1.25em;
-    position: relative;
-  }
-  .featured-highlights li::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0.55em;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--gold);
-  }
-  .featured-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
-
-  /* ── Section label ── */
-  .section-label {
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 0.5rem;
-  }
-  .section-heading.centered { text-align: center; }
-  .section-heading.centered p { margin-inline: auto; }
-
-  /* ── Services ── */
-  .services-section { background: var(--paper); }
-  .service-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
-    gap: 1.5rem;
-    margin-top: 2.5rem;
-  }
-  .service-card {
-    padding: 2rem 1.75rem;
     background: #fff;
     border: 1px solid var(--line);
     border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  @media (min-width: 860px) {
+    .featured { grid-template-columns: 1.1fr 1fr; }
+  }
+  .featured__image {
     position: relative;
-    transition: box-shadow 0.2s;
+    display: block;
+    background: var(--paper);
+    aspect-ratio: 4/3;
+    align-self: center;
   }
-  .service-card:hover { box-shadow: var(--shadow-card); }
-  .service-card--featured {
-    border-color: var(--forest);
-    background: var(--forest-deep);
-    color: #fff;
+  /* contain: layout plans and brochures must not be cropped */
+  .featured__image img { width: 100%; height: 100%; object-fit: contain; }
+  .featured__tag { position: absolute; left: 0.75rem; bottom: 0.75rem; }
+  .featured__body {
+    padding: clamp(1.25rem, 3vw, 2.25rem);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
   }
-  .service-card--featured h3,
-  .service-card--featured p { color: rgba(255,255,255,0.85); }
-  .service-card--featured .service-card__icon { color: var(--gold); }
-  .service-card--featured .service-link { color: var(--gold); }
-  .service-card__number {
-    font-family: var(--font-serif);
-    font-size: 3rem;
-    color: var(--line);
-    line-height: 1;
-    margin-bottom: 0.75rem;
+  .featured__title { font-family: var(--font-serif); font-weight: 400; font-size: clamp(1.4rem, 3vw, 1.9rem); line-height: 1.2; }
+  .featured__title a { text-decoration: none; }
+  .featured__title a:hover { color: var(--forest); }
+  .featured__loc { color: var(--muted); font-size: 0.95rem; }
+  .featured__desc { line-height: 1.65; max-width: 52ch; }
+  .featured__highlights { list-style: none; display: flex; flex-direction: column; gap: 0.3rem; }
+  .featured__highlights li { font-size: 0.95rem; padding-left: 1.2em; position: relative; }
+  .featured__highlights li::before {
+    content: '';
     position: absolute;
-    top: 1.25rem;
-    right: 1.5rem;
+    left: 0;
+    top: 0.6em;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--ochre);
   }
-  .service-card--featured .service-card__number { color: rgba(255,255,255,0.1); }
-  .service-card__icon { color: var(--forest); margin-bottom: 1rem; line-height: 0; }
-  .service-card h3 { margin-bottom: 0.6rem; font-size: 1.15rem; }
-  .service-card p { color: var(--muted); font-size: 0.95rem; line-height: 1.65; margin-bottom: 1.25rem; }
-  .service-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4em;
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: var(--forest);
-    text-decoration: none;
-    border-bottom: 1.5px solid transparent;
-    transition: border-color 0.15s, gap 0.15s;
-  }
-  .service-link:hover { border-bottom-color: currentColor; gap: 0.6em; }
+  .featured__price { font-weight: 600; color: var(--forest-deep); margin-top: 0.25rem; }
+  .featured__price span { font-weight: 400; color: var(--muted); }
+  .featured__actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 0.5rem; }
+
+  .completed { margin-top: clamp(2rem, 5vw, 3rem); }
+  .completed__title { font-size: 1.1rem; margin-bottom: 1rem; color: var(--muted); }
 
   /* ── Why section ── */
   .why-section { background: var(--sage); }
   .why-layout {
     display: grid;
-    gap: 4rem;
+    gap: clamp(2.5rem, 6vw, 4rem);
     align-items: start;
   }
   @media (min-width: 900px) {
@@ -566,6 +415,7 @@ const latest = allProperties.filter(p => p !== featured).slice(0, 3);
     color: var(--forest);
     box-shadow: 0 1px 3px rgba(23,63,45,0.1);
   }
+  .why-steps__title { font-size: clamp(1.4rem, 3vw, 1.75rem); margin-bottom: 1.5rem; }
   .why-point h4 { font-size: 0.95rem; margin-bottom: 0.2rem; }
   .why-point p { font-size: 0.875rem; color: var(--muted); }
 
@@ -591,54 +441,21 @@ const latest = allProperties.filter(p => p !== featured).slice(0, 3);
   .process-step h4 { font-size: 0.95rem; margin-bottom: 0.2rem; }
   .process-step p { font-size: 0.85rem; color: var(--muted); }
 
-  /* ── Partner banner ── */
-  .partner-banner {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 2rem;
-    align-items: center;
-    justify-content: space-between;
-    padding: 2.5rem 2.5rem;
-    background: var(--paper);
-    border: 1px solid var(--line);
-    border-left: 4px solid var(--forest);
-    border-radius: var(--radius-lg);
-  }
-  .partner-banner__text h2 { margin-bottom: 0.5rem; font-size: clamp(1.3rem, 2.5vw, 1.65rem); }
-  .partner-banner__text > p { color: var(--muted); max-width: 56ch; line-height: 1.65; margin-bottom: 1rem; font-size: 0.95rem; }
-  .partner-points {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-  }
-  .partner-points li {
-    font-size: 0.875rem;
-    color: var(--muted);
-    padding-left: 1.25em;
-    position: relative;
-  }
-  .partner-points li::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0.55em;
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background: var(--forest);
-  }
+  /* ── Sell / partner banner ── */
   .sell-banner {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    align-items: start;
     gap: 2rem;
-    align-items: center;
-    justify-content: space-between;
-    padding: 2.5rem 2.5rem;
+    padding: clamp(1.75rem, 4vw, 2.75rem);
     background: var(--forest-deep);
     color: #fff;
     border-radius: var(--radius-lg);
   }
-  .sell-banner__text h2 { color: #fff; margin-bottom: 0.5rem; font-size: clamp(1.3rem, 2.5vw, 1.65rem); }
-  .sell-banner__text p { color: rgba(255,255,255,0.72); max-width: 56ch; line-height: 1.65; font-size: 0.95rem; }
+  @media (min-width: 760px) {
+    .sell-banner { grid-template-columns: 1fr 1fr; gap: 3rem; }
+    .sell-banner__col + .sell-banner__col { border-left: 1px solid rgba(255,255,255,0.15); padding-left: 3rem; }
+  }
+  .sell-banner__col { display: flex; flex-direction: column; align-items: flex-start; gap: 0.6rem; }
+  .sell-banner__col h2 { color: #fff; font-size: clamp(1.3rem, 2.5vw, 1.6rem); }
+  .sell-banner__col p { color: rgba(255,255,255,0.8); line-height: 1.65; max-width: 48ch; margin-bottom: 0.5rem; }
 </style>

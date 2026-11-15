@@ -27,19 +27,6 @@ const year = new Date().getFullYear();
         )}
       </div>
 
-      <!-- Site location -->
-      <div>
-        <h4>{site.projectSite.label}</h4>
-        <address>
-          {site.projectSite.lines.map(l => <>{l}<br /></>)}
-        </address>
-        {site.projectSite.mapUrl && (
-          <a href={site.projectSite.mapUrl} target="_blank" rel="noopener noreferrer" style="margin-top:0.5rem;display:inline-block;font-size:0.85rem;">
-            View on Google Maps
-          </a>
-        )}
-      </div>
-
       <!-- Contact -->
       <div>
         <h4>Contact</h4>
@@ -58,14 +45,13 @@ const year = new Date().getFullYear();
         )}
       </div>
 
-      <!-- Quick links -->
+      <!-- Links -->
       <div>
-        <h4>Quick links</h4>
+        <h4>Explore</h4>
         <ul class="site-footer__links">
-          <li><a href={url('/properties')}>Properties</a></li>
+          <li><a href={url('/properties')}>Our projects</a></li>
           <li><a href={url('/construction')}>Construction</a></li>
-          <li><a href={url('/requirement')}>Book a site visit</a></li>
-          <li><a href={url('/sell')}>Sell your property</a></li>
+          <li><a href={url('/sell')}>Sell property</a></li>
           <li><a href={url('/about')}>About us</a></li>
           <li><a href={url('/faq')}>FAQ</a></li>
           <li><a href={url('/contact')}>Contact</a></li>
