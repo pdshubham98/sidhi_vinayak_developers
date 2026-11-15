@@ -36,6 +36,7 @@ jobs:
           npm run build
         env:
           DEPLOY_TARGET: github
+          PUBLIC_APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
 
       - name: Upload build output
         uses: actions/upload-pages-artifact@v3
