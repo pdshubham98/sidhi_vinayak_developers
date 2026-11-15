@@ -111,7 +111,7 @@ p + p { margin-top: 1em; }
   padding-inline: clamp(1rem, 4vw, 2rem);
 }
 
-.section { padding-block: clamp(3rem, 7vw, 5rem); }
+.section { padding-block: clamp(4rem, 9vw, 6.5rem); }
 
 /* ─── Buttons ────────────────────────────────────────────────────────────── */
 .btn {
@@ -381,7 +381,7 @@ label .required { color: #c0392b; margin-left: 2px; }
 .page-hero {
   background: var(--forest-deep);
   color: #fff;
-  padding-block: clamp(2.5rem, 6vw, 4rem);
+  padding-block: clamp(3rem, 7vw, 5rem);
 }
 .page-hero h1 { color: #fff; margin-bottom: 0.5rem; }
 .page-hero p { color: rgba(255,255,255,0.75); max-width: 56ch; }

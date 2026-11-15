@@ -63,20 +63,10 @@ const isAvailable = status === 'available' || status === 'upcoming';
       {offer && <span class="property-card__offer">{offer}</span>}
     </div>
 
-    {showCta && isAvailable && (
+    {showCta && (
       <div class="property-card__cta">
-        <a href={url(`/requirement?need=${needParam}`)} class="btn btn-primary" style="width:100%;justify-content:center;font-size:0.9rem;min-height:44px;">
-          Book a site visit
-        </a>
-        <a href={url(`/properties/${id}`)} style="display:block;text-align:center;font-size:0.85rem;color:var(--forest);font-weight:600;margin-top:0.4rem;">
-          View details
-        </a>
-      </div>
-    )}
-    {showCta && !isAvailable && (
-      <div class="property-card__cta">
-        <a href={url(`/properties/${id}`)} class="btn btn-ghost" style="width:100%;justify-content:center;font-size:0.9rem;min-height:44px;">
-          View details
+        <a href={url(`/properties/${id}`)} class={`btn ${isAvailable ? 'btn-primary' : 'btn-ghost'}`} style="width:100%;justify-content:center;font-size:0.9rem;min-height:44px;">
+          View property
         </a>
       </div>
     )}
