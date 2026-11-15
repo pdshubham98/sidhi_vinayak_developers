@@ -10,8 +10,8 @@ export const site = {
   description:
     'Explore residential plots and farmhouses near Bhopal, plan your home construction, or enquire about selling your property with Sidhivinayak Developers.',
 
-  /** Keep false until the site is live on its own domain, so search engines don't index the temporary address. */
-  indexable: false,
+  /** Controlled by SITE_INDEXABLE env var — set to 'true' in Cloudflare dashboard to enable indexing. */
+  indexable: import.meta.env.SITE_INDEXABLE === 'true',
 
   contact: {
     /** Shown as text and used for tap-to-call, e.g. '+91 98765 43210'. */
