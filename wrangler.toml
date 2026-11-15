@@ -1,3 +1,7 @@
 name = "siddhivinayak-developers"
 compatibility_date = "2024-11-01"
 compatibility_flags = ["nodejs_compat"]
+
+[[kv_namespaces]]
+binding = "PROPERTIES_KV"
+id = "fb4f512c69b7425e881f1ab27d6420ff"

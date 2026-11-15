@@ -17,6 +17,7 @@
     "astro": "^7.3.7"
   },
   "devDependencies": {
+    "@types/node": "^22.20.5",
     "sanity": "^6.21.0",
     "wrangler": "^4.148.0"
   }

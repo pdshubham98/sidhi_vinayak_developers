@@ -7,18 +7,17 @@ import Honeypot from '../components/Honeypot.astro';
 import { lookingForOptions, budgetOptions, timelineOptions, userRoleOptions, callbackTimeOptions } from '../lib/form-options';
 
 const errors: Record<string, string[] | undefined> = {};
-import { url } from '../lib/url';
 ---
 
 <Base
-  title="Book a site visit"
-  description="Tell us what you are looking for — plots, farm house land, or construction in Bhopal — and we will arrange a site visit and find the right options for you."
-  breadcrumbs={[{ name: 'Book a site visit', url: '/requirement' }]}
+  title="Send an Enquiry"
+  description="Tell us what you are looking for — plots, farm house land, or construction in Bhopal — and we will get back to you personally."
+  breadcrumbs={[{ name: 'Enquiry', url: '/requirement' }]}
 >
   <section class="page-hero">
     <div class="container">
-      <h1>Book a site visit</h1>
-      <p>Tell us what you are looking for and we will arrange a visit and find the right options for you.</p>
+      <h1>Send an Enquiry</h1>
+      <p>Fill in the details below and we'll get back to you personally — no middlemen, no waiting.</p>
     </div>
   </section>
 
@@ -90,7 +89,7 @@ import { url } from '../lib/url';
         <Consent error={errors.consent?.[0]} />
 
         <div class="form-submit">
-          <button type="submit" class="btn btn-primary">Send requirement</button>
+          <button type="submit" class="btn btn-primary">Submit Enquiry</button>
         </div>
       </form>
     </div>
@@ -98,5 +97,5 @@ import { url } from '../lib/url';
 </Base>
 
 <script>
-  import '/src/scripts/whatsapp-form.ts';
+  import '../scripts/whatsapp-form.ts';
 </script>

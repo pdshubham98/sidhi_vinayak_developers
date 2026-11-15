@@ -2,6 +2,7 @@ import { defineCollection } from 'astro:content';
 import { file } from 'astro/loaders';
 import { z } from 'astro/zod';
 import { sanityPropertiesLoader } from './lib/sanity-loader';
+import { ownershipTypes, propertyStatuses, propertyTypes } from './lib/property-meta';
 
 /**
  * Property listings.
@@ -12,8 +13,8 @@ const useSanity = !!import.meta.env.SANITY_PROJECT_ID;
 
 const propertySchema = z.object({
   title: z.string(),
-  type: z.enum(['farm-house-plot', 'plot', 'house', 'flat', 'commercial']),
-  status: z.enum(['available', 'booked', 'sold', 'upcoming']),
+  type: z.enum(propertyTypes),
+  status: z.enum(propertyStatuses),
   location: z.string(),
   /** Price in rupees. Leave out to show "Price on request". */
   price: z.number().positive().optional(),
@@ -26,7 +27,7 @@ const propertySchema = z.object({
    * - "own"      — company's own inventory/project
    * - "assisted" — brokerage/consultancy listing for a third-party seller
    */
-  ownershipType: z.enum(['own', 'assisted']).default('assisted'),
+  ownershipType: z.enum(ownershipTypes).default('assisted'),
   /** Whether this listing is publicly visible. */
   published: z.boolean().default(true),
   summary: z.string(),

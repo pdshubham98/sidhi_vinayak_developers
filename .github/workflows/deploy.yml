@@ -29,11 +29,7 @@ jobs:
         run: npm ci
 
       - name: Build site
-        run: |
-          # Astro Actions require a server; remove the file so the static build succeeds.
-          # The file is preserved in the repo — this only affects the CI working directory.
-          rm -f src/actions/index.ts
-          npm run build
+        run: npm run build
         env:
           DEPLOY_TARGET: github
           PUBLIC_APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}

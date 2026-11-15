@@ -1,0 +1,500 @@
+---
+import { env } from 'cloudflare:workers';
+import {
+  deleteImage,
+  getAllProperties,
+  isOneOf,
+  ownershipLabels,
+  ownershipTypes,
+  propertyStatuses,
+  propertyTypes,
+  saveImage,
+  saveProperties,
+  statusLabels,
+  typeLabels,
+  type Property,
+  type PropertyData,
+  type PropertyImage,
+} from '../lib/properties';
+
+const ADMIN_PASSWORD = ((env as Record<string, unknown>).ADMIN_PASSWORD as string | undefined) || 'sdv2026';
+const COOKIE_NAME = 'sdv_admin';
+const MAX_PHOTOS = 12;
+const MAX_PHOTO_BYTES = 8 * 1024 * 1024;
+const PHOTO_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+const STATUS_COLORS: Record<string, string> = { available: '#1a7a3c', upcoming: '#2D5F7A', booked: '#c27c00', sold: '#888' };
+const DONE_MESSAGES: Record<string, string> = {
+  added: 'Property added.',
+  updated: 'Changes saved.',
+  deleted: 'Property deleted.',
+  status: 'Status updated.',
+};
+
+// Session cookie holds a hash of the password, never the password itself.
+async function sessionToken(): Promise<string> {
+  const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(ADMIN_PASSWORD + '|sdv-admin'));
+  return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, '0')).join('');
+}
+
+const token = await sessionToken();
+const isAuth = Astro.cookies.get(COOKIE_NAME)?.value === token;
+
+const slugify = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
+function uniqueId(base: string, taken: Property[]): string {
+  const root = base || `property-${crypto.randomUUID().slice(0, 8)}`;
+  let id = root;
+  for (let n = 2; taken.some((p) => p.id === id); n++) id = `${root}-${n}`;
+  return id;
+}
+
+let error = '';
+/** Values shown in the add/edit form; filled from the failed POST so nothing typed is lost. */
+let formValues: Record<string, string> | null = null;
+
+if (Astro.request.method === 'POST') {
+  const fd = await Astro.request.formData().catch(() => null);
+  const field = (k: string) => fd?.get(k)?.toString().trim() ?? '';
+  const action = field('action');
+
+  if (action === 'login') {
+    if (field('password') === ADMIN_PASSWORD) {
+      Astro.cookies.set(COOKIE_NAME, token, { httpOnly: true, secure: true, sameSite: 'strict', maxAge: 86400 * 30, path: '/admin' });
+      return Astro.redirect('/admin');
+    }
+    error = 'Wrong password. Try again.';
+  } else if (!isAuth) {
+    error = 'Your session expired. Please log in again.';
+  } else if (action === 'logout') {
+    Astro.cookies.delete(COOKIE_NAME, { path: '/admin' });
+    return Astro.redirect('/admin');
+  } else {
+    try {
+      const all = await getAllProperties();
+      const id = field('id');
+      const idx = all.findIndex((p) => p.id === id);
+
+      if (action === 'delete') {
+        if (idx >= 0) {
+          await saveProperties(all.filter((_, i) => i !== idx));
+          await Promise.all(all[idx].data.images.map((img) => deleteImage(img.src)));
+        }
+        return Astro.redirect('/admin?done=deleted');
+      }
+
+      if (action === 'status') {
+        const status = field('status');
+        if (idx < 0 || !isOneOf(propertyStatuses, status)) throw new Error('Could not update status. Refresh and try again.');
+        all[idx] = { id, data: { ...all[idx].data, status, updatedAt: new Date() } };
+        await saveProperties(all);
+        return Astro.redirect('/admin?done=status');
+      }
+
+      if (action === 'save') {
+        const title = field('title');
+        const summary = field('summary');
+        const location = field('location');
+        const type = field('type');
+        const status = field('status');
+        const ownershipType = field('ownershipType');
+        const priceRaw = field('price').replace(/[,\s₹]/g, '');
+        const price = priceRaw ? Number(priceRaw) : undefined;
+
+        if (!title || !summary || !location) throw new Error('Name, summary and location are required.');
+        if (!isOneOf(propertyTypes, type) || !isOneOf(propertyStatuses, status) || !isOneOf(ownershipTypes, ownershipType)) {
+          throw new Error('Choose a valid type, status and listing type.');
+        }
+        if (price !== undefined && (!Number.isFinite(price) || price <= 0)) throw new Error('Price must be a number in rupees, e.g. 2500000. Leave it empty for "Price on request".');
+        const mapUrl = field('mapUrl');
+        if (mapUrl && !/^https:\/\/\S+$/.test(mapUrl)) throw new Error('The Google Maps link must start with https://');
+
+        const existing = idx >= 0 ? all[idx].data : undefined;
+
+        const removed = new Set(fd!.getAll('remove').map(String));
+        let images: PropertyImage[] = (existing?.images ?? []).filter((img) => !removed.has(img.src));
+        const cover = field('cover');
+        const coverIdx = images.findIndex((img) => img.src === cover);
+        if (coverIdx > 0) images.unshift(...images.splice(coverIdx, 1));
+
+        const uploads = fd!.getAll('photos').filter((f): f is File => f instanceof File && f.size > 0);
+        for (const f of uploads) {
+          if (!PHOTO_TYPES.includes(f.type)) throw new Error(`"${f.name}" is not a JPG, PNG or WebP photo.`);
+          if (f.size > MAX_PHOTO_BYTES) throw new Error(`"${f.name}" is larger than 8 MB.`);
+        }
+        if (uploads.length) images = images.filter((img) => !img.placeholder);
+        if (images.length + uploads.length > MAX_PHOTOS) throw new Error(`A property can have at most ${MAX_PHOTOS} photos.`);
+
+        for (const f of uploads) {
+          images.push({ src: await saveImage(await f.arrayBuffer(), f.type), alt: `${title} – photo ${images.length + 1}` });
+        }
+        if (!images.length) images = [{ src: type === 'farm-house-plot' ? '/images/vatika-green.svg' : '/images/plot.svg', alt: title, placeholder: true }];
+
+        const highlights = field('highlights').split('\n').map((h) => h.trim()).filter(Boolean);
+        const data: PropertyData = {
+          ...existing,
+          title,
+          summary,
+          location,
+          type,
+          status,
+          ownershipType,
+          price,
+          mapUrl: mapUrl || undefined,
+          size: field('size') || undefined,
+          offer: field('offer') || undefined,
+          description: field('description') || undefined,
+          highlights: highlights.length ? highlights : undefined,
+          published: field('published') === '1',
+          featured: field('featured') === '1',
+          images,
+          listedOn: existing?.listedOn ?? new Date(),
+          updatedAt: new Date(),
+        };
+
+        if (existing) all[idx] = { id, data };
+        else all.push({ id: uniqueId(slugify(title), all), data });
+
+        await saveProperties(all);
+        await Promise.all([...removed].map((src) => deleteImage(src)));
+        return Astro.redirect(`/admin?done=${existing ? 'updated' : 'added'}`);
+      }
+    } catch (e) {
+      error = e instanceof Error ? e.message : 'Something went wrong. Please try again.';
+      if (action === 'save' && fd) {
+        formValues = Object.fromEntries([...fd.entries()].filter(([, v]) => typeof v === 'string')) as Record<string, string>;
+      }
+    }
+  }
+}
+
+const allProps = isAuth ? await getAllProperties() : [];
+const notice = DONE_MESSAGES[Astro.url.searchParams.get('done') ?? ''] ?? '';
+const editId = formValues?.id || Astro.url.searchParams.get('edit') || '';
+const editProp = editId ? allProps.find((p) => p.id === editId) ?? null : null;
+const showForm = !!formValues || Astro.url.searchParams.has('new') || !!editProp;
+
+const d = editProp?.data;
+const v: Record<string, string> = formValues ?? {
+  title: d?.title ?? '',
+  summary: d?.summary ?? '',
+  status: d?.status ?? 'available',
+  type: d?.type ?? 'plot',
+  location: d?.location ?? '',
+  mapUrl: d?.mapUrl ?? '',
+  price: d?.price ? String(d.price) : '',
+  size: d?.size ?? '',
+  ownershipType: d?.ownershipType ?? 'own',
+  offer: d?.offer ?? '',
+  description: d?.description ?? '',
+  highlights: (d?.highlights ?? []).join('\n'),
+  published: d && !d.published ? '' : '1',
+  featured: d?.featured ? '1' : '',
+};
+---
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Admin — Sidhivinayak Developers</title>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0f4ef;color:#1a2a1e;min-height:100vh;font-size:16px}
+    a{color:#24533b}
+    .hd{background:#24533b;color:#fff;padding:.85rem 1rem;display:flex;align-items:center;justify-content:space-between;gap:.5rem;position:sticky;top:0;z-index:10}
+    .hd h1{font-size:.95rem;font-weight:700}
+    .hd a{color:#fff;font-size:.85rem}
+    .pg{max-width:720px;margin:0 auto;padding:1rem}
+    .flash{padding:.7rem 1rem;border-radius:8px;margin-bottom:1rem;font-size:.9rem;font-weight:500}
+    .flash-ok{background:#d4edda;color:#155724}
+    .flash-err{background:#f8d7da;color:#721c24}
+    .login{background:#fff;border-radius:14px;padding:2rem 1.25rem;max-width:360px;margin:3rem auto;box-shadow:0 4px 20px rgba(0,0,0,.1)}
+    .login h2{margin-bottom:.5rem;font-size:1.3rem}
+    .login p{font-size:.85rem;color:#666;margin-bottom:1.5rem}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:.4em;padding:.7em 1.2em;border-radius:9px;font-size:.9rem;font-weight:600;cursor:pointer;border:none;text-decoration:none;transition:opacity .15s;-webkit-tap-highlight-color:transparent;min-height:44px}
+    .btn:hover{opacity:.85}
+    .btn:active{opacity:.7}
+    .btn:disabled{opacity:.5;cursor:wait}
+    .btn-p{background:#24533b;color:#fff}
+    .btn-s{background:#e8f0e4;color:#24533b;border:1px solid #c9d6c3}
+    .btn-d{background:#fee2e2;color:#991b1b;border:1px solid #fca5a5}
+    .btn-sm{padding:.45em .9em;font-size:.82rem;min-height:40px}
+    .btn-w{width:100%}
+    .btn-logout{background:rgba(255,255,255,.18);color:#fff;border:1px solid rgba(255,255,255,.35);padding:.4em 1em;border-radius:7px;font-size:.85rem;cursor:pointer;min-height:36px}
+    .field{display:flex;flex-direction:column;gap:.35rem;margin-bottom:.85rem}
+    .field label,.field .lbl{font-size:.82rem;font-weight:600;color:#444}
+    .field input,.field select,.field textarea{padding:.65em .8em;border:1.5px solid #cdd9c8;border-radius:9px;font-size:1rem;font-family:inherit;background:#fff;color:inherit;width:100%}
+    .field input:focus,.field select:focus,.field textarea:focus{outline:2px solid #24533b;border-color:#24533b}
+    .field textarea{resize:vertical;min-height:90px}
+    .hint{font-size:.75rem;color:#888;margin-top:.15rem}
+    .row2{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+    @media(max-width:420px){.row2{grid-template-columns:1fr}}
+    .checks{display:flex;gap:1.5rem;padding:.5rem 0;flex-wrap:wrap}
+    .ck{display:flex;align-items:center;gap:.5rem;font-size:.9rem;cursor:pointer}
+    .ck input{width:1.1rem;height:1.1rem;cursor:pointer;accent-color:#24533b}
+    .photos{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:.6rem;margin-bottom:.6rem}
+    .photo{border:1.5px solid #cdd9c8;border-radius:9px;overflow:hidden;background:#fff;font-size:.78rem}
+    .photo img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;background:#e8f0e4}
+    .photo label{display:flex;align-items:center;gap:.35rem;padding:.35rem .5rem;cursor:pointer}
+    .photo input{accent-color:#24533b}
+    .upload{border:2px dashed #b9cbb2;border-radius:9px;padding:.9rem;background:#f7faf6}
+    .upload input{border:none;padding:0;background:none}
+    .card{background:#fff;border-radius:12px;padding:1rem 1.1rem;box-shadow:0 1px 4px rgba(0,0,0,.07);margin-bottom:.75rem;display:flex;gap:.9rem}
+    .card-thumb{width:84px;height:84px;border-radius:8px;object-fit:cover;flex-shrink:0;background:#e8f0e4}
+    .card-main{min-width:0;flex:1}
+    .card-title{font-weight:700;font-size:1rem;margin-bottom:.25rem}
+    .card-loc{font-size:.82rem;color:#666;margin-bottom:.6rem}
+    .card-row{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap}
+    .badge{display:inline-block;padding:.2em .65em;border-radius:100px;font-size:.72rem;font-weight:700}
+    .bt{background:#e8f0e4;color:#24533b}
+    .bu{background:#fee2e2;color:#991b1b}
+    .card-actions{display:flex;gap:.5rem;margin-top:.8rem;flex-wrap:wrap;align-items:center}
+    .st-sel{padding:.4em .6em;border:1.5px solid #cdd9c8;border-radius:7px;font-size:.85rem;background:#fff;cursor:pointer;font-family:inherit;min-height:40px}
+    .sh{display:flex;align-items:center;justify-content:space-between;gap:.75rem;margin-bottom:1rem}
+    .sh h2{font-size:1.05rem;font-weight:700}
+    .form-wrap{background:#fff;border-radius:14px;padding:1.25rem 1.1rem;margin-bottom:1.25rem;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+    .form-wrap h3{font-size:1rem;font-weight:700;margin-bottom:1rem;padding-bottom:.7rem;border-bottom:1px solid #e5ede2}
+    .form-actions{display:flex;gap:.6rem;padding-top:.5rem;flex-wrap:wrap}
+    .empty{text-align:center;padding:3rem 1rem;color:#888;background:#fff;border-radius:12px}
+  </style>
+</head>
+<body>
+
+{isAuth && (
+  <header class="hd">
+    <h1>SDV Admin</h1>
+    <div style="display:flex;gap:1rem;align-items:center">
+      <a href="/" target="_blank" rel="noopener">View site</a>
+      <form method="POST">
+        <input type="hidden" name="action" value="logout" />
+        <button type="submit" class="btn-logout">Logout</button>
+      </form>
+    </div>
+  </header>
+)}
+
+<div class="pg">
+
+  {!isAuth && (
+    <div class="login">
+      <h2>Admin Login</h2>
+      <p>Sidhivinayak Developers — Property Management</p>
+      {error && <div class="flash flash-err" role="alert">{error}</div>}
+      <form method="POST">
+        <input type="hidden" name="action" value="login" />
+        <div class="field">
+          <label for="pwd">Password</label>
+          <input id="pwd" type="password" name="password" required autofocus autocomplete="current-password" placeholder="Enter password" />
+        </div>
+        <button type="submit" class="btn btn-p btn-w">Login</button>
+      </form>
+    </div>
+  )}
+
+  {isAuth && (
+    <div>
+      {notice && <div class="flash flash-ok" role="status">{notice}</div>}
+      {error && <div class="flash flash-err" role="alert">{error}</div>}
+
+      {showForm && (
+        <div class="form-wrap">
+          <h3>{editProp ? 'Edit Property' : 'Add New Property'}</h3>
+          <form method="POST" enctype="multipart/form-data" id="property-form">
+            <input type="hidden" name="action" value="save" />
+            <input type="hidden" name="id" value={editProp?.id ?? ''} />
+            <div class="field">
+              <label for="f-title">Property name *</label>
+              <input id="f-title" name="title" required maxlength="120" value={v.title} placeholder="e.g. Vatika Green Farm House" />
+            </div>
+            <div class="field">
+              <label for="f-summary">One-line summary *</label>
+              <input id="f-summary" name="summary" required maxlength="300" value={v.summary} placeholder="Short description shown on listing card" />
+            </div>
+            <div class="row2">
+              <div class="field">
+                <label for="f-status">Status</label>
+                <select id="f-status" name="status">
+                  {propertyStatuses.map((s) => <option value={s} selected={v.status === s}>{statusLabels[s]}</option>)}
+                </select>
+              </div>
+              <div class="field">
+                <label for="f-type">Type</label>
+                <select id="f-type" name="type">
+                  {propertyTypes.map((t) => <option value={t} selected={v.type === t}>{typeLabels[t]}</option>)}
+                </select>
+              </div>
+            </div>
+            <div class="field">
+              <label for="f-location">Location *</label>
+              <input id="f-location" name="location" required maxlength="160" value={v.location} placeholder="e.g. Khuraniya, near Bilkisganj" />
+            </div>
+            <div class="field">
+              <label for="f-map">Google Maps link</label>
+              <input id="f-map" name="mapUrl" type="url" maxlength="500" value={v.mapUrl} placeholder="https://maps.app.goo.gl/…" />
+              <span class="hint">In Google Maps tap Share → Copy link, then paste here.</span>
+            </div>
+            <div class="row2">
+              <div class="field">
+                <label for="f-price">Price (₹ in numbers)</label>
+                <input id="f-price" name="price" inputmode="numeric" value={v.price} placeholder="e.g. 2500000" />
+                <span class="hint">Leave blank → "Price on request"</span>
+              </div>
+              <div class="field">
+                <label for="f-size">Size</label>
+                <input id="f-size" name="size" maxlength="80" value={v.size} placeholder="e.g. 1,500–3,000 sq.ft" />
+              </div>
+            </div>
+            <div class="row2">
+              <div class="field">
+                <label for="f-own">Listing type</label>
+                <select id="f-own" name="ownershipType">
+                  {ownershipTypes.map((o) => <option value={o} selected={v.ownershipType === o}>{ownershipLabels[o]}</option>)}
+                </select>
+              </div>
+              <div class="field">
+                <label for="f-offer">Offer tag</label>
+                <input id="f-offer" name="offer" maxlength="80" value={v.offer} placeholder="e.g. Early bird pricing" />
+              </div>
+            </div>
+            <div class="field">
+              <label for="f-desc">Full description</label>
+              <textarea id="f-desc" name="description" maxlength="3000">{v.description}</textarea>
+            </div>
+            <div class="field">
+              <label for="f-hl">Highlights (one per line)</label>
+              <textarea id="f-hl" name="highlights" placeholder={'Company-owned project\nPlanned internal road\nClose to Bilkisganj'}>{v.highlights}</textarea>
+            </div>
+
+            <div class="field">
+              <span class="lbl">Photos</span>
+              {editProp && editProp.data.images.length > 0 && (
+                <>
+                  <div class="photos">
+                    {editProp.data.images.map((img, i) => (
+                      <div class="photo">
+                        <img src={img.src} alt={img.alt} loading="lazy" />
+                        <label><input type="radio" name="cover" value={img.src} checked={i === 0} /> Main photo</label>
+                        <label><input type="checkbox" name="remove" value={img.src} /> Remove</label>
+                      </div>
+                    ))}
+                  </div>
+                  <span class="hint">The main photo is shown on the listing card. Ticked photos are removed when you save.</span>
+                </>
+              )}
+              <div class="upload">
+                <label for="f-photos" class="lbl" style="display:block;margin-bottom:.4rem">Add photos from your phone or computer</label>
+                <input id="f-photos" type="file" name="photos" accept="image/jpeg,image/png,image/webp" multiple />
+                <span class="hint" style="display:block">JPG, PNG or WebP. Large photos are shrunk automatically. Up to {MAX_PHOTOS} per property.</span>
+              </div>
+            </div>
+
+            <div class="checks">
+              <label class="ck"><input type="checkbox" name="published" value="1" checked={v.published === '1'} /> Published (visible)</label>
+              <label class="ck"><input type="checkbox" name="featured" value="1" checked={v.featured === '1'} /> Featured</label>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-p">{editProp ? 'Save changes' : 'Add property'}</button>
+              <a href="/admin" class="btn btn-s">Cancel</a>
+            </div>
+          </form>
+        </div>
+      )}
+
+      <div class="sh">
+        <h2>Properties ({allProps.length})</h2>
+        {!showForm && <a href="/admin?new" class="btn btn-p btn-sm">+ Add</a>}
+      </div>
+
+      {allProps.length === 0 && <div class="empty">No properties yet. Tap "+ Add" to get started.</div>}
+
+      {allProps.map((p) => (
+        <div class="card" data-id={p.id}>
+          {p.data.images[0] && <img class="card-thumb" src={p.data.images[0].src} alt="" loading="lazy" />}
+          <div class="card-main">
+            <div class="card-title">{p.data.title}</div>
+            <div class="card-loc">{p.data.location}</div>
+            <div class="card-row">
+              <span class="badge" style={`background:${STATUS_COLORS[p.data.status]};color:#fff`}>{statusLabels[p.data.status]}</span>
+              <span class="badge bt">{typeLabels[p.data.type]}</span>
+              {!p.data.published && <span class="badge bu">Hidden</span>}
+              {p.data.featured && <span class="badge bt">Featured</span>}
+            </div>
+            <div class="card-actions">
+              <form method="POST" class="status-form">
+                <input type="hidden" name="action" value="status" />
+                <input type="hidden" name="id" value={p.id} />
+                <select name="status" class="st-sel" aria-label={`Status of ${p.data.title}`}>
+                  {propertyStatuses.map((s) => <option value={s} selected={p.data.status === s}>{statusLabels[s]}</option>)}
+                </select>
+                <noscript><button type="submit" class="btn btn-s btn-sm">Update</button></noscript>
+              </form>
+              <a href={`/admin?edit=${encodeURIComponent(p.id)}`} class="btn btn-s btn-sm">Edit</a>
+              <a href={`/properties/${encodeURIComponent(p.id)}`} class="btn btn-s btn-sm" target="_blank" rel="noopener">View</a>
+              <form method="POST" class="delete-form" data-title={p.data.title}>
+                <input type="hidden" name="action" value="delete" />
+                <input type="hidden" name="id" value={p.id} />
+                <button type="submit" class="btn btn-d btn-sm">Delete</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  )}
+
+</div>
+
+<script>
+  document.querySelectorAll<HTMLSelectElement>('.status-form select').forEach((sel) => {
+    sel.addEventListener('change', () => sel.form?.submit());
+  });
+
+  document.querySelectorAll<HTMLFormElement>('.delete-form').forEach((form) => {
+    form.addEventListener('submit', (e) => {
+      if (!confirm(`Delete "${form.dataset.title}"? This cannot be undone.`)) e.preventDefault();
+    });
+  });
+
+  // Phone photos are often 3–10 MB; shrink them before upload so saving is fast on mobile data.
+  const MAX_EDGE = 1600;
+
+  async function shrink(file: File): Promise<File> {
+    if (!file.type.startsWith('image/')) return file;
+    const bitmap = await createImageBitmap(file);
+    const scale = Math.min(1, MAX_EDGE / Math.max(bitmap.width, bitmap.height));
+    if (scale === 1 && file.size < 600_000) return file;
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.round(bitmap.width * scale);
+    canvas.height = Math.round(bitmap.height * scale);
+    canvas.getContext('2d')!.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+    const blob = await new Promise<Blob | null>((r) => canvas.toBlob(r, 'image/jpeg', 0.82));
+    return blob ? new File([blob], file.name.replace(/\.\w+$/, '') + '.jpg', { type: 'image/jpeg' }) : file;
+  }
+
+  const form = document.getElementById('property-form') as HTMLFormElement | null;
+  const input = document.getElementById('f-photos') as HTMLInputElement | null;
+  let shrunk = false;
+  form?.addEventListener('submit', async (e) => {
+    const btn = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+    if (!input?.files?.length || shrunk) {
+      if (btn) { btn.disabled = true; btn.textContent = 'Saving…'; }
+      return;
+    }
+    e.preventDefault();
+    if (btn) { btn.disabled = true; btn.textContent = 'Preparing photos…'; }
+    try {
+      const dt = new DataTransfer();
+      for (const f of await Promise.all([...input.files].map(shrink))) dt.items.add(f);
+      input.files = dt.files;
+    } catch {
+      // Older browsers: upload the originals; the server still enforces the size limit.
+    }
+    shrunk = true;
+    if (btn) btn.textContent = 'Saving…';
+    form.requestSubmit();
+  });
+</script>
+</body>
+</html>

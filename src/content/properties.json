@@ -4,23 +4,101 @@
     "title": "Vatika Green Farm House",
     "type": "farm-house-plot",
     "status": "available",
-    "location": "Vatika Green Parisar, Khuraniya, near Bilkisganj",
+    "location": "Vatika Green Parisar, Khuraniya, near Bilkisganj, Bhopal",
     "featured": true,
     "ownershipType": "own",
     "published": true,
-    "summary": "Farm house plots at Vatika Green Parisar near Bilkisganj — a planned layout with an internal road and tree planting.",
-    "description": "Vatika Green is our own farm house project at Khuraniya, near Bilkisganj. The layout is planned with plots on both sides of an internal road, green spaces, and trees. We personally take every visitor to the site. Call us or share your requirement for current plot sizes, pricing, and to arrange a site visit.",
+    "summary": "Farm house plots at Vatika Green Parisar near Bilkisganj — planned layout with internal roads, green spaces, tree planting, electrification, water line and sewage.",
+    "description": "Vatika Green is our own farm house project at Khuraniya, near Bilkisganj, Bhopal. The layout is fully planned with farm house plots on both sides of internal roads, green spaces, and tree-lined boundaries. The colony has electrification with street lights, water line, sewage line, and park. We personally take every visitor to the site. Call us or share your requirement for current plot sizes, pricing, and to arrange a site visit.",
     "highlights": [
-      "Company-owned project with direct sale — no middlemen",
-      "Planned internal road",
-      "Tree-lined layout",
-      "Close to Bilkisganj",
+      "Company-owned project — direct sale, no middlemen",
+      "25-foot wide RCC internal roads",
+      "Plot demarcations with corner pillars",
+      "Electrification and street lights",
+      "Water line and sewage line",
+      "Park and children's play ground",
+      "Tree-lined green spaces throughout the layout",
       "Personal guidance and site visit included"
     ],
     "images": [
-      { "src": "/images/vatika-green.svg", "alt": "Vatika Green farm house plot layout, Khuraniya near Bilkisganj", "placeholder": true }
+      {
+        "src": "/images/vatika-green-brochure.jpg",
+        "alt": "Vatika Farm House — gate entrance and project brochure"
+      },
+      {
+        "src": "/images/vatika-green-layout.jpg",
+        "alt": "Vatika Green Farm House layout plan — Khuraniya near Bilkisganj Bhopal"
+      }
     ],
     "listedOn": "2026-10-08",
-    "updatedAt": "2026-11-01"
+    "updatedAt": "2026-11-15",
+    "mapUrl": "https://maps.app.goo.gl/hizpeEzMPxKctzGSA"
+  },
+  {
+    "id": "kanha-dream-city",
+    "title": "Kanha Dream City",
+    "type": "plot",
+    "status": "available",
+    "location": "Near Rajdhaba, Neelbad–Ratibad Road, Bhopal",
+    "featured": true,
+    "ownershipType": "own",
+    "published": true,
+    "summary": "Residential plotted colony by Sidhivinayak Group near Rajdhaba on Neelbad–Ratibad Road, Bhopal. 25-foot wide RCC roads, electrification, water line, sewage, park, Radha Krishna & Jain Temple.",
+    "description": "Kanha Dream City is a fully planned residential colony on Neelbad–Ratibad Road near Rajdhaba, Bhopal. The colony features 25-foot wide RCC internal roads with direct access from the NH approach road via CC road. All plots are demarcated with corner pillars. The colony has electrification with street lights, water line, sewage line, a children's park, Radha Krishna & Jain Temple, commercial shops, and a covered campus. Call us to arrange a site visit.",
+    "highlights": [
+      "Company-owned project — direct sale, no middlemen",
+      "25-foot wide RCC internal roads",
+      "Plot demarcations with corner pillars",
+      "Electrification and street lights",
+      "Water line and sewage line",
+      "Park and children's play ground",
+      "Radha Krishna & Jain Temple",
+      "Commercial shops in the colony",
+      "Covered campus",
+      "Direct NH to approach road CC road"
+    ],
+    "images": [
+      {
+        "src": "/images/kanha-dream-city-layout.jpg",
+        "alt": "Kanha Dream City layout plan — near Rajdhaba Neelbad Ratibad Road Bhopal"
+      },
+      {
+        "src": "/images/plot.svg",
+        "alt": "Residential plot illustration",
+        "placeholder": true
+      }
+    ],
+    "listedOn": "2026-11-15",
+    "updatedAt": "2026-11-15",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=58GJ%2B87G%2C%20Ratibad%20Rd%2C%20Bhopal%2C%20Madhya%20Pradesh%20462044"
+  },
+  {
+    "id": "siddhivinayak-phase-2",
+    "title": "Siddhi Vinayak Campus Phase 2",
+    "type": "plot",
+    "status": "sold",
+    "location": "Neelbad–Mendori Road, Bhadbhada Road, Bhopal",
+    "featured": false,
+    "ownershipType": "own",
+    "published": true,
+    "summary": "Completed residential plot project near Neelbad Chouraha, Bhopal. 1 km from Neelbad Chouraha, 10 km from New Market. All plots successfully handed over to buyers.",
+    "description": "Siddhi Vinayak Campus Phase 2 was our residential plotted colony on Mendori Road near Neelbad Chouraha, Bhopal — just 1 km from Neelbad Chouraha, 10 km from New Market, 7 km from Bhadbhada Dam, 14 km from Rani Kamlapati Railway Station. The project is fully sold out with all plots handed over. This established the trust behind our ongoing projects — Kanha Dream City and Vatika Green.",
+    "highlights": [
+      "Completed and fully sold project",
+      "1 km from Neelbad Chouraha",
+      "10 km from New Market, 7 km from Bhadbhada Dam",
+      "14 km from Rani Kamlapati Railway Station",
+      "All plots handed over to buyers",
+      "25-foot wide internal roads, electrification, water, sewage"
+    ],
+    "images": [
+      {
+        "src": "/images/siddhivinayak-phase2-brochure.jpg",
+        "alt": "Siddhi Vinayak Campus Phase 2 — project brochure with location map, Neelbad Bhopal"
+      }
+    ],
+    "listedOn": "2026-11-15",
+    "updatedAt": "2026-11-15",
+    "mapUrl": "https://maps.app.goo.gl/X1S4hxNdMgDcKXaz7"
   }
 ]

@@ -1,133 +1,82 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { getProperties, typeLabels, statusLabels } from '../../lib/properties';
 import PropertyCard from '../../components/PropertyCard.astro';
+import { url } from '../../lib/url';
+import { getProperties } from '../../lib/properties';
 
 const properties = await getProperties();
 
-// Only show filter buttons for types / statuses that actually have listings.
-const usedTypes   = new Set(properties.map(p => p.data.type));
-const usedStatuses = new Set(properties.map(p => p.data.status));
-
-const typeEntries   = Object.entries(typeLabels).filter(([v]) => usedTypes.has(v as any));
-const statusEntries = Object.entries(statusLabels).filter(([v]) => usedStatuses.has(v as any));
-
-const total = properties.length;
-import { url } from '../../lib/url';
+const forSale  = properties.filter(p => p.data.status !== 'upcoming');
+const upcoming = properties.filter(p => p.data.status === 'upcoming');
 ---
 
 <Base
   title="Properties in Bhopal – Plots &amp; Farm Houses"
-  description={`Browse ${total} residential plot${total !== 1 ? 's' : ''} and farm house plot${total !== 1 ? 's' : ''} available around Bhopal, Madhya Pradesh. Vatika Green near Bilkisganj. Filter by type or availability.`}
+  description="Browse residential plots and farm house plots available around Bhopal, Madhya Pradesh — Vatika Green near Bilkisganj and upcoming projects. Direct sale, no middlemen."
   breadcrumbs={[{ name: 'Properties', url: '/properties' }]}
 >
   <section class="page-hero">
     <div class="container">
       <h1>Properties in Bhopal</h1>
-      <p>Plots and farm house plots around Bhopal, Madhya Pradesh. Call or share your requirement for current prices and a site visit.</p>
+      <p>Plots and farm house plots around Bhopal, Madhya Pradesh. Direct from us — no middlemen, no extra commission.</p>
     </div>
   </section>
 
   <section class="section">
     <div class="container">
-      <!-- Filters (only shown when >1 type or status exists) -->
-      {typeEntries.length > 1 && (
-        <div style="margin-bottom:1.75rem;">
-          <p style="font-size:0.85rem;font-weight:600;color:var(--muted);margin-bottom:0.6rem;text-transform:uppercase;letter-spacing:0.06em;">Filter by type</p>
-          <div class="filter-bar" id="type-filters" role="group" aria-label="Filter by property type">
-            <button class="filter-btn" data-filter="all" aria-pressed="true">All ({total})</button>
-            {typeEntries.map(([value, label]) => {
-              const count = properties.filter(p => p.data.type === value).length;
-              return (
-                <button class="filter-btn" data-filter={value} aria-pressed="false">{label} ({count})</button>
-              );
-            })}
+
+      {forSale.length > 0 && (
+        <div class="listing-section">
+          <div class="listing-section__header">
+            <h2>Available for Sale</h2>
+            <p>Ready to visit. Call us or send an enquiry to arrange a site visit.</p>
+          </div>
+          <div class="property-grid">
+            {forSale.map(p => <PropertyCard property={p} />)}
           </div>
         </div>
       )}
 
-      {statusEntries.length > 1 && (
-        <div style="margin-bottom:2rem;">
-          <p style="font-size:0.85rem;font-weight:600;color:var(--muted);margin-bottom:0.6rem;text-transform:uppercase;letter-spacing:0.06em;">Filter by availability</p>
-          <div class="filter-bar" id="status-filters" role="group" aria-label="Filter by availability">
-            <button class="filter-btn" data-filter-status="all" aria-pressed="true">All</button>
-            {statusEntries.map(([value, label]) => (
-              <button class="filter-btn" data-filter-status={value} aria-pressed="false">{label}</button>
-            ))}
+      {upcoming.length > 0 && (
+        <div class="listing-section">
+          <div class="listing-section__header">
+            <h2>Upcoming Projects</h2>
+            <p>Launching soon. Register your interest for early-bird pricing.</p>
+          </div>
+          <div class="property-grid">
+            {upcoming.map(p => <PropertyCard property={p} />)}
           </div>
         </div>
       )}
 
-      <!-- Count -->
-      <p style="font-size:0.9rem;color:var(--muted);margin-bottom:1.25rem;" id="result-count">{total} propert{total !== 1 ? 'ies' : 'y'} listed</p>
+      {properties.length === 0 && (
+        <p style="color:var(--muted);">No properties listed yet. Check back soon.</p>
+      )}
 
-      <!-- Grid -->
-      <div class="property-grid" id="property-grid">
-        {properties.map(p => <PropertyCard property={p} />)}
-        <div class="empty-state" id="empty-state" hidden aria-live="polite">
-          <strong>No properties match those filters.</strong>
-          <p>Try a different combination, or <a href={url('/requirement')}>share your requirement</a> and we will find something for you.</p>
-        </div>
+      <div class="listing-cta">
+        <p class="listing-cta__title">Can't find what you're looking for?</p>
+        <p class="listing-cta__body">Share your requirement and we'll find the right property in Bhopal for you.</p>
+        <a href={url('/requirement')} class="btn btn-primary">Send an Enquiry</a>
       </div>
 
-      <!-- CTA -->
-      <div style="margin-top:2.5rem;padding-top:2rem;border-top:1px solid var(--line);">
-        <p style="font-weight:600;margin-bottom:0.5rem;">Can't find what you're looking for?</p>
-        <p style="color:var(--muted);font-size:0.95rem;margin-bottom:1rem;">Share your requirement and we'll find the right property in Bhopal for you.</p>
-        <a href={url('/requirement')} class="btn btn-primary">Share your requirement</a>
-      </div>
     </div>
   </section>
 </Base>
 
-<script>
-  let activeType   = 'all';
-  let activeStatus = 'all';
-
-  function applyFilters() {
-    const cards = Array.from(document.querySelectorAll<HTMLElement>('#property-grid .property-card'));
-    let visible = 0;
-
-    cards.forEach(card => {
-      const type   = card.dataset.type   ?? '';
-      const status = card.dataset.status ?? '';
-      const show =
-        (activeType   === 'all' || activeType   === type) &&
-        (activeStatus === 'all' || activeStatus === status);
-      card.hidden = !show;
-      if (show) visible++;
-    });
-
-    const empty = document.getElementById('empty-state')!;
-    empty.hidden = visible > 0;
-
-    const count = document.getElementById('result-count');
-    if (count) count.textContent = `${visible} propert${visible !== 1 ? 'ies' : 'y'} listed`;
+<style>
+  .listing-section { margin-bottom: 3rem; }
+  .listing-section__header {
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--forest);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem 1.5rem;
   }
-
-  const typeFilters = document.getElementById('type-filters');
-  if (typeFilters) {
-    typeFilters.addEventListener('click', e => {
-      const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.filter-btn');
-      if (!btn) return;
-      activeType = btn.dataset.filter ?? 'all';
-      typeFilters.querySelectorAll('.filter-btn').forEach(b =>
-        b.setAttribute('aria-pressed', String(b === btn))
-      );
-      applyFilters();
-    });
-  }
-
-  const statusFilters = document.getElementById('status-filters');
-  if (statusFilters) {
-    statusFilters.addEventListener('click', e => {
-      const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.filter-btn');
-      if (!btn) return;
-      activeStatus = btn.dataset.filterStatus ?? 'all';
-      statusFilters.querySelectorAll('.filter-btn').forEach(b =>
-        b.setAttribute('aria-pressed', String(b === btn))
-      );
-      applyFilters();
-    });
-  }
-</script>
+  .listing-section__header h2 { font-size: clamp(1.2rem, 2.5vw, 1.4rem); margin: 0; color: var(--forest-deep); }
+  .listing-section__header p { font-size: 0.875rem; color: var(--muted); margin: 0; }
+  .listing-cta { margin-top: 1rem; padding: 2rem; background: var(--sage); border-radius: var(--radius-lg); }
+  .listing-cta__title { font-weight: 700; font-size: 1.1rem; margin-bottom: 0.4rem; }
+  .listing-cta__body { color: var(--muted); font-size: 0.95rem; margin-bottom: 1rem; }
+</style>

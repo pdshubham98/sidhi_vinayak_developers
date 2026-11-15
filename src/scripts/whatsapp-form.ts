@@ -1,51 +1,35 @@
 /**
- * Static deployment form handler (GitHub Pages).
+ * Enquiry form handler for the requirement, sell and contact pages (works on both
+ * Cloudflare and the static GitHub Pages build).
  *
- * On submit:
- * 1. POSTs lead data to Google Apps Script (fire-and-forget, no-cors)
- * 2. Opens WhatsApp with all fields pre-filled
- * 3. Redirects to /thank-you/
- *
- * On the full Cloudflare deployment this script is replaced by enhance-form.ts
- * which uses Astro Actions for server-side delivery.
+ * On submit it validates required fields, sends the lead to the Google Apps Script
+ * sheet, then redirects to /thank-you/.
  */
+import { isValidEmail, isValidPhone, sendLead } from './lead';
 
-const WA_NUMBER = '917869246638';
-const SCRIPT_URL = import.meta.env.PUBLIC_APPS_SCRIPT_URL as string | undefined;
+const params = new URLSearchParams(window.location.search);
 
 // Prefill ?property= on the contact page hidden field
 const propertyField = document.getElementById('property-field') as HTMLInputElement | null;
-if (propertyField) {
-  const param = new URLSearchParams(window.location.search).get('property');
-  if (param) propertyField.value = decodeURIComponent(param);
-}
+if (propertyField && params.get('property')) propertyField.value = params.get('property')!;
+
+// Prefill ?role= on the contact page (e.g. from partner banner)
+const roleField = document.getElementById('user-role-field') as HTMLInputElement | null;
+if (roleField && params.get('role')) roleField.value = params.get('role')!;
 
 // Prefill ?need= on the requirement page
-const needParam = new URLSearchParams(window.location.search).get('need');
+const needParam = params.get('need');
 if (needParam) {
-  const radio = document.querySelector<HTMLInputElement>(`[name="lookingFor"][value="${needParam}"]`);
+  const radio = document.querySelector<HTMLInputElement>(`[name="lookingFor"][value="${CSS.escape(needParam)}"]`);
   if (radio) radio.checked = true;
-  const select = document.querySelector<HTMLSelectElement>('[name="lookingFor"]');
-  if (select) select.value = needParam;
+  const select = document.querySelector<HTMLSelectElement>('select[name="lookingFor"]');
+  if (select && [...select.options].some((o) => o.value === needParam)) select.value = needParam;
 }
 
-const FIELD_LABELS: Record<string, string> = {
-  name: 'Name',
-  phone: 'Mobile',
-  email: 'Email',
-  userRole: 'I am a',
-  lookingFor: 'Looking for',
-  preferredArea: 'Preferred area',
-  budget: 'Budget',
-  timeline: 'Timeline',
-  callbackTime: 'Best time to call',
-  propertyType: 'Property type',
-  location: 'Property location',
-  size: 'Size',
-  expectedPrice: 'Expected price',
-  property: 'Re: property',
-  message: 'Message',
-};
+const FIELDS = [
+  'name', 'phone', 'email', 'userRole', 'lookingFor', 'preferredArea', 'budget', 'timeline',
+  'callbackTime', 'propertyType', 'location', 'size', 'expectedPrice', 'property', 'message',
+];
 
 const FORM_TYPES: Record<string, string> = {
   'requirement-form': 'requirement',
@@ -53,73 +37,75 @@ const FORM_TYPES: Record<string, string> = {
   'contact-form': 'contact',
 };
 
-const FORM_TITLES: Record<string, string> = {
-  'requirement-form': 'Site visit request',
-  'sell-form': 'Property listing enquiry',
-  'contact-form': 'General enquiry',
-};
+function showError(form: HTMLFormElement, name: string, message: string) {
+  const inputs = form.querySelectorAll<HTMLElement>(`[name="${name}"]`);
+  const group = inputs[0]?.closest('.form-group');
+  if (!group) return;
+  const errorId = `${name}-error`;
+  let errEl = group.querySelector<HTMLElement>('.field-error');
+  if (!errEl) {
+    errEl = document.createElement('p');
+    errEl.className = 'field-error';
+    errEl.id = errorId;
+    errEl.setAttribute('role', 'alert');
+    group.appendChild(errEl);
+  }
+  errEl.textContent = message;
+  inputs.forEach((el) => {
+    el.setAttribute('aria-invalid', 'true');
+    const described = el.getAttribute('aria-describedby') ?? '';
+    if (!described.split(' ').includes(errorId)) el.setAttribute('aria-describedby', `${described} ${errorId}`.trim());
+  });
+}
 
-(['requirement-form', 'sell-form', 'contact-form'] as const).forEach((formId) => {
+function clearErrors(form: HTMLFormElement) {
+  form.querySelectorAll('.field-error').forEach((el) => el.remove());
+  form.querySelectorAll('[aria-invalid]').forEach((el) => el.removeAttribute('aria-invalid'));
+}
+
+function validate(form: HTMLFormElement, data: FormData): boolean {
+  clearErrors(form);
+  let ok = true;
+  const fail = (name: string, msg: string) => { showError(form, name, msg); ok = false; };
+
+  const required = new Set([...form.querySelectorAll<HTMLInputElement>('[aria-required="true"]')].map((el) => el.name));
+  for (const name of required) {
+    const value = data.get(name)?.toString().trim() ?? '';
+    if (value) continue;
+    if (name === 'consent') fail(name, 'Tick the box so we can contact you');
+    else if (name === 'name') fail(name, 'Enter your name');
+    else if (name === 'phone') fail(name, 'Enter your mobile number');
+    else fail(name, 'This field is required');
+  }
+
+  const phone = data.get('phone')?.toString().trim();
+  if (phone && !isValidPhone(phone)) fail('phone', 'Enter a 10-digit mobile number');
+  const email = data.get('email')?.toString().trim();
+  if (email && !isValidEmail(email)) fail('email', 'Enter a valid email address, or leave it empty');
+
+  if (!ok) form.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
+  return ok;
+}
+
+for (const [formId, formType] of Object.entries(FORM_TYPES)) {
   const form = document.getElementById(formId) as HTMLFormElement | null;
-  if (!form) return;
+  if (!form) continue;
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
-
     const data = new FormData(form);
+    if (!validate(form, data)) return;
 
-    // Consent must be checked
-    if (!data.get('consent')) {
-      const consentEl = form.querySelector<HTMLElement>('[name="consent"]');
-      const group = consentEl?.closest('.form-group');
-      let errEl = group?.querySelector<HTMLElement>('.field-error');
-      if (!errEl && group) {
-        errEl = document.createElement('p');
-        errEl.className = 'field-error';
-        errEl.setAttribute('role', 'alert');
-        group.appendChild(errEl);
+    // Honeypot: real visitors never fill the hidden "website" field.
+    if (!data.get('website')) {
+      const payload: Record<string, string> = { formType };
+      for (const key of FIELDS) {
+        const val = data.get(key)?.toString().trim();
+        if (val) payload[key] = val;
       }
-      if (errEl) errEl.textContent = 'Tick the box so we can contact you';
-      consentEl?.focus();
-      return;
+      sendLead(payload);
     }
 
-    // Build JSON payload for Apps Script
-    const payload: Record<string, string> = {
-      formType: FORM_TYPES[formId] ?? formId,
-    };
-    for (const key of Object.keys(FIELD_LABELS)) {
-      const val = data.get(key)?.toString().trim();
-      if (val) payload[key] = val;
-    }
-
-    // POST to Apps Script — fire and forget (no-cors = can't read response, but data arrives)
-    if (SCRIPT_URL) {
-      fetch(SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      }).catch(() => {});
-    }
-
-    // Build WhatsApp message
-    const title = FORM_TITLES[formId] ?? 'Enquiry';
-    const lines: string[] = [`*${title}*`, `_via sidhivinayakdevelopers_`, ''];
-
-    for (const [key, label] of Object.entries(FIELD_LABELS)) {
-      const val = data.get(key)?.toString().trim();
-      if (val) lines.push(`${label}: ${val}`);
-    }
-
-    window.open(
-      `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(lines.join('\n'))}`,
-      '_blank',
-    );
-
-    // Redirect to thank-you after WhatsApp opens
-    setTimeout(() => {
-      window.location.href = `${import.meta.env.BASE_URL}thank-you/`;
-    }, 400);
+    window.location.href = `${import.meta.env.BASE_URL}thank-you/`;
   });
-});
+}

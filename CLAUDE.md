@@ -47,19 +47,16 @@ Website for a family real estate business in Bhopal, Madhya Pradesh. The goal is
 ## Architecture
 
 - **Astro 7.3.7** with **@astrojs/cloudflare 14.3.4**, deploying to Cloudflare Workers. **wrangler 4** is a dev dependency.
-- Pages are prerendered at build time. Only the form pages use `export const prerender = false`.
-- **Forms** use Astro Actions (`src/actions/index.ts`) with `accept: 'form'` and **zod 4**, imported from `astro/zod`:
-  - Error messages use `{ error: '...' }`, not `message`.
-  - Validation: Indian 10-digit mobile number, optional email, a required consent checkbox, and a honeypot field called `website`.
-- **Leads** are delivered in one function, `src/lib/leads.ts`. Locally it logs to the terminal. At go-live it will save each lead to Sanity and send an email.
-- **Listings** are an Astro content collection (`src/content.config.ts`) using the `file()` loader on `src/content/properties.json`. At go-live the loader is swapped for **Sanity** (free plan) with the same schema, so family members edit listings in Sanity Studio.
+- **Listings live in Cloudflare KV** (`PROPERTIES_KV`, key `properties`) and are edited at `/admin` (password: `ADMIN_PASSWORD` secret, fallback in `src/admin/AdminPage.astro`). `src/content/properties.json` is only the seed used when the KV key is empty, and the data source for the GitHub Pages build. All reads/writes go through `src/lib/properties.ts`; vocabulary (types, statuses, labels, `formatPrice`) is in `src/lib/property-meta.ts`.
+- **Uploaded photos** are stored in the same KV namespace (`img:<uuid>`) and served by `src/admin/media.ts` at `/media/<uuid>`.
+- **Prerendering is controlled in `astro.config.mjs`**, not in page files: the `deploy-target` integration makes `/`, `/properties` and `/properties/[slug]` server-rendered on Cloudflare (so admin edits show instantly) and static on GitHub Pages, and injects `/admin` + `/media` only for Cloudflare. A non-literal `export const prerender = …` is silently treated as `true`, so do not reintroduce one. No `rm -rf dist/client/properties` step is needed when deploying.
+- **Forms** (requirement, sell, contact, popup) are validated in the browser and posted to the Google Apps Script sheet by `src/scripts/whatsapp-form.ts` and `src/scripts/lead.ts` (works on both deploy targets).
 - Adapter config: `session: false` (not needed) and `imageService: 'passthrough'`.
 - Fonts are self-hosted through Fontsource, already installed: `@fontsource/young-serif` and `@fontsource/mukta`. Mukta covers Devanagari, ready for Hindi pages later.
 
 ### Verified in a test run
 
-- `astro build` succeeds.
-- A form action returns 400 with field errors on invalid input, and a 302 redirect on success.
+- `astro build` and `npx astro check` (needs TypeScript 6) pass with 0 errors.
 - The offline warning `Unable to fetch the Request.cf object` is harmless.
 
 ## Status
@@ -68,10 +65,9 @@ Website for a family real estate business in Bhopal, Madhya Pradesh. The goal is
 - `astro.config.mjs`, `tsconfig.json`, `.gitignore`
 - `src/config/site.ts`: business details plus `telHref` and `whatsappHref` helpers
 - `src/content.config.ts` and `src/content/properties.json`: Vatika Green plus 2 sample listings
-- `src/lib/properties.ts`: type and status labels, sorting, and `formatPrice` in Lakh/Cr
+- `src/lib/property-meta.ts` + `src/lib/properties.ts`: listing types, labels, KV data access
 - `src/lib/form-options.ts`: shared select options
-- `src/lib/leads.ts`
-- `src/actions/index.ts`: the `requirement`, `sell` and `contact` actions
+- `src/admin/`: admin panel and photo endpoint
 
 **To build next:**
 

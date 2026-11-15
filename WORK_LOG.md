@@ -109,3 +109,23 @@ Do not edit past entries. Add new entries at the bottom.
 - Build: 12 pages, 0 errors
 
 **Next:** Merge to main and deploy. Real email, Google Maps, Vatika Green photos still needed.
+
+---
+
+## 2026-11-15 — Full-site audit, admin rebuild, E2E verification
+
+**Bugs fixed:**
+- robots.txt blocked all crawlers (`Disallow: /`) while the site was set to indexable → now `Allow: /`, `Disallow: /admin`
+- Home page was prerendered from JSON with Vatika text hardcoded → now live from KV; a second "featured" listing is no longer hidden
+- `/properties` 404 root cause: non-literal `export const prerender` is read as `true` → prerender now set per route in `astro.config.mjs`; GitHub Pages build fixed (admin excluded, KV stubbed, image paths respect base URL)
+- Admin: duplicate names overwrote existing listings; editing dropped fields not on the form; no validation of status/type/price; `%` in flash message crashed the page; cookie was the base64 password (now SHA-256 token scoped to /admin); saves reported success with no storage
+- Data: missing `listedOn` produced an Invalid Date that crashed every later save
+- Forms: name/phone never validated (`novalidate`), honeypot ignored, quote in `?need=` broke the script, navigation could cancel the lead request (now `keepalive`)
+- Unknown property returned a 302 to /404 → now a real HTTP 404
+- Layout plans cropped by `object-fit: cover`; thumbnails could not be opened
+
+**Added:** photo upload/remove/reorder in admin (stored in KV, auto-shrunk on the phone), Google Maps link field + button, "View" link per listing.
+
+**Consolidated:** `kv-properties.ts` + content loader → `src/lib/properties.ts`; labels/badge classes/types → `src/lib/property-meta.ts`; lead sending + phone check → `src/scripts/lead.ts`; detail page uses `whatsappHref`/`telHref`. Removed unused Astro Actions (`src/actions`, `leads.ts`, `enhance-form.ts`).
+
+**Verified:** `astro check` 0 errors/0 warnings; Cloudflare and GitHub Pages builds pass; Playwright E2E 130/130 locally (incl. full admin CRUD with cleanup) and 96/96 read-only against production. Deployed version e2c94706.

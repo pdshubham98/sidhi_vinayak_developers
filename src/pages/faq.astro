@@ -73,7 +73,7 @@ import { url } from '../lib/url';
   <section class="section">
     <div class="container" style="max-width:780px;">
       <div class="faq-list" itemscope itemtype="https://schema.org/FAQPage">
-        {faqs.map(({ q, a }, i) => (
+        {faqs.map(({ q, a }) => (
           <details class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
             <summary class="faq-question" itemprop="name">
               {q}

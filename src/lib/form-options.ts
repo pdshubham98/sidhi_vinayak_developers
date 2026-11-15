@@ -1,4 +1,4 @@
-/** Choices shared by the form pages (labels) and the server-side validation (values). */
+/** Choices shared by the enquiry forms and the popup. */
 export type Option = { value: string; label: string };
 
 export const lookingForOptions = [
@@ -48,6 +48,3 @@ export const callbackTimeOptions = [
   { value: 'evening', label: 'Evening (4 PM – 7 PM)' },
   { value: 'anytime', label: 'Anytime' },
 ] as const satisfies readonly Option[];
-
-export const values = <T extends readonly Option[]>(options: T) =>
-  options.map((o) => o.value) as unknown as [T[number]['value'], ...T[number]['value'][]];

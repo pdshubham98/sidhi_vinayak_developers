@@ -6,7 +6,6 @@ import Honeypot from '../components/Honeypot.astro';
 import { site, telHref, whatsappHref } from '../config/site';
 
 const errors: Record<string, string[] | undefined> = {};
-import { url } from '../lib/url';
 ---
 
 <Base
@@ -72,6 +71,7 @@ import { url } from '../lib/url';
             <Honeypot />
 
             <input type="hidden" name="property" id="property-field" value="" />
+            <input type="hidden" name="userRole" id="user-role-field" value="" />
 
             <div class="form-row">
               <Field id="name" label="Your name" required error={errors.name?.[0]} autocomplete="name" />
@@ -94,5 +94,5 @@ import { url } from '../lib/url';
 </Base>
 
 <script>
-  import '/src/scripts/whatsapp-form.ts';
+  import '../scripts/whatsapp-form.ts';
 </script>

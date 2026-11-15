@@ -7,7 +7,6 @@ import Honeypot from '../components/Honeypot.astro';
 import { sellTypeOptions } from '../lib/form-options';
 
 const errors: Record<string, string[] | undefined> = {};
-import { url } from '../lib/url';
 ---
 
 <Base
@@ -110,7 +109,7 @@ import { url } from '../lib/url';
 </Base>
 
 <script>
-  import '/src/scripts/whatsapp-form.ts';
+  import '../scripts/whatsapp-form.ts';
 </script>
 
 <style>

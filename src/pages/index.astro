@@ -7,7 +7,8 @@ import { url } from '../lib/url';
 
 const allProperties = await getProperties();
 const featured = allProperties.find(p => p.data.featured);
-const latest = allProperties.filter(p => !p.data.featured).slice(0, 3);
+// Everything except the hero listing, so a second "featured" property is never hidden.
+const latest = allProperties.filter(p => p !== featured).slice(0, 3);
 ---
 
 <Base
@@ -82,26 +83,22 @@ const latest = allProperties.filter(p => !p.data.featured).slice(0, 3);
         <div class="section-label">Featured Project</div>
         <div class="featured-layout">
           <div class="featured-info">
-            <h2>Vatika Green Farm House</h2>
+            <h2>{featured.data.title}</h2>
             <p class="featured-loc">
               <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-              Khuraniya, near Bilkisganj, Bhopal
+              {featured.data.location}
             </p>
-            <p class="featured-desc">
-              Farm house plots at Vatika Green Parisar — a planned layout with an internal road,
-              tree planting, and open green spaces. Available for site visits Mon to Sat.
-            </p>
-            <ul class="featured-highlights">
-              <li>Planned internal road</li>
-              <li>Tree-lined layout</li>
-              <li>Close to Bilkisganj</li>
-              <li>Personal guidance included</li>
-            </ul>
+            <p class="featured-desc">{featured.data.summary}</p>
+            {featured.data.highlights && featured.data.highlights.length > 0 && (
+              <ul class="featured-highlights">
+                {featured.data.highlights.slice(0, 4).map((h) => <li>{h}</li>)}
+              </ul>
+            )}
             <div class="featured-actions">
-              <a href={url('/requirement?need=farm-house')} class="btn btn-primary">
+              <a href={url(`/requirement?need=${featured.data.type === 'farm-house-plot' ? 'farm-house' : 'plot'}`)} class="btn btn-primary">
                 Book a Site Visit
               </a>
-              <a href={url('/properties/vatika-green-farm-house')} class="btn btn-outline-white">
+              <a href={url(`/properties/${featured.id}`)} class="btn btn-outline-white">
                 See Full Details
               </a>
             </div>
@@ -289,7 +286,7 @@ const latest = allProperties.filter(p => !p.data.featured).slice(0, 3);
             <li>Direct coordination, no middlemen</li>
           </ul>
         </div>
-        <a href={url('/contact')} class="btn btn-outline">Get in touch to partner</a>
+        <a href={url('/contact') + '?role=broker'} class="btn btn-outline">Get in touch to partner</a>
       </div>
     </div>
   </section>

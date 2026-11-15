@@ -9,3 +9,8 @@ export function url(path: string): string {
   const base = import.meta.env.BASE_URL; // always ends with /
   return base + path.replace(/^\//, '');
 }
+
+/** Like url(), but leaves full http(s) URLs untouched. Use for image paths stored in listing data. */
+export function asset(src: string): string {
+  return /^https?:\/\//.test(src) ? src : url(src);
+}
