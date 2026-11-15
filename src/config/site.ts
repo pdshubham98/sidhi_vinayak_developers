@@ -18,7 +18,7 @@ export const site = {
     phone: '+91 78692 46638',
     /** WhatsApp number with country code, digits only, e.g. '919876543210'. */
     whatsapp: '917869246638',
-    email: '', // TODO: add real email address
+    email: 'sales.siddhivinayakdevelopers@gmail.com',
     /** e.g. 'Mon to Sat, 10 am to 7 pm' */
     hours: 'Mon to Sat, 10 am to 7 pm',
   },

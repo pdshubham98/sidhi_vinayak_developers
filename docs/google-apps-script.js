@@ -1,31 +1,60 @@
 /**
  * Google Apps Script — Sidhivinayak Developers lead capture
  *
- * Sheet headers (Row 1) — 11 columns:
- * Timestamp | Status | Name | Phone | Role | Interest | Best Time | Email | Query | Connected? | Comments
+ * Routes each submission to one of 3 tabs:
+ *   - Buyers        → Buyer / Investor + all requirement form leads
+ *   - Sellers       → Property Seller + all sell form leads
+ *   - Dealers       → Broker / Channel Partner + Builder / Developer
  *
- * Columns 1–9 are filled automatically by this script.
- * Columns 10 (Connected?) and 11 (Comments) are filled manually by your team.
+ * Tabs are created automatically on first run if they don't exist.
  *
- * Sheet access:
- * - Keep the sheet PRIVATE — share only with team members you choose.
- * - This script runs as you (the owner), so it can write even when the sheet is private.
- * - Customers only POST data through this script URL — they never see the sheet.
- *
- * To add a team member: Sheets → Share → enter their email → set Viewer or Editor.
+ * Sheet access: keep the sheet PRIVATE (Share → Restricted).
+ * Add team members by email with Editor access so they can fill
+ * the Connected? and Comments columns. Customers never see the sheet.
  */
 
 const NOTIFY_EMAIL = 'sales.siddhivinayakdevelopers@gmail.com';
 
+const HEADERS = [
+  'Timestamp', 'Status', 'Name', 'Phone', 'Role',
+  'Interest', 'Best Time', 'Email', 'Query', 'Connected?', 'Comments'
+];
+
+function getOrCreateTab(spreadsheet, name) {
+  var sheet = spreadsheet.getSheetByName(name);
+  if (!sheet) {
+    sheet = spreadsheet.insertSheet(name);
+    var headerRange = sheet.getRange(1, 1, 1, HEADERS.length);
+    headerRange.setValues([HEADERS]);
+    headerRange.setFontWeight('bold').setBackground('#d9ead3');
+    sheet.setFrozenRows(1);
+    sheet.setColumnWidth(1, 160);  // Timestamp
+    sheet.setColumnWidth(3, 150);  // Name
+    sheet.setColumnWidth(9, 250);  // Query
+    sheet.setColumnWidth(11, 200); // Comments
+  }
+  return sheet;
+}
+
 function doPost(e) {
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
   var data = JSON.parse(e.postData.contents);
 
-  // Insert at Row 2 — newest lead always appears at the top
+  // Route to correct tab
+  var tabName;
+  if (data.formType === 'sell' || data.userRole === 'seller') {
+    tabName = 'Sellers';
+  } else if (data.userRole === 'broker' || data.userRole === 'builder') {
+    tabName = 'Dealers & Brokers';
+  } else {
+    tabName = 'Buyers';
+  }
+
+  var sheet = getOrCreateTab(ss, tabName);
+
   sheet.insertRowBefore(2);
 
   var timestamp = Utilities.formatDate(new Date(), 'Asia/Kolkata', 'dd-MMM-yyyy hh:mm a');
-  var formLabel = data.formType === 'sell' ? 'Sell' : data.formType === 'contact' ? 'Contact' : 'Requirement';
 
   var rowValues = [[
     timestamp,
@@ -33,17 +62,19 @@ function doPost(e) {
     data.name        || '-',
     "'" + (data.phone || '-'),
     data.userRole    || '-',
-    data.lookingFor  || data.propertyType || formLabel,
+    data.lookingFor  || data.propertyType || data.formType || '-',
     data.callbackTime || 'Anytime',
     data.email       || '-',
     data.message     || data.location    || '-',
+    '',  // Connected? — filled by team
+    '',  // Comments   — filled by team
   ]];
 
-  var range = sheet.getRange(2, 1, 1, 9);
+  var range = sheet.getRange(2, 1, 1, 11);
   range.setValues(rowValues);
-  range.setBackground('#e6f4ea'); // soft green for new leads
+  range.setBackground('#e6f4ea');
 
-  // Add dropdown for "Connected?" in column 10
+  // Dropdown for Connected? column
   var connectedCell = sheet.getRange(2, 10);
   var rule = SpreadsheetApp.newDataValidation()
     .requireValueInList(['Yes', 'No', 'Follow up'], true)
@@ -52,18 +83,18 @@ function doPost(e) {
 
   MailApp.sendEmail({
     to: NOTIFY_EMAIL,
-    subject: '🏡 [' + formLabel + '] New inquiry: ' + (data.name || 'Unknown') + ' — ' + (data.phone || ''),
+    subject: '🏡 [' + tabName + '] New inquiry: ' + (data.name || 'Unknown') + ' — ' + (data.phone || ''),
     body:
-      'New website inquiry (IST: ' + timestamp + ')\n\n' +
-      'Form:          ' + formLabel + '\n' +
-      'Name:          ' + (data.name || '-') + '\n' +
-      'Phone:         ' + (data.phone || '-') + '\n' +
-      'Role:          ' + (data.userRole || '-') + '\n' +
-      'Looking for:   ' + (data.lookingFor || data.propertyType || '-') + '\n' +
-      'Best time:     ' + (data.callbackTime || 'Anytime') + '\n' +
-      'Email:         ' + (data.email || 'Not provided') + '\n' +
-      'Message:       ' + (data.message || data.location || 'None') + '\n\n' +
-      'View all leads: ' + SpreadsheetApp.getActiveSpreadsheet().getUrl(),
+      'New website inquiry (IST: ' + timestamp + ')\n' +
+      'Tab: ' + tabName + '\n\n' +
+      'Name:         ' + (data.name || '-') + '\n' +
+      'Phone:        ' + (data.phone || '-') + '\n' +
+      'Role:         ' + (data.userRole || '-') + '\n' +
+      'Looking for:  ' + (data.lookingFor || data.propertyType || '-') + '\n' +
+      'Best time:    ' + (data.callbackTime || 'Anytime') + '\n' +
+      'Email:        ' + (data.email || 'Not provided') + '\n' +
+      'Message:      ' + (data.message || data.location || 'None') + '\n\n' +
+      'Open sheet: ' + ss.getUrl(),
   });
 
   return ContentService
