@@ -1,4 +1,4 @@
-# Siddhivinayak Developers website
+# Sidhivinayak Developers website
 
 Website for a family real estate business in Bhopal, Madhya Pradesh. The goal is to get enquiries (calls, WhatsApp messages and form leads) and show property listings.
 
@@ -17,7 +17,7 @@ Website for a family real estate business in Bhopal, Madhya Pradesh. The goal is
 
 ## Confirmed business facts
 
-- Working name: **Siddhivinayak Developers**. It is set in `src/config/site.ts` and can change in one place.
+- Working name: **Sidhivinayak Developers**. It is set in `src/config/site.ts` and can change in one place.
 - Services:
   - Property sales: plots and farm house plots
   - Resale: buying and selling

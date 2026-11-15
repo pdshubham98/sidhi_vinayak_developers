@@ -1,4 +1,4 @@
-# Siddhivinayak Developers — Work Log
+# Sidhivinayak Developers — Work Log
 
 Append-only log. Each entry records date, time, what changed, and what is next.
 Do not edit past entries. Add new entries at the bottom.
@@ -43,7 +43,7 @@ Do not edit past entries. Add new entries at the bottom.
 - Set `indexable: true` in src/config/site.ts
 - Set `site:` in astro.config.mjs to the real domain URL
 - Install @astrojs/sitemap and add to integrations array
-- Create Google Business Profile for "Siddhivinayak Developers, Neelbad, Bhopal"
+- Create Google Business Profile for "Sidhivinayak Developers, Neelbad, Bhopal"
 - Submit to Google Search Console
 - Target keywords: "plots in Bhopal", "farm house plots Bhopal", "property Neelbad Bhopal", "plots near Bilkisganj"
 

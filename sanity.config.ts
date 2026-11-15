@@ -3,8 +3,8 @@ import { structureTool } from 'sanity/structure';
 import { schemaTypes } from './src/sanity/schemaTypes';
 
 export default defineConfig({
-  name: 'siddhivinayak-developers',
-  title: 'Siddhivinayak Developers',
+  name: 'sidhivinayak-developers',
+  title: 'Sidhivinayak Developers',
 
   // Fill these in after running: npx sanity init
   projectId: process.env.SANITY_PROJECT_ID || '',

@@ -1,4 +1,4 @@
-# Project Context — Siddhivinayak Developers Website
+# Project Context — Sidhivinayak Developers Website
 
 Quick reference for any Claude session picking up this project.
 
@@ -87,7 +87,7 @@ On Cloudflare Workers with the real domain, `src/actions/index.ts` handles serve
   1. Set `indexable: true` in `src/config/site.ts`
   2. Set `site: 'https://yourdomain.in'` in `astro.config.mjs`
   3. Install `@astrojs/sitemap` and add to integrations
-  4. Create Google Business Profile (Siddhivinayak Developers, Neelbad Bhopal)
+  4. Create Google Business Profile (Sidhivinayak Developers, Neelbad Bhopal)
   5. Submit to Google Search Console
   6. Target keywords: "plots in Bhopal", "farm house plots Bhopal", "plots near Bilkisganj"
 
@@ -152,7 +152,7 @@ DEPLOY_TARGET=github npm run build   # GitHub Pages build (static)
 
 ## Owner items still needed
 
-- Real contact email (currently `info@siddhivinayak.in` — placeholder)
+- Real contact email (currently `info@sidhivinayak.in` — placeholder)
 - Google Maps share links for office (Neelbad) and project site (Khuraniya)
 - Vatika Green: real plot sizes, prices, site plan, photos
 - Confirm: "Khuraniya" spelling, PIN 462044, "AM Point" building name
