@@ -3,9 +3,11 @@ import { z } from 'astro/zod';
 import { deliverLead } from '../lib/leads';
 import {
   budgetOptions,
+  callbackTimeOptions,
   lookingForOptions,
   sellTypeOptions,
   timelineOptions,
+  userRoleOptions,
   values,
 } from '../lib/form-options';
 
@@ -36,10 +38,12 @@ export const server = {
     accept: 'form',
     input: z.object({
       ...contactFields,
+      userRole: z.enum(values(userRoleOptions), choose),
       lookingFor: z.enum(values(lookingForOptions), choose),
       preferredArea: optionalText(120),
       budget: z.enum(values(budgetOptions), choose),
       timeline: z.enum(values(timelineOptions), choose),
+      callbackTime: z.enum(values(callbackTimeOptions), choose).optional(),
       message: optionalText(1000),
     }),
     handler: async (input) => {

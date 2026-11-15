@@ -1,0 +1,60 @@
+media: public/images
+content:
+  - name: properties
+    label: Properties & Sites
+    type: file
+    path: src/content/properties.json
+    fields:
+      - name: properties
+        label: Property Listings
+        type: object
+        list: true
+        fields:
+          - name: id
+            label: URL slug (e.g. vatika-green-farm-house)
+            type: string
+            required: true
+          - name: title
+            label: Property name
+            type: string
+            required: true
+          - name: status
+            label: Availability
+            type: select
+            options:
+              values: ["available", "booked", "sold", "upcoming"]
+          - name: type
+            label: Property type
+            type: select
+            options:
+              values: ["plot", "farm-house-plot", "house", "flat", "commercial", "agricultural"]
+          - name: ownershipType
+            label: Listing type
+            type: select
+            options:
+              values: ["own", "assisted"]
+          - name: location
+            label: Location (short)
+            type: string
+          - name: price
+            label: Price (number, in rupees)
+            type: number
+          - name: size
+            label: Size label (e.g. 1,500–3,000 sq.ft)
+            type: string
+          - name: summary
+            label: One-line description
+            type: string
+          - name: featured
+            label: Show as featured on homepage
+            type: boolean
+          - name: published
+            label: Published (show on site)
+            type: boolean
+          - name: highlights
+            label: Key highlights
+            type: string
+            list: true
+          - name: offer
+            label: Offer tag (e.g. "Early bird pricing")
+            type: string

@@ -35,5 +35,19 @@ export const sellTypeOptions = [
   { value: 'other', label: 'Other' },
 ] as const satisfies readonly Option[];
 
+export const userRoleOptions = [
+  { value: 'buyer', label: 'Buyer / Investor' },
+  { value: 'seller', label: 'Property Seller' },
+  { value: 'broker', label: 'Broker / Channel Partner' },
+  { value: 'builder', label: 'Builder / Developer' },
+] as const satisfies readonly Option[];
+
+export const callbackTimeOptions = [
+  { value: 'morning', label: 'Morning (10 AM – 1 PM)' },
+  { value: 'afternoon', label: 'Afternoon (1 PM – 4 PM)' },
+  { value: 'evening', label: 'Evening (4 PM – 7 PM)' },
+  { value: 'anytime', label: 'Anytime' },
+] as const satisfies readonly Option[];
+
 export const values = <T extends readonly Option[]>(options: T) =>
   options.map((o) => o.value) as unknown as [T[number]['value'], ...T[number]['value'][]];

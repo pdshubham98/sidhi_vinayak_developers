@@ -4,7 +4,7 @@ import Field from '../components/Field.astro';
 import ChoiceGroup from '../components/ChoiceGroup.astro';
 import Consent from '../components/Consent.astro';
 import Honeypot from '../components/Honeypot.astro';
-import { lookingForOptions, budgetOptions, timelineOptions } from '../lib/form-options';
+import { lookingForOptions, budgetOptions, timelineOptions, userRoleOptions, callbackTimeOptions } from '../lib/form-options';
 
 const errors: Record<string, string[] | undefined> = {};
 import { url } from '../lib/url';
@@ -41,6 +41,15 @@ import { url } from '../lib/url';
         <Field id="email" label="Email address" type="email" error={errors.email?.[0]} autocomplete="email" />
 
         <ChoiceGroup
+          id="userRole"
+          label="I am a…"
+          options={userRoleOptions}
+          required
+          value=""
+          error={errors.userRole?.[0]}
+        />
+
+        <ChoiceGroup
           id="lookingFor"
           label="What are you looking for?"
           options={lookingForOptions}
@@ -68,7 +77,15 @@ import { url } from '../lib/url';
           error={errors.timeline?.[0]}
         />
 
-        <Field id="message" label="Anything else we should know?" type="textarea" error={errors.message?.[0]} />
+        <ChoiceGroup
+          id="callbackTime"
+          label="Best time to call you back"
+          options={callbackTimeOptions}
+          value=""
+          error={errors.callbackTime?.[0]}
+        />
+
+        <Field id="message" label="Anything else we should know?" type="textarea" error={errors.message?.[0]} placeholder="e.g. Looking for a 2,000 sq.ft plot near Bilkisganj, budget ₹25L, available for site visit this Sunday." />
 
         <Consent error={errors.consent?.[0]} />
 

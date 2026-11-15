@@ -272,6 +272,28 @@ const latest = allProperties.filter(p => !p.data.featured).slice(0, 3);
     </div>
   </section>
 
+  <!-- ─── Broker / Partner section ───────────────────────────────── -->
+  <section class="section">
+    <div class="container">
+      <div class="partner-banner">
+        <div class="partner-banner__text">
+          <div class="section-label">For Brokers &amp; Dealers</div>
+          <h2>Partner with us in Bhopal</h2>
+          <p>
+            Are you a broker, channel partner, or landowner in Bhopal? We work with trusted local
+            partners across Neelbad, Bilkisganj, Kolar Road, and surrounding areas — directly, without long chains.
+          </p>
+          <ul class="partner-points">
+            <li>Refer buyers and sellers — earn on every closed deal</li>
+            <li>List your land or inventory through our network</li>
+            <li>Direct coordination, no middlemen</li>
+          </ul>
+        </div>
+        <a href={url('/contact')} class="btn btn-outline">Get in touch to partner</a>
+      </div>
+    </div>
+  </section>
+
   <!-- ─── Sell banner ───────────────────────────────────────────── -->
   <section class="section">
     <div class="container">
@@ -571,4 +593,55 @@ const latest = allProperties.filter(p => !p.data.featured).slice(0, 3);
   }
   .process-step h4 { font-size: 0.95rem; margin-bottom: 0.2rem; }
   .process-step p { font-size: 0.85rem; color: var(--muted); }
+
+  /* ── Partner banner ── */
+  .partner-banner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2.5rem 2.5rem;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--forest);
+    border-radius: var(--radius-lg);
+  }
+  .partner-banner__text h2 { margin-bottom: 0.5rem; font-size: clamp(1.3rem, 2.5vw, 1.65rem); }
+  .partner-banner__text > p { color: var(--muted); max-width: 56ch; line-height: 1.65; margin-bottom: 1rem; font-size: 0.95rem; }
+  .partner-points {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+  .partner-points li {
+    font-size: 0.875rem;
+    color: var(--muted);
+    padding-left: 1.25em;
+    position: relative;
+  }
+  .partner-points li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--forest);
+  }
+  .sell-banner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2.5rem 2.5rem;
+    background: var(--forest-deep);
+    color: #fff;
+    border-radius: var(--radius-lg);
+  }
+  .sell-banner__text h2 { color: #fff; margin-bottom: 0.5rem; font-size: clamp(1.3rem, 2.5vw, 1.65rem); }
+  .sell-banner__text p { color: rgba(255,255,255,0.72); max-width: 56ch; line-height: 1.65; font-size: 0.95rem; }
 </style>
