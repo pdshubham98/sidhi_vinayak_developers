@@ -9,7 +9,7 @@ const githubPages = process.env.DEPLOY_TARGET === 'github';
 export default defineConfig({
   // GitHub Pages serves the site at /sidhi_vinayak_developers/
   // Cloudflare Workers serves at the root.
-  base: githubPages ? '/sidhi_vinayak_developers' : undefined,
+  base: githubPages ? '/sidhi_vinayak_developers/' : undefined,
 
   session: false,
 

@@ -1,0 +1,178 @@
+---
+import { site, whatsappHref } from '../config/site';
+import { url } from '../lib/url';
+const waHref = whatsappHref(site.contact.whatsapp, "Hi, I'm interested in a property in Bhopal.");
+---
+
+<div id="popup-cta" class="popup-cta" role="dialog" aria-modal="true" aria-label="Quick enquiry" hidden>
+  <div class="popup-cta__backdrop"></div>
+  <div class="popup-cta__box">
+    <button class="popup-cta__close" aria-label="Close" id="popup-close">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <p class="popup-cta__eyebrow">Still looking?</p>
+    <h2 class="popup-cta__heading">We're here to help</h2>
+    <p class="popup-cta__body">
+      Plots, farmhouses, construction — talk to us directly. No agents, no waiting.
+    </p>
+    <div class="popup-cta__actions">
+      {site.contact.whatsapp && (
+        <a href={waHref} class="btn btn-primary popup-cta__wa" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.38 1.25 4.79L2.05 22l5.42-1.42c1.35.73 2.9 1.14 4.56 1.14h.01c5.45 0 9.9-4.45 9.9-9.91S17.49 2 12.04 2zm0 18.13c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.24 8.24 0 0 1-1.26-4.37c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c-.01 4.54-3.7 8.22-8.22 8.22zm4.52-6.16c-.25-.12-1.47-.72-1.69-.8-.23-.08-.39-.12-.56.12-.17.25-.64.8-.78 1-.15.2-.29.21-.54.08-.25-.12-.95-.35-1.8-.11-.69.21-1.12.69-1.29.9-.17.21-.09.31.09.41.27.14 1.42.92 1.97 2.17.54 1.24-.39 2.64-.52 2.83-.13.2-.39.25-.58.16-.2-.09-.82-.3-1.56-.95-.58-.52-.97-1.16-1.08-1.35-.11-.2-.01-.3.09-.4.09-.09.2-.24.3-.35.1-.12.13-.2.2-.33.06-.14.03-.26-.02-.35-.05-.1-.56-1.35-.77-1.85-.2-.49-.4-.42-.56-.43-.14-.01-.31-.01-.47-.01-.17 0-.44.06-.66.31-.23.25-.87.85-.87 2.07s.89 2.4 1.01 2.57c.13.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.47-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.1-.23-.15-.48-.27z"/></svg>
+          WhatsApp us
+        </a>
+      )}
+      <a href={url('/requirement')} class="btn btn-outline popup-cta__visit">
+        Book a site visit
+      </a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .popup-cta {
+    position: fixed;
+    inset: 0;
+    z-index: 900;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 1rem;
+  }
+  @media (min-width: 500px) {
+    .popup-cta { align-items: center; }
+  }
+  .popup-cta[hidden] { display: none; }
+
+  .popup-cta__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(23,41,34,0.55);
+    backdrop-filter: blur(2px);
+  }
+
+  .popup-cta__box {
+    position: relative;
+    background: #fff;
+    border-radius: var(--radius-lg);
+    padding: 2rem 1.75rem 1.75rem;
+    max-width: 420px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(23,41,34,0.25);
+    animation: popup-slide-up 0.3s ease;
+  }
+  @keyframes popup-slide-up {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .popup-cta__box { animation: none; }
+  }
+
+  .popup-cta__close {
+    position: absolute;
+    top: 0.9rem;
+    right: 0.9rem;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--sage);
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    color: var(--ink);
+    transition: background 0.15s;
+  }
+  .popup-cta__close:hover { background: var(--line); }
+
+  .popup-cta__eyebrow {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.4rem;
+  }
+  .popup-cta__heading {
+    font-size: 1.5rem;
+    margin-bottom: 0.6rem;
+  }
+  .popup-cta__body {
+    font-size: 0.95rem;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+  .popup-cta__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .popup-cta__actions .btn {
+    width: 100%;
+    justify-content: center;
+    min-height: 48px;
+  }
+  .popup-cta__wa {
+    background: #25d366;
+    border-color: #25d366;
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+  }
+  .popup-cta__wa:hover { background: #1da851; border-color: #1da851; }
+</style>
+
+<script>
+  (function () {
+    var STORAGE_KEY = 'sdv_popup_dismissed';
+    var DELAY_MS = 8000; // 8 seconds
+
+    function dismissed() {
+      try {
+        var ts = localStorage.getItem(STORAGE_KEY);
+        if (!ts) return false;
+        // Don't show again for 7 days
+        return (Date.now() - parseInt(ts)) < 7 * 24 * 60 * 60 * 1000;
+      } catch { return false; }
+    }
+
+    function dismiss() {
+      try { localStorage.setItem(STORAGE_KEY, String(Date.now())); } catch {}
+      var el = document.getElementById('popup-cta');
+      if (el) el.hidden = true;
+    }
+
+    if (dismissed()) return;
+
+    var interacted = false;
+    var events = ['click', 'keydown', 'scroll', 'touchstart'];
+
+    function onInteract() {
+      interacted = true;
+      events.forEach(function(e) { document.removeEventListener(e, onInteract); });
+    }
+    events.forEach(function(e) { document.addEventListener(e, onInteract, { passive: true }); });
+
+    setTimeout(function () {
+      if (interacted) return;
+      var el = document.getElementById('popup-cta');
+      if (!el) return;
+      el.hidden = false;
+
+      var closeBtn = document.getElementById('popup-close');
+      if (closeBtn) closeBtn.addEventListener('click', dismiss);
+
+      var backdrop = el.querySelector('.popup-cta__backdrop');
+      if (backdrop) backdrop.addEventListener('click', dismiss);
+
+      // Dismiss when any CTA is clicked
+      el.querySelectorAll('a').forEach(function(a) {
+        a.addEventListener('click', dismiss);
+      });
+    }, DELAY_MS);
+  })();
+</script>

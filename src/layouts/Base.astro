@@ -4,6 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import MobileBar from '../components/MobileBar.astro';
 import WhatsAppFloat from '../components/WhatsAppFloat.astro';
+import PopupCTA from '../components/PopupCTA.astro';
 import '../styles/global.css';
 
 interface BreadcrumbItem {
@@ -127,5 +128,6 @@ const allSchemas = [businessSchema, ...(breadcrumbSchema ? [breadcrumbSchema] : 
   <Footer />
   <MobileBar />
   <WhatsAppFloat />
+  <PopupCTA />
 </body>
 </html>
