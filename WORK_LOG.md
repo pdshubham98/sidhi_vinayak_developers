@@ -146,3 +146,16 @@ Do not edit past entries. Add new entries at the bottom.
 - Tighter section spacing on phones.
 
 **Verified:** `astro check` 0 errors; Playwright E2E 148/148 against local `wrangler dev` (new checks for every item above, incl. admin CRUD on local KV); screenshots at 390px and 1440px reviewed.
+
+## 2026-11-16 — Google indexing fixes (branch `seo-sitemap`)
+
+**Why Google showed "No information is available for this page":** until 2026-11-15 `robots.txt` had `Disallow: /`, so Google could list the domain but not read it. That was fixed on 11-15; Google just has not re-crawled yet.
+
+**Added / fixed:**
+- `/sitemap.xml` (`src/seo/sitemap.ts`), rendered live from KV so listings added in /admin appear automatically; URLs use the exact form each page is served at (no redirects). `robots.txt` now points to it.
+- Search Console verification file now served by the Worker (`src/seo/google-verification.ts`) with a direct 200; from `public/` Cloudflare redirected `.html` → extensionless (307), which can fail verification.
+- Canonical URL for `/properties…` pages no longer depends on a trailing slash (both forms return 200).
+
+**Verified:** `astro check` 0 errors; both build targets pass; E2E 153/153 locally.
+
+**Owner to do:** in Search Console submit `sitemap.xml` and request indexing for the home page.

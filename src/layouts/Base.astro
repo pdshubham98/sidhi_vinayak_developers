@@ -38,7 +38,12 @@ const siteSeoName = 'Sidhivinayak Developers | Plots, Farmhouses & Construction 
 const pageTitle = title === site.name ? siteSeoName : `${title} – ${site.name}`;
 
 // Auto-generate canonical from current URL when Astro.site is set
-const canonicalUrl = canonical ?? (Astro.site ? new URL(Astro.url.pathname, Astro.site).toString() : undefined);
+// Listing pages are server-rendered and answer with or without a trailing slash; pick one form so
+// Google does not see duplicates. Static pages are only served with the slash.
+const canonicalPath = Astro.url.pathname.startsWith('/properties') && Astro.url.pathname !== '/'
+  ? Astro.url.pathname.replace(/\/+$/, '')
+  : Astro.url.pathname;
+const canonicalUrl = canonical ?? (Astro.site ? new URL(canonicalPath, Astro.site).toString() : undefined);
 
 const businessSchema = {
   '@context': 'https://schema.org',

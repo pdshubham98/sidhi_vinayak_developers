@@ -22,6 +22,9 @@ const deployTarget = {
       if (githubPages) return;
       injectRoute({ pattern: '/admin', entrypoint: './src/admin/AdminPage.astro', prerender: false });
       injectRoute({ pattern: '/media/[id]', entrypoint: './src/admin/media.ts', prerender: false });
+      // Live sitemap (includes listings added in /admin) and Search Console verification file.
+      injectRoute({ pattern: '/sitemap.xml', entrypoint: './src/seo/sitemap.ts', prerender: false });
+      injectRoute({ pattern: '/google6bf495484f830c73.html', entrypoint: './src/seo/google-verification.ts', prerender: false });
     },
     'astro:route:setup': ({ route }) => {
       if (LISTING_PAGES.has(route.component)) route.prerender = githubPages;
