@@ -159,3 +159,13 @@ Do not edit past entries. Add new entries at the bottom.
 **Verified:** `astro check` 0 errors; both build targets pass; E2E 153/153 locally.
 
 **Owner to do:** in Search Console submit `sitemap.xml` and request indexing for the home page.
+
+## 2026-11-22 — Google Tag Manager (branch `analytics`)
+
+**Added:** GTM container `GTM-WFGDF9G9` in `src/layouts/Base.astro` — the standard async loader in `<head>` and the `<noscript>` iframe right after `<body>`, so every page that uses the layout is tracked. Both are gated on `site.indexable`, so the GitHub Pages staging build and local dev send no data; only production does.
+
+`/admin` does not use `Base.astro` and is deliberately untracked.
+
+**Verified:** production build has the pair on all 10 static pages, the server-rendered `/`, `/properties` and listing pages; staging build has none; smoke suite 58/58 against local `wrangler dev` (incl. sitemap, robots and the Search Console verification file still returning a direct 200).
+
+**Still open:** the leads Google Sheet shows unnamed "Column 1…12" headers. That is set by the Google Apps Script receiving the form POST, not by this repo — needs the Apps Script source to fix.
