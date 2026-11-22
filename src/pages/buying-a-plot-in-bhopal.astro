@@ -1,0 +1,129 @@
+---
+import Base from '../layouts/Base.astro';
+import { site, whatsappHref } from '../config/site';
+import { url } from '../lib/url';
+
+const steps = [
+  {
+    h: 'Decide what the land is for',
+    p: `A plot you intend to build on this year and a plot you are holding for later are not judged the same way. If you are building soon, the colony work — roads, water, electricity, sewage — matters immediately. If you are holding the land, the location and the clarity of the title matter more than the amenities.`,
+  },
+  {
+    h: 'Visit the plot, not just the brochure',
+    p: `Stand on the plot itself. Look at the approach road, how water would drain in the monsoon, what is being built around it, and how far the nearest habitation is. A layout plan cannot tell you any of this. We take buyers to the site personally and we would rather you came twice than once.`,
+  },
+  {
+    h: 'Check the documents before you pay anything',
+    p: `Ask for the title deed and read whose name is on it. Ask for an encumbrance certificate, which shows whether the land carries a loan or a dispute. Ask whether the layout is approved and whether the land use has been diverted from agricultural, because that governs what you are allowed to build. If the project falls under MP RERA, verify the registration yourself on the MP RERA portal rather than taking anyone's word for it, ours included.`,
+  },
+  {
+    h: 'Agree the terms in writing',
+    p: `Put the price, the payment schedule, what is included in the colony work, and the expected date of registration into a written agreement. A verbal understanding is worth very little when something goes wrong a year later.`,
+  },
+  {
+    h: 'Register the sale deed',
+    p: `Buyer and seller go to the sub-registrar office in Bhopal to execute the sale deed. Stamp duty and registration charges are paid at that point; the rates are set by the state and your sub-registrar will confirm the current figures. Carry Aadhaar, PAN and passport-size photographs. We handle the paperwork and go with you.`,
+  },
+  {
+    h: 'Get the mutation done',
+    p: `After registration, apply for mutation — namantaran — so the revenue records show the land in your name. People often skip this and discover the problem years later when they try to sell. It is a short step and it matters.`,
+  },
+];
+
+const guideSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: 'How to buy a plot in Bhopal',
+  description:
+    'The steps involved in buying a residential or farm house plot in Bhopal, Madhya Pradesh: choosing the plot, checking documents, registering the sale deed and completing mutation.',
+  step: steps.map((s, i) => ({
+    '@type': 'HowToStep',
+    position: i + 1,
+    name: s.h,
+    text: s.p,
+  })),
+};
+---
+
+<Base
+  title="How to Buy a Plot in Bhopal – Documents, Registration & Checks"
+  description="A plain guide to buying a residential or farm house plot in Bhopal: what to check on site, which documents to verify, how sale deed registration works at the sub-registrar office, and why mutation matters."
+  breadcrumbs={[{ name: 'Buying a plot in Bhopal', url: '/buying-a-plot-in-bhopal' }]}
+  extraSchemas={[guideSchema]}
+>
+  <section class="page-hero">
+    <div class="container">
+      <h1>How to buy a plot in Bhopal</h1>
+      <p>
+        What the process actually involves, what to check before you pay, and where buyers most
+        often get caught out. Written from what we are asked on site visits.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container" style="max-width:780px;">
+      <div class="construction-steps">
+        {steps.map((s, i) => (
+          <div class="construction-step">
+            <div class="construction-step__num">{i + 1}</div>
+            <div>
+              <h2 style="font-size:1.15rem;margin-bottom:0.35rem;">{s.h}</h2>
+              <p style="color:var(--muted);line-height:1.7;">{s.p}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="background:var(--sage);">
+    <div class="container" style="max-width:780px;">
+      <div class="section-heading">
+        <h2>Is land in Bhopal a good investment?</h2>
+      </div>
+      <p style="margin-bottom:1rem;">
+        We are not going to put a number on that, and we would treat anyone who does with caution.
+        Nobody can honestly promise you what a plot will be worth in five years, and a seller
+        quoting a guaranteed return is telling you something they cannot know.
+      </p>
+      <p style="margin-bottom:1rem;">
+        What we can say is what is actually within your control: buy land with a clean, verifiable
+        title, buy where you can see the area developing with your own eyes rather than on a map,
+        buy at a price you can justify against what nearby plots are selling for, and complete the
+        registration and mutation properly so the land is unambiguously yours. Those four things
+        decide most of what happens afterwards.
+      </p>
+      <p style="color:var(--muted);">
+        Our own projects are at{' '}
+        <a href={url('/plots-in-neelbad-bhopal')}>Neelbad on the Ratibad Road</a> and at{' '}
+        <a href={url('/farm-house-plots-bilkisganj')}>Vatika Green near Bilkisganj</a>. Our{' '}
+        <a href={url('/faq')}>FAQ</a> covers shorter questions.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container" style="max-width:780px;">
+      <h2 style="font-size:1.4rem;margin-bottom:0.5rem;">Ask us anything before you buy</h2>
+      <p style="color:var(--muted);margin-bottom:1.5rem;">
+        Whether or not you end up buying from us, we are happy to answer questions about the
+        process. Call, send a message, or come to the office in Neelbad.
+      </p>
+      <div style="display:flex;flex-wrap:wrap;gap:0.75rem;">
+        <a href={url('/requirement')} class="btn btn-primary">Share your requirement</a>
+        {site.contact.whatsapp && (
+          <a
+            href={whatsappHref(site.contact.whatsapp, 'Hello, I have a question about buying a plot in Bhopal.')}
+            class="btn btn-outline"
+            target="_blank"
+            rel="noopener"
+          >WhatsApp us</a>
+        )}
+        {site.contact.phone && (
+          <a href={`tel:${site.contact.phone.replace(/\s/g, '')}`} class="btn btn-outline">Call {site.contact.phone}</a>
+        )}
+      </div>
+    </div>
+  </section>
+</Base>

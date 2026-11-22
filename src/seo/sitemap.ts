@@ -6,7 +6,10 @@
 import type { APIRoute } from 'astro';
 import { getProperties } from '../lib/properties';
 
-const STATIC_PAGES = ['/', '/construction/', '/sell/', '/about/', '/contact/', '/requirement/', '/faq/', '/privacy/'];
+const STATIC_PAGES = [
+  '/', '/construction/', '/sell/', '/about/', '/contact/', '/requirement/', '/faq/', '/privacy/',
+  '/plots-in-neelbad-bhopal/', '/farm-house-plots-bilkisganj/', '/buying-a-plot-in-bhopal/',
+];
 
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const day = (d?: Date) => (d && !isNaN(d.getTime()) ? d.toISOString().slice(0, 10) : undefined);
