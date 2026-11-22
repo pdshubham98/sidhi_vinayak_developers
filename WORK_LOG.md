@@ -186,3 +186,9 @@ Do not edit past entries. Add new entries at the bottom.
 **Verified:** both build targets pass; smoke suite 58/58 against local `wrangler dev`; Apps Script logic suite 36/36 (column alignment, field coverage, fallbacks, routing); all three JSON-LD blocks on `/construction` parse.
 
 **Owner to do:** ranking for these queries is not a code problem. Create the Google Business Profile — the map pack is most of the result for both searches, and the site cannot appear in it without one.
+
+## 2026-11-22 — "property dealer" wording (branch `dealer-keyword`)
+
+The owner searches "best property dealer in bhopal" and the phrase appeared nowhere on the site, so the pages could not match it however well they ranked otherwise. Added it where it reads naturally and is accurate — the about page intro and meta description, the shared `site.description` used for the home page and Open Graph, and the `LocalBusiness` schema keywords. Three placements, not stuffed.
+
+**Verified:** smoke suite 58/58; phrase renders on `/` and `/about`.

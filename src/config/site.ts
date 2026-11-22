@@ -8,7 +8,7 @@ export const site = {
   name: 'Sidhivinayak Developers',
   tagline: 'Buy It. Build It. Sell It. We\'re With You.',
   description:
-    'Explore residential plots and farmhouses near Bhopal, plan your home construction, or enquire about selling your property with Sidhivinayak Developers.',
+    'Sidhivinayak Developers is a property dealer and plot developer in Neelbad, Bhopal. Residential plots and farmhouses near Bhopal, house construction on your plot, and help selling your property.',
 
   /** Controlled by SITE_INDEXABLE env var — set to 'true' in Cloudflare dashboard to enable indexing. */
   indexable: import.meta.env.SITE_INDEXABLE === 'true',
