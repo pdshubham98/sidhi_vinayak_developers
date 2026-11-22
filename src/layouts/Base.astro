@@ -34,6 +34,8 @@ const {
   extraSchemas = [],
 } = Astro.props;
 
+const GTM_ID = 'GTM-WFGDF9G9';
+
 const siteSeoName = 'Sidhivinayak Developers | Plots, Farmhouses & Construction in Bhopal, MP';
 const pageTitle = title === site.name ? siteSeoName : `${title} – ${site.name}`;
 
@@ -123,8 +125,19 @@ const allSchemas = [businessSchema, ...(breadcrumbSchema ? [breadcrumbSchema] : 
   {allSchemas.map(schema => (
     <script type="application/ld+json" set:html={JSON.stringify(schema)} />
   ))}
+
+  {site.indexable && (
+    <script is:inline set:html={`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','${GTM_ID}');`} />
+  )}
 </head>
 <body>
+  {site.indexable && (
+    <noscript set:html={`<iframe src="https://www.googletagmanager.com/ns.html?id=${GTM_ID}" height="0" width="0" style="display:none;visibility:hidden"></iframe>`} />
+  )}
   <a href="#main-content" class="skip-link">Skip to main content</a>
   <Header />
   <main id="main-content">
