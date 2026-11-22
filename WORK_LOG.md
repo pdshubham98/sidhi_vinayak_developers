@@ -169,3 +169,20 @@ Do not edit past entries. Add new entries at the bottom.
 **Verified:** production build has the pair on all 10 static pages, the server-rendered `/`, `/properties` and listing pages; staging build has none; smoke suite 58/58 against local `wrangler dev` (incl. sitemap, robots and the Search Console verification file still returning a direct 200).
 
 **Still open:** the leads Google Sheet shows unnamed "Column 1…12" headers. That is set by the Google Apps Script receiving the form POST, not by this repo — needs the Apps Script source to fix.
+
+## 2026-11-22 — Lead sheet repair and keyword targeting (branch `leads-and-seo`)
+
+**Apps Script (`apps-script/leads.gs`, now tracked in this repo).** Two bugs:
+- *Unnamed "Column 1…12" headers.* `getOrCreateTab` wrote the header row only inside the `if (!sheet)` branch, so a tab that already existed — made by an earlier version of the script, or renamed by hand — never got one. Row 1 is now rewritten whenever it is missing or stale, and `repairHeaders()` can be run once from the editor to fix the existing tabs immediately.
+- *Silent data loss.* The site posts 15 fields; the script read 10. `preferredArea`, `budget`, `timeline`, `size`, `expectedPrice` and `property` were discarded on every lead — budget and timeline being the two a seller most wants. The sheet is now 16 columns and captures all of them. `propertyType`/`location`/`expectedPrice` sit behind `lookingFor`/`preferredArea`/`budget` as fallbacks, which is safe because the first three exist only on the sell form and the others only on the requirement form.
+- The notification email is wrapped in try/catch: the row is already written, so a mail quota failure must not throw away the lead.
+
+**Keyword targeting.** The owner reported not ranking for "plots in Bhopal" and "best contractor for house construction in bhopal".
+- `/construction`: title and copy now use "contractor" as a self-description. The page previously used the word only to distance itself from contractors ("so you don't have to coordinate with multiple contractors"), which worked against the exact query. Added `Service` JSON-LD.
+- `/properties`: title and h1 now lead with "Plots in Bhopal for sale" instead of the vaguer "Properties in Bhopal".
+- Fixed a pre-existing double-escape: the literal `&amp;` in the `/properties` title rendered as a visible "&amp;" in the tab and in search results.
+- `/about` title was "About Sidhivinayak Developers – Sidhivinayak Developers"; now "About us".
+
+**Verified:** both build targets pass; smoke suite 58/58 against local `wrangler dev`; Apps Script logic suite 36/36 (column alignment, field coverage, fallbacks, routing); all three JSON-LD blocks on `/construction` parse.
+
+**Owner to do:** ranking for these queries is not a code problem. Create the Google Business Profile — the map pack is most of the result for both searches, and the site cannot appear in it without one.

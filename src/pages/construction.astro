@@ -2,12 +2,39 @@
 import Base from '../layouts/Base.astro';
 import { site, whatsappHref } from '../config/site';
 import { url } from '../lib/url';
+
+const constructionSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  serviceType: 'House construction contractor',
+  name: 'House construction in Bhopal',
+  description:
+    'Turnkey house construction on your own plot in Bhopal and across Madhya Pradesh: floor plan and layout design, municipal permits and approvals, construction with regular site updates, and inspection and handover.',
+  provider: {
+    '@type': 'LocalBusiness',
+    name: site.name,
+    ...(site.contact.phone ? { telephone: site.contact.phone } : {}),
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: site.office.lines[0],
+      addressLocality: 'Bhopal',
+      addressRegion: 'Madhya Pradesh',
+      postalCode: '462044',
+      addressCountry: 'IN',
+    },
+  },
+  areaServed: [
+    { '@type': 'City', name: 'Bhopal' },
+    { '@type': 'State', name: 'Madhya Pradesh' },
+  ],
+};
 ---
 
 <Base
-  title="House Construction in Bhopal – Design to Handover"
-  description="Build your home on your plot in Bhopal. Sidhivinayak Developers handles design, approvals, construction, and handover. Request a free site visit and estimate."
+  title="House Construction Contractor in Bhopal – Design to Handover"
+  description="Looking for a house construction contractor in Bhopal? Sidhivinayak Developers builds on your plot end to end — design, municipal approvals, construction and handover. Free site visit and estimate."
   breadcrumbs={[{ name: 'Construction', url: '/construction' }]}
+  extraSchemas={[constructionSchema]}
 >
   <section class="page-hero">
     <div class="container">
@@ -20,8 +47,8 @@ import { url } from '../lib/url';
   <section class="section">
     <div class="container" style="max-width:900px;">
       <div class="section-heading">
-        <h2>End-to-end construction in Bhopal</h2>
-        <p>Own a plot anywhere around Bhopal? We manage the full process so you don't have to coordinate with multiple contractors.</p>
+        <h2>Your house construction contractor in Bhopal</h2>
+        <p>Own a plot anywhere around Bhopal? We are your single contractor for the whole build, so you never have to coordinate several of them yourself.</p>
       </div>
       <div class="service-items">
         <div class="service-item">
