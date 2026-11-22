@@ -192,3 +192,33 @@ Do not edit past entries. Add new entries at the bottom.
 The owner searches "best property dealer in bhopal" and the phrase appeared nowhere on the site, so the pages could not match it however well they ranked otherwise. Added it where it reads naturally and is accurate — the about page intro and meta description, the shared `site.description` used for the home page and Open Graph, and the `LocalBusiness` schema keywords. Three placements, not stuffed.
 
 **Verified:** smoke suite 58/58; phrase renders on `/` and `/about`.
+
+## 2026-11-22 — SEO landing pages and Organization schema (branch `seo-landing-pages`)
+
+The owner asked for landing pages covering eight high-intent searches. Four of those
+("Plots for Sale", "Land for Sale", "Our Projects", "Home Construction Company") are the same
+search intent as pages that already exist, so building separate pages for them would have
+produced near-duplicate doorway pages — which Google demotes rather than rewards. Instead three
+genuinely distinct pages were added, each backed by a real project or real process knowledge:
+
+- `/plots-in-neelbad-bhopal` — the Neelbad / Ratibad corridor, where Kanha Dream City is selling
+  and Siddhi Vinayak Campus Phase 2 is completed. Distances are the ones recorded on the Phase 2
+  listing; no new claims. Carries `ItemList` schema.
+- `/farm-house-plots-bilkisganj` — Vatika Green. Explains how a farm house plot differs from a
+  city plot, and is explicit that permissions depend on the individual plot rather than claiming
+  blanket approvals.
+- `/buying-a-plot-in-bhopal` — a six-step buyer's guide (documents, sale deed, mutation) with
+  `HowTo` schema. Deliberately refuses to forecast returns and tells buyers to verify RERA on the
+  MP portal themselves. Distinct in format and wording from the FAQ so the two do not compete.
+
+Also: `Organization` schema added site-wide alongside the existing RealEstateAgent/LocalBusiness;
+the three pages added to `sitemap.xml` (12 → 15 URLs) and cross-linked from the footer and from
+each other, so none is orphaned.
+
+**Fixed along the way:** Astro drops the newline between a line of text and an element opening the
+next line, so "See also our" + `<a>` rendered as "ourguide to buying a plot". Six occurrences,
+fixed with `{' '}`. The smoke suite now has a regression check for a word jammed against a link.
+
+**Verified:** `astro check` 0 errors over 46 files; smoke suite 97/97 (unique titles and
+descriptions, one h1 each, >300 words each, valid JSON-LD, footer-linked, in sitemap); Playwright
+at 390px and 1440px — no horizontal overflow, no JS errors, styles applied; screenshots reviewed.

@@ -77,6 +77,34 @@ const businessSchema = {
   ...(site.office.mapUrl ? { hasMap: site.office.mapUrl } : {}),
 };
 
+const organizationSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: site.name,
+  url: Astro.site ? String(Astro.site) : undefined,
+  ...(Astro.site ? { logo: new URL('/images/logo-mark.png', Astro.site).toString() } : {}),
+  description: site.description,
+  ...(site.contact.phone
+    ? {
+        contactPoint: {
+          '@type': 'ContactPoint',
+          telephone: site.contact.phone,
+          contactType: 'sales',
+          areaServed: 'IN',
+          availableLanguage: ['en', 'hi'],
+        },
+      }
+    : {}),
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: site.office.lines[0],
+    addressLocality: 'Bhopal',
+    addressRegion: 'Madhya Pradesh',
+    postalCode: '462044',
+    addressCountry: 'IN',
+  },
+};
+
 const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
@@ -91,7 +119,7 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
   ],
 } : null;
 
-const allSchemas = [businessSchema, ...(breadcrumbSchema ? [breadcrumbSchema] : []), ...extraSchemas];
+const allSchemas = [businessSchema, organizationSchema, ...(breadcrumbSchema ? [breadcrumbSchema] : []), ...extraSchemas];
 ---
 
 <!doctype html>

@@ -1,0 +1,113 @@
+---
+import Base from '../layouts/Base.astro';
+import PropertyCard from '../components/PropertyCard.astro';
+import { site, whatsappHref } from '../config/site';
+import { url } from '../lib/url';
+import { getProperties } from '../lib/properties';
+
+const properties = await getProperties();
+const vatika = properties.find((p) => p.id === 'vatika-green-farm-house');
+---
+
+<Base
+  title="Farm House Plots near Bilkisganj, Bhopal – Vatika Green"
+  description="Farm house plots at Vatika Green Parisar, Khuraniya, near Bilkisganj, Bhopal. Planned layout with 25-foot RCC roads, electrification, water and sewage lines, park and tree-lined green spaces. Direct from the developer."
+  breadcrumbs={[{ name: 'Farm house plots near Bilkisganj', url: '/farm-house-plots-bilkisganj' }]}
+>
+  <section class="page-hero">
+    <div class="container">
+      <h1>Farm house plots near Bilkisganj</h1>
+      <p>
+        Vatika Green Parisar at Khuraniya, near Bilkisganj, is our farm house plot layout outside
+        Bhopal — for buyers who want more land and more green around them than a city plot allows.
+      </p>
+    </div>
+  </section>
+
+  {vatika && (
+    <section class="section">
+      <div class="container">
+        <div class="section-heading">
+          <h2>Vatika Green Farm House</h2>
+          <p>Our company-owned farm house project. You buy directly from us, with no agent in between.</p>
+        </div>
+        <div class="property-grid">
+          <PropertyCard property={vatika} />
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class="section" style="background:var(--sage);">
+    <div class="container" style="max-width:820px;">
+      <div class="section-heading">
+        <h2>How a farm house plot differs from a residential plot</h2>
+        <p>Buyers ask us this often, so it is worth setting out plainly before you visit.</p>
+      </div>
+      <p style="margin-bottom:1rem;">
+        A farm house plot is usually larger than a city residential plot and sits outside the dense
+        built-up area, so there is room for open ground, trees and a boundary around the house
+        rather than walls shared with neighbours. People buy them to build a weekend house, to keep
+        the land and build later, or simply to hold land near the city.
+      </p>
+      <p style="margin-bottom:1rem;">
+        Because it sits outside the municipal area, the permissions, the land classification and
+        the construction rules are not always the same as for a plot inside Bhopal. What applies
+        depends on the specific plot. We will tell you exactly what applies to the plot you are
+        looking at, and we would rather you ask us the awkward questions before you buy than after.
+      </p>
+      <p style="color:var(--muted);">
+        If a plot inside the city suits you better, see our{' '}
+        <a href={url('/plots-in-neelbad-bhopal')}>residential plots in Neelbad</a> instead.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container" style="max-width:820px;">
+      <div class="section-heading">
+        <h2>What is already done at Vatika Green</h2>
+        <p>The layout work is complete, so you are not buying into an empty field.</p>
+      </div>
+      <ul class="highlights-list">
+        <li>25-foot wide RCC internal roads</li>
+        <li>Plot demarcations with corner pillars</li>
+        <li>Electrification and street lights</li>
+        <li>Water line and sewage line</li>
+        <li>Park and children's play ground</li>
+        <li>Tree-lined green spaces throughout the layout</li>
+        <li>Company-owned project — direct sale, no middlemen</li>
+      </ul>
+      <p style="margin-top:1.25rem;color:var(--muted);">
+        Plot sizes and prices depend on what is still available in the layout, so we quote them on
+        a call rather than publishing a figure that goes stale. Our{' '}
+        <a href={url('/buying-a-plot-in-bhopal')}>guide to buying a plot in Bhopal</a> covers the
+        documents and the registration process.
+      </p>
+    </div>
+  </section>
+
+  <section class="section" style="background:var(--sage);">
+    <div class="container" style="max-width:820px;">
+      <h2 style="font-size:1.4rem;margin-bottom:0.5rem;">See the site at Bilkisganj</h2>
+      <p style="color:var(--muted);margin-bottom:1.5rem;">
+        A farm house plot is hard to judge from a brochure. Tell us a time that suits you and we
+        will take you out to the layout and walk it with you.
+      </p>
+      <div style="display:flex;flex-wrap:wrap;gap:0.75rem;">
+        <a href={url('/requirement?need=farm-house')} class="btn btn-primary">Book a site visit</a>
+        {site.contact.whatsapp && (
+          <a
+            href={whatsappHref(site.contact.whatsapp, 'Hello, I am interested in farm house plots at Vatika Green near Bilkisganj.')}
+            class="btn btn-outline"
+            target="_blank"
+            rel="noopener"
+          >WhatsApp us</a>
+        )}
+        {site.contact.phone && (
+          <a href={`tel:${site.contact.phone.replace(/\s/g, '')}`} class="btn btn-outline">Call {site.contact.phone}</a>
+        )}
+      </div>
+    </div>
+  </section>
+</Base>
